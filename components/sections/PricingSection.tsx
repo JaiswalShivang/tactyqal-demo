@@ -19,10 +19,19 @@ export default function PricingSection() {
   return (
     <section
       id="pricing"
-      className="py-16 md:py-22 px-4 bg-ink text-paper border-y border-ink"
+      className="py-16 md:py-22 px-4 bg-ink text-paper border-y border-ink relative overflow-hidden"
       aria-label="Pricing and enrollment"
     >
-      <div className="max-w-7xl mx-auto">
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover opacity-[0.14] mix-blend-luminosity pointer-events-none"
+        src="https://www.tactyqal.com/application/assets/videos/continuous-support.mp4"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#121316] via-[#121316]/85 to-[#121316] pointer-events-none" />
+      <div className="max-w-7xl mx-auto relative z-10">
         <SectionHeader
           eyebrow="№ 07 / 08 · INVESTMENT"
           title="The Builder's Vault"

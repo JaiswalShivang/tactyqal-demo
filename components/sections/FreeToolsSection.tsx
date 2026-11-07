@@ -258,9 +258,18 @@ export default function FreeToolsSection() {
   return (
     <section
       id="free-tools"
-      className="py-16 md:py-22 px-4 bg-[#121316] text-[#F6F4EE] free-tools-dots border-y border-[#2E3138] relative perforated-tear-top perforated-tear-bottom"
+      className="py-16 md:py-22 px-4 bg-[#121316] text-[#F6F4EE] free-tools-dots border-y border-[#2E3138] relative overflow-hidden perforated-tear-top perforated-tear-bottom"
       aria-label="Free startup diagnostic tools"
     >
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover opacity-[0.14] mix-blend-luminosity pointer-events-none"
+        src="https://www.tactyqal.com/application/assets/videos/continuous-support.mp4"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#121316] via-[#121316]/85 to-[#121316] pointer-events-none" />
       <div className="max-w-7xl mx-auto relative z-20">
         <SectionHeader
           eyebrow="№ 05 / 08 · FREE RESOURCES"

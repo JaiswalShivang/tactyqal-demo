@@ -31,6 +31,7 @@ export default function HeroSection() {
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [highlight, setHighlight] = useState({ x: 50, y: 50 });
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const prefersReduced = useReducedMotion();
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -67,15 +68,6 @@ export default function HeroSection() {
       className="relative min-h-[calc(100vh-3.5rem)] py-16 md:py-20 px-4 grid-bg overflow-hidden flex flex-col justify-center border-b border-ink"
       aria-label="Hero section"
     >
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute right-0 top-0 w-1/2 h-full object-cover opacity-10 pointer-events-none mix-blend-luminosity hidden lg:block"
-        src="https://www.tactyqal.com/application/assets/videos/kid_impact.mp4"
-      />
-
       <div className="absolute inset-0 pointer-events-none select-none opacity-40" aria-hidden="true">
         <div className="absolute top-8 left-6 font-mono text-[12px] text-ink/30 font-bold">+</div>
         <div className="absolute top-8 right-6 font-mono text-[12px] text-ink/30 font-bold">+</div>
@@ -180,8 +172,8 @@ export default function HeroSection() {
             <div className="ticket-notch ticket-notch-left" />
             <div className="ticket-notch ticket-notch-right" />
 
-            <div className="p-8">
-              <div className="flex items-start justify-between mb-4 border-b border-ink/15 pb-4">
+            <div className="p-6">
+              <div className="flex items-start justify-between mb-4 border-b border-ink/15 pb-3">
                 <div>
                   <div className="font-mono text-xs text-ink/50 stamp-text mb-1">
                     ADMISSION TICKET
@@ -200,8 +192,35 @@ export default function HeroSection() {
                 </div>
               </div>
 
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-3">
+              <div className="mb-4 border-[1.5px] border-ink overflow-hidden relative bg-ink group aspect-[16/7] w-full shadow-tactile-sm">
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover opacity-90 transition-transform duration-300 group-hover:scale-105"
+                  src="https://www.tactyqal.com/application/assets/videos/kid_impact.mp4"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
+                <div className="absolute top-2 left-2 flex items-center gap-1.5 bg-ink/90 border border-white/20 px-2 py-0.5 rounded-sm font-mono text-[10px] text-white">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald animate-pulse" />
+                  <span className="tracking-wider">LIVE COHORT REEL • 1:1 MENTORING</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsModalOpen(true);
+                  }}
+                  className="absolute bottom-2 right-2 font-mono text-[10px] font-bold text-ink bg-volt hover:bg-white border border-ink px-2 py-0.5 shadow-sm transition-colors cursor-pointer flex items-center gap-1"
+                >
+                  <span>Expand Reel</span>
+                  <span>↗</span>
+                </button>
+              </div>
+
+              <div className="mb-4">
+                <div className="flex items-center gap-2 mb-2">
                   <span className="pill pill-volt text-xs font-semibold">
                     Limited Time Offer
                   </span>
@@ -210,74 +229,101 @@ export default function HeroSection() {
                   </span>
                 </div>
 
-                <div className="flex items-baseline gap-4 mb-2">
+                <div className="flex items-baseline gap-4 mb-1">
                   <span className="font-mono text-2xl line-through text-ink/40">
                     ₹25,000
                   </span>
-                  <span className="font-display text-[clamp(2.75rem,4.5vw,4.25rem)] font-extrabold text-signal leading-none tracking-tight">
+                  <span className="font-display text-[clamp(2.5rem,4vw,3.75rem)] font-extrabold text-signal leading-none tracking-tight">
                     ₹16,000
                   </span>
                 </div>
-                <div className="font-mono text-xs text-ink/50 stamp-text">
+                <div className="font-mono text-[11px] text-ink/50 stamp-text">
                   ONE-TIME · FULL PROGRAM ACCESS · TAX INCLUDED
                 </div>
               </div>
 
-              <div className="border-t border-dashed border-ink/30 my-6" />
+              <div className="border-t border-dashed border-ink/30 my-4" />
 
-              <div className="mb-6">
-                <div className="font-mono text-xs text-ink/60 uppercase tracking-wider mb-3">
+              <div className="mb-4">
+                <div className="font-mono text-xs text-ink/60 uppercase tracking-wider mb-2">
                   Cohort Inclusions:
                 </div>
-                <ul className="space-y-2.5 text-sm">
-                  <li className="flex items-center gap-2.5">
+                <ul className="space-y-2 text-xs sm:text-sm">
+                  <li className="flex items-center gap-2">
                     <span className="w-4 h-4 rounded-full bg-emerald text-white flex items-center justify-center text-[10px] font-bold">✓</span>
                     <span className="font-medium">8 Weeks 1:1 Live Mentoring</span>
                   </li>
-                  <li className="flex items-center gap-2.5">
+                  <li className="flex items-center gap-2">
                     <span className="w-4 h-4 rounded-full bg-emerald text-white flex items-center justify-center text-[10px] font-bold">✓</span>
                     <span className="font-medium">Full-Stack App Production Launch</span>
                   </li>
-                  <li className="flex items-center gap-2.5">
+                  <li className="flex items-center gap-2">
                     <span className="w-4 h-4 rounded-full bg-emerald text-white flex items-center justify-center text-[10px] font-bold">✓</span>
                     <span className="font-medium">100% Money-Back Guarantee</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="mb-6">
+              <div className="mb-4">
                 <Barcode digits="160002500008" />
-                <div className="font-mono text-[10px] text-ink/40 mt-1.5 tracking-wider">
+                <div className="font-mono text-[10px] text-ink/40 mt-1 tracking-wider">
                   160002500008-TQLAB-VERIFIED
                 </div>
               </div>
 
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 <Link
                   href="#contact"
-                  className="tactile-btn-signal w-full py-3 text-center font-semibold block text-sm tracking-wide"
+                  className="tactile-btn-signal w-full py-2.5 text-center font-semibold block text-sm tracking-wide"
                 >
                   Enrol In 8-Week Cohort →
                 </Link>
                 <Link
                   href="#contact"
-                  className="tactile-btn w-full py-2.5 text-center font-medium block text-xs bg-ivory tracking-wide"
+                  className="tactile-btn w-full py-2 text-center font-medium block text-xs bg-ivory tracking-wide"
                 >
                   Schedule Founder Call ↗
                 </Link>
-              </div>
-
-              <div className="mt-4 pt-3 border-t border-ink/15 flex items-center justify-between font-mono text-[11px] text-ink/70">
-                <span className="flex items-center gap-1.5 font-semibold text-signal">
-                  <span className="w-2 h-2 rounded-full bg-signal animate-pulse" />
-                  LIVE BUILDER COHORT
-                </span>
-                <span className="text-ink/50 uppercase">8 WEEKS · ZERO CODE</span>
               </div>
             </div>
           </motion.div>
         </div>
       </div>
+
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="ticket-card bg-ivory max-w-2xl w-full p-5 border-2 border-ink shadow-tactile relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-3 mb-3 border-b border-ink/20 font-mono text-xs">
+              <span className="font-bold text-signal flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald animate-pulse" />
+                TACTYQAL BUILDER COHORT REEL · 1:1 MENTORING
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="border border-ink px-2.5 py-1 hover:bg-ink hover:text-white font-bold transition-colors cursor-pointer"
+              >
+                ✕ CLOSE
+              </button>
+            </div>
+            <div className="aspect-video w-full bg-ink border border-ink overflow-hidden">
+              <video
+                autoPlay
+                controls
+                playsInline
+                className="w-full h-full object-cover"
+                src="https://www.tactyqal.com/application/assets/videos/kid_impact.mp4"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="perforated-edge mt-12" />
     </section>

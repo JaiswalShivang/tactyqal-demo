@@ -142,28 +142,37 @@ export default function HomepageBlogSection() {
               <Link
                 key={post.id}
                 href={`/blog/${post.slug}`}
-                className="ticket-card p-5 hover:shadow-tactile transition-all group flex-1 flex flex-col sm:flex-row items-center gap-4 justify-between"
+                className="ticket-card p-5 sm:p-5.5 hover:shadow-tactile transition-all group flex-1 flex flex-col justify-between"
               >
-                <div className="w-full sm:w-32 aspect-[4/3] flex-shrink-0 border border-ink overflow-hidden bg-sand shadow-tactile-sm">
-                  <PostThumbnail src={post.coverImage} title={post.title} />
-                </div>
+                <div>
+                  <div className="aspect-[16/9] border border-ink mb-3 overflow-hidden bg-sand shadow-tactile-sm">
+                    <PostThumbnail src={post.coverImage} title={post.title} />
+                  </div>
 
-                <div className="flex-1 min-w-0 w-full">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="pill text-[10px] px-2 py-0.5 bg-sand">
+                    <span className="pill text-[10px] px-2 py-0.5 bg-sand font-medium">
                       {post.category}
                     </span>
                     <span className="font-mono text-[11px] text-ink/50">
-                      {post.readTime}m read
+                      {post.readTime} min read
                     </span>
                   </div>
-                  <h4 className="font-display font-bold text-base leading-snug tracking-tight line-clamp-2 group-hover:text-signal transition-colors mb-2">
+
+                  <h4 className="font-display font-bold text-base sm:text-lg leading-snug tracking-tight line-clamp-2 group-hover:text-signal transition-colors mb-2">
                     {post.title}
                   </h4>
-                  <div className="font-mono text-xs text-signal font-semibold flex items-center gap-1">
+
+                  <p className="text-xs text-ink/70 leading-relaxed line-clamp-2 mb-3">
+                    {post.excerpt}
+                  </p>
+                </div>
+
+                <div className="pt-2.5 border-t border-ink/15 flex items-center justify-between font-mono text-xs">
+                  <span className="text-ink/50">By {post.author}</span>
+                  <span className="text-signal font-bold group-hover:translate-x-1 transition-transform flex items-center gap-1">
                     <span>Read Guide</span>
-                    <span className="group-hover:translate-x-1 transition-transform">→</span>
-                  </div>
+                    <span>→</span>
+                  </span>
                 </div>
               </Link>
             ))}
