@@ -1,1 +1,479 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Bontang";
+  src: url("/fonts/Bontang-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bontang";
+  src: url("/fonts/Bontang-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BDO Grotesk";
+  src: url("/fonts/BDOGrotesk-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BDO Grotesk";
+  src: url("/fonts/BDOGrotesk-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BDO Grotesk";
+  src: url("/fonts/BDOGrotesk-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --paper: #F6F4EE;
+  --ivory: #FFFFFF;
+  --sand: #EAE6DF;
+  --ink: #121316;
+  --signal: #FF4F18;
+  --volt: #D2FF28;
+  --emerald: #0D5C46;
+  --grid-line: rgba(18, 19, 22, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-plus-jakarta), system-ui, sans-serif;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 1;
+}
+
+.grid-bg {
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      var(--grid-line) 0px,
+      var(--grid-line) 1px,
+      transparent 1px,
+      transparent calc(100% / 12)
+    );
+  background-size: 100% 100%;
+}
+
+.perforated-edge {
+  position: relative;
+}
+
+.perforated-edge::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 16px;
+  background-image: radial-gradient(
+    circle at 50% 0%,
+    var(--paper) 8px,
+    transparent 8px
+  );
+  background-size: 24px 16px;
+  background-repeat: repeat-x;
+  pointer-events: none;
+}
+
+.perforated-edge-top::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 16px;
+  background-image: radial-gradient(
+    circle at 50% 100%,
+    var(--paper) 8px,
+    transparent 8px
+  );
+  background-size: 24px 16px;
+  background-repeat: repeat-x;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tactile-btn {
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: translate(0, 0);
+  transition: box-shadow 90ms ease, transform 90ms ease;
+  cursor: pointer;
+  border: 1.5px solid var(--ink);
+}
+
+.tactile-btn:hover {
+  box-shadow: 2px 2px 0 var(--ink);
+  transform: translate(2px, 2px);
+}
+
+.tactile-btn:active {
+  box-shadow: 0px 0px 0 var(--ink);
+  transform: translate(4px, 4px);
+}
+
+.tactile-btn-signal {
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: translate(0, 0);
+  transition: box-shadow 90ms ease, transform 90ms ease;
+  cursor: pointer;
+  border: 1.5px solid var(--ink);
+  background-color: var(--signal);
+  color: var(--ivory);
+}
+
+.tactile-btn-signal:hover {
+  box-shadow: 2px 2px 0 var(--ink);
+  transform: translate(2px, 2px);
+}
+
+.tactile-btn-signal:active {
+  box-shadow: 0px 0px 0 var(--ink);
+  transform: translate(4px, 4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tactile-btn,
+  .tactile-btn-signal {
+    transition: none;
+  }
+}
+
+.font-boomdang {
+  font-family: "Bontang", "BDO Grotesk", var(--font-dangrek), sans-serif;
+}
+
+.stamp-text {
+  font-family: var(--font-jetbrains), monospace;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.section-number {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: rgba(18, 19, 22, 0.4);
+}
+
+.headline-display {
+  font-family: "Bontang", "BDO Grotesk", var(--font-dangrek), sans-serif;
+  font-size: clamp(2.5rem, 7vw, 7rem);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+.headline-xl {
+  font-size: clamp(3rem, 9vw, 9rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+.volt-highlight {
+  background-color: var(--volt);
+  padding: 0 0.1em;
+  display: inline;
+}
+
+.signal-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.signal-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 3px;
+  background-color: var(--signal);
+  transform-origin: left;
+  transform: scaleX(1);
+}
+
+.barcode {
+  display: flex;
+  gap: 1px;
+  align-items: flex-end;
+  height: 40px;
+}
+
+.barcode-bar {
+  background-color: var(--ink);
+  width: 2px;
+  flex-shrink: 0;
+}
+
+.ticket-card {
+  background-color: var(--ivory);
+  border: 1.5px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  position: relative;
+  overflow: hidden;
+}
+
+.ticket-notch {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--paper);
+  border: 1.5px solid var(--ink);
+}
+
+.ticket-notch-left {
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ticket-notch-right {
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.verified-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: var(--emerald);
+  color: white;
+  font-size: 0.65rem;
+  font-family: var(--font-jetbrains), monospace;
+  letter-spacing: 0.1em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: 1.5px solid var(--ink);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.pill-volt {
+  background-color: var(--volt);
+  border-color: var(--ink);
+}
+
+.pill-signal {
+  background-color: var(--signal);
+  color: var(--ivory);
+  border-color: var(--ink);
+}
+
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background-color: var(--signal);
+  z-index: 100;
+  transform-origin: left;
+  transition: transform 0.1s linear;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 10000;
+  background: var(--signal);
+  color: white;
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  transition: top 0.1s;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.custom-cursor {
+  pointer-events: none;
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, border-color 0.2s;
+  z-index: 99999;
+  mix-blend-mode: multiply;
+}
+
+.custom-cursor.over-interactive {
+  width: 48px;
+  height: 48px;
+  border-color: var(--signal);
+}
+
+@media (hover: none) {
+  .custom-cursor {
+    display: none;
+  }
+}
+
+.accordion-content {
+  overflow: hidden;
+  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 19, 22, 0.8);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.slide-over {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  max-width: 640px;
+  background: var(--paper);
+  border-left: 1.5px solid var(--ink);
+  z-index: 1000;
+  overflow-y: auto;
+  box-shadow: -4px 0 0 var(--ink);
+}
+
+.prose-tactyqal h2 {
+  font-family: "Bontang", "BDO Grotesk", var(--font-dangrek), sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.1;
+}
+
+.prose-tactyqal p {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+.prose-tactyqal ul,
+.prose-tactyqal ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose-tactyqal li {
+  margin-bottom: 0.4rem;
+  line-height: 1.6;
+}
+
+.prose-tactyqal blockquote {
+  border-left: 4px solid var(--signal);
+  padding-left: 1.25rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: rgba(18, 19, 22, 0.75);
+}
+
+.prose-tactyqal code {
+  font-family: var(--font-jetbrains), monospace;
+  background: var(--sand);
+  padding: 0.1em 0.4em;
+  border-radius: 2px;
+  font-size: 0.875em;
+  border: 1px solid rgba(18, 19, 22, 0.15);
+}
+
+.prose-tactyqal pre {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.prose-tactyqal pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+}
+
+.prose-tactyqal strong {
+  font-weight: 700;
+}
+
+.drop-cap::first-letter {
+  float: left;
+  font-family: "Bontang", "BDO Grotesk", var(--font-dangrek), sans-serif;
+  font-size: 4.5rem;
+  line-height: 0.85;
+  margin-right: 0.1em;
+  margin-top: 0.05em;
+  font-weight: 700;
+  color: var(--signal);
+}
