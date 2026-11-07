@@ -83,6 +83,19 @@ export default function HomepageBlogSection() {
               }`}
             >
               <div className="p-5">
+                {post.coverImage && (
+                  <div className="border border-ink mb-4 overflow-hidden bg-white shadow-tactile-sm">
+                    <div className="relative aspect-[16/9] overflow-hidden">
+                      <img
+                        src={post.coverImage}
+                        alt={post.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
+                      />
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex items-center gap-2 mb-3">
                   <span className="pill pill-volt text-xs">{post.category}</span>
                   <span className="font-mono text-xs text-ink/40">

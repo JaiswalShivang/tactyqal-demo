@@ -5,10 +5,25 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 export default function WhyParentsSection() {
   const [videoOpen, setVideoOpen] = useState(false);
+  const [selectedTimestamp, setSelectedTimestamp] = useState(105);
   const prefersReduced = useReducedMotion();
-  const videoUrl = process.env.NEXT_PUBLIC_FOUNDER_VIDEO_URL ?? "";
+  const videoBase = process.env.NEXT_PUBLIC_FOUNDER_VIDEO_URL || "https://www.youtube.com/embed/UyUH06CfLbk";
 
   const closeModal = useCallback(() => setVideoOpen(false), []);
+
+  const CHAPTERS = [
+    { time: 0, label: "00:00 · The Builder Thesis" },
+    { time: 105, label: "01:45 · Spotting Real Problems" },
+    { time: 260, label: "04:20 · Validating Before Code" },
+    { time: 495, label: "08:15 · First Paying Customers" },
+    { time: 690, label: "11:30 · 8-Week Launch Map" },
+  ];
+
+  const TAKEAWAYS = [
+    "Solve problems people are already paying to solve.",
+    "No-code lets high-schoolers ship in days, not months.",
+    "Real revenue is the ultimate university admission proof.",
+  ];
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -174,38 +189,79 @@ export default function WhyParentsSection() {
             onClick={closeModal}
             role="dialog"
             aria-modal="true"
-            aria-label="Founder Masterclass video"
+            aria-label="Founder Masterclass video theater"
           >
             <motion.div
-              className="w-full max-w-3xl bg-ink border border-ink relative"
+              className="w-full max-w-4xl bg-ink border-2 border-signal relative p-4 sm:p-6 shadow-tactile"
               initial={prefersReduced ? {} : { scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={prefersReduced ? {} : { scale: 0.95, opacity: 0 }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                onClick={closeModal}
-                className="absolute -top-10 right-0 text-white font-mono text-sm hover:text-signal transition-colors"
-                aria-label="Close video"
-              >
-                CLOSE ✕
-              </button>
+              <div className="flex items-center justify-between border-b border-white/20 pb-3 mb-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-signal inline-block" />
+                  <span className="w-3 h-3 rounded-full bg-volt inline-block" />
+                  <span className="w-3 h-3 rounded-full bg-emerald inline-block" />
+                  <span className="font-mono text-xs text-white/60 ml-2 stamp-text">
+                    CINEMA THEATER · STARTUP IDEAS 101
+                  </span>
+                </div>
+                <button
+                  onClick={closeModal}
+                  className="text-white font-mono text-xs border border-white/40 px-2 py-1 hover:bg-signal hover:border-signal transition-colors"
+                  aria-label="Close video"
+                >
+                  ESC / CLOSE ✕
+                </button>
+              </div>
 
-              <div className="aspect-video">
-                {videoUrl ? (
-                  <iframe
-                    src={`${videoUrl}?autoplay=1&rel=0`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="w-full h-full"
-                    title="Startup Ideas 101 - Founder Masterclass"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-white/50 font-mono text-sm">
-                    Set NEXT_PUBLIC_FOUNDER_VIDEO_URL in .env.local
+              <div className="aspect-video border border-white/20 bg-black mb-4">
+                <iframe
+                  src={`${videoBase}?start=${selectedTimestamp}&autoplay=1&rel=0`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full"
+                  title="Startup Ideas 101 - Founder Masterclass"
+                />
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4 pt-2">
+                <div>
+                  <div className="font-mono text-xs text-volt uppercase tracking-wider mb-2">
+                    Jump to Chapter:
                   </div>
-                )}
+                  <div className="flex flex-wrap gap-2">
+                    {CHAPTERS.map((ch) => (
+                      <button
+                        key={ch.time}
+                        onClick={() => setSelectedTimestamp(ch.time)}
+                        className={`font-mono text-xs px-2.5 py-1 border transition-colors ${
+                          selectedTimestamp === ch.time
+                            ? "bg-volt text-ink border-volt font-bold"
+                            : "border-white/20 text-white/70 hover:border-white"
+                        }`}
+                      >
+                        {ch.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="font-mono text-xs text-signal uppercase tracking-wider mb-2">
+                    Core Founder Principles:
+                  </div>
+                  <ul className="text-xs text-white/80 space-y-1">
+                    {TAKEAWAYS.map((point) => (
+                      <li key={point} className="flex items-start gap-2">
+                        <span className="text-signal">▸</span>
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </motion.div>
           </div>

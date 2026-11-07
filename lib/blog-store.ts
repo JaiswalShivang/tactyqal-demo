@@ -96,6 +96,7 @@ const memoryDriver: BlogDriver = {
       slug,
       excerpt: input.excerpt,
       content: input.content,
+      coverImage: input.coverImage ?? null,
       category: input.category,
       tags: input.tags,
       author: input.author || "Tactyqal",

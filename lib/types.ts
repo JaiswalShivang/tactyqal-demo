@@ -4,6 +4,7 @@ export type Post = {
   slug: string;
   excerpt: string;
   content: string;
+  coverImage?: string | null;
   category: string;
   tags: string[];
   author: string;

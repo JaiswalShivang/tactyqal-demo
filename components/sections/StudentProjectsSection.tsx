@@ -18,6 +18,7 @@ type Project = {
   metricPrefix: string;
   metricSuffix: string;
   icon: React.ReactNode;
+  screenshot: string;
 };
 
 function AppIcon({ type }: { type: string }) {
@@ -94,6 +95,7 @@ const PROJECTS: Project[] = [
     metricPrefix: "",
     metricSuffix: "+",
     icon: <AppIcon type="agri" />,
+    screenshot: "/extracted/krishidrishti1.png",
   },
   {
     id: "one-last-chapter",
@@ -108,6 +110,7 @@ const PROJECTS: Project[] = [
     metricPrefix: "₹",
     metricSuffix: "",
     icon: <AppIcon type="book" />,
+    screenshot: "/extracted/olc1.png",
   },
   {
     id: "elenor",
@@ -122,6 +125,7 @@ const PROJECTS: Project[] = [
     metricPrefix: "₹",
     metricSuffix: "",
     icon: <AppIcon type="bag" />,
+    screenshot: "/extracted/elenor1.png",
   },
   {
     id: "paws-of-promise",
@@ -136,6 +140,7 @@ const PROJECTS: Project[] = [
     metricPrefix: "",
     metricSuffix: "+",
     icon: <AppIcon type="paws" />,
+    screenshot: "/extracted/pop1.png",
   },
   {
     id: "audionova",
@@ -150,6 +155,7 @@ const PROJECTS: Project[] = [
     metricPrefix: "",
     metricSuffix: "+",
     icon: <AppIcon type="audio" />,
+    screenshot: "/extracted/audionova1.png",
   },
   {
     id: "converza",
@@ -164,6 +170,7 @@ const PROJECTS: Project[] = [
     metricPrefix: "",
     metricSuffix: "+",
     icon: <AppIcon type="converza" />,
+    screenshot: "/extracted/converza1.png",
   },
 ];
 
@@ -193,6 +200,25 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
           <div className="font-mono text-xs text-ink/40 stamp-text">{project.category}</div>
         </div>
         <span className="pill pill-volt text-xs flex-shrink-0">{project.badgeValue}</span>
+      </div>
+
+      <div className="border border-ink bg-paper mb-3 overflow-hidden shadow-tactile-sm">
+        <div className="bg-sand border-b border-ink px-2 py-1 flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-signal" />
+            <span className="w-2 h-2 rounded-full bg-volt" />
+            <span className="w-2 h-2 rounded-full bg-emerald" />
+          </div>
+          <span className="font-mono text-[10px] text-ink/50 uppercase tracking-widest">{project.id}.app</span>
+        </div>
+        <div className="relative aspect-[16/10] bg-white overflow-hidden">
+          <img
+            src={project.screenshot}
+            alt={`${project.name} application preview`}
+            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
+        </div>
       </div>
 
       <p className="text-sm text-ink/70 leading-relaxed mb-3">{project.description}</p>
@@ -258,11 +284,29 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           ✕
         </button>
 
-        <div className="flex items-start gap-4 mb-6">
+        <div className="flex items-start gap-4 mb-4">
           {project.icon}
           <div>
             <div className="font-boomdang text-2xl font-bold">{project.name}</div>
             <span className="pill text-xs">{project.category}</span>
+          </div>
+        </div>
+
+        <div className="border border-ink bg-paper mb-5 overflow-hidden shadow-tactile-sm">
+          <div className="bg-sand border-b border-ink px-3 py-1.5 flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-signal" />
+              <span className="w-2.5 h-2.5 rounded-full bg-volt" />
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald" />
+            </div>
+            <span className="font-mono text-xs text-ink/60 uppercase tracking-wider">{project.id}.tactyqal.app</span>
+          </div>
+          <div className="relative aspect-[16/10] bg-white overflow-hidden max-h-56">
+            <img
+              src={project.screenshot}
+              alt={`${project.name} full preview`}
+              className="w-full h-full object-cover object-top"
+            />
           </div>
         </div>
 

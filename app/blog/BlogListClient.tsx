@@ -143,6 +143,17 @@ export default function BlogListClient({
                     className="block ticket-card hover:shadow-tactile-signal transition-all group"
                   >
                     <div className="p-8">
+                      {featured.coverImage && (
+                        <div className="border border-ink mb-6 overflow-hidden bg-white shadow-tactile-sm">
+                          <div className="relative aspect-[21/9] overflow-hidden">
+                            <img
+                              src={featured.coverImage}
+                              alt={featured.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                        </div>
+                      )}
                       <div className="flex items-center gap-3 mb-4">
                         <span className="bg-signal text-white font-mono text-xs px-3 py-1 stamp-text">
                           FEATURED
@@ -183,6 +194,18 @@ export default function BlogListClient({
                       className="ticket-card hover:shadow-tactile transition-all group"
                     >
                       <div className="p-5">
+                        {post.coverImage && (
+                          <div className="border border-ink mb-4 overflow-hidden bg-white shadow-tactile-sm">
+                            <div className="relative aspect-[16/9] overflow-hidden">
+                              <img
+                                src={post.coverImage}
+                                alt={post.title}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                loading="lazy"
+                              />
+                            </div>
+                          </div>
+                        )}
                         <div className="flex items-center gap-2 mb-3">
                           <span className="pill text-xs">{post.category}</span>
                           <span className="font-mono text-xs text-ink/40">

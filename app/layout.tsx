@@ -8,6 +8,12 @@ const dangrek = localFont({
   display: "swap",
 });
 
+const outfit = localFont({
+  src: "../public/fonts/Outfit.woff2",
+  variable: "--font-outfit",
+  display: "swap",
+});
+
 const plusJakarta = localFont({
   src: "../public/fonts/PlusJakartaSans.woff2",
   variable: "--font-plus-jakarta",
@@ -75,7 +81,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dangrek.variable} ${plusJakarta.variable} ${jetbrainsMono.variable}`}
+      className={`${outfit.variable} ${dangrek.variable} ${plusJakarta.variable} ${jetbrainsMono.variable}`}
     >
       <body className="bg-paper text-ink font-body min-h-screen antialiased">
         <a href="#main-content" className="skip-link">

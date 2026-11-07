@@ -124,9 +124,21 @@ export default function BlogPostClient({
               {post.title}
             </h1>
 
-            <p className="text-lg text-ink/70 leading-relaxed max-w-3xl border-l-4 border-signal pl-4 italic">
+            <p className="text-lg text-ink/70 leading-relaxed max-w-3xl border-l-4 border-signal pl-4 italic mb-8">
               {post.excerpt}
             </p>
+
+            {post.coverImage && (
+              <div className="border border-ink mb-8 overflow-hidden bg-white shadow-tactile">
+                <div className="relative aspect-[21/9] overflow-hidden">
+                  <img
+                    src={post.coverImage}
+                    alt={post.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="border-t border-b border-ink/20 py-4 mb-10 flex flex-wrap items-center justify-between gap-4">
