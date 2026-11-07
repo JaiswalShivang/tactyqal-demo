@@ -3,6 +3,7 @@ import { listPosts } from "@/lib/blog-store";
 import BlogListClient from "./BlogListClient";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://tactyqal.com"),
   title: "Blog — Startup Knowledge for Young Founders",
   description:
     "Practical startup guides, idea lists, and founder insights from Tactyqal Labs.",

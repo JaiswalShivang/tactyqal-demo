@@ -16,6 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
+    metadataBase: new URL("https://tactyqal.com"),
     title: post.title,
     description: post.excerpt,
     authors: [{ name: post.author }],
