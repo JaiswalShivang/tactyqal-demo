@@ -54,8 +54,8 @@ export default function HomepageBlogSection() {
   }, []);
 
   const lead = posts[0];
-  const sidePosts = posts.slice(1, 4);
-  const bottomPosts = posts.slice(4, 6);
+  const sidePosts = posts.slice(1, 3);
+  const bottomPosts = posts.slice(3, 6);
 
   return (
     <section
@@ -65,7 +65,7 @@ export default function HomepageBlogSection() {
     >
       <div className="max-w-7xl mx-auto">
         <SectionHeader
-          eyebrow="№ 06.5 / 08 · INSIGHTS"
+          eyebrow="№ 07 / 09 · LEARN FROM INDUSTRY EXPERTS"
           title="From The Founders Desk"
           accent="Founders"
           description="Tactical blueprints, venture ideas, and mental models for high-schoolers launching software."
@@ -74,7 +74,7 @@ export default function HomepageBlogSection() {
               href="/blog"
               className="font-mono text-xs text-ink/70 hover:text-signal transition-colors uppercase tracking-[0.08em] font-semibold border-b border-ink/40 pb-0.5 hover:border-signal"
             >
-              ALL POSTS →
+              READ ALL ARTICLES →
             </Link>
           }
         />
@@ -129,19 +129,19 @@ export default function HomepageBlogSection() {
             </div>
           )}
 
-          <div className="md:col-span-5 flex flex-col justify-between gap-4">
+          <div className="md:col-span-5 flex flex-col justify-between gap-5">
             {sidePosts.map((post) => (
               <Link
                 key={post.id}
                 href={`/blog/${post.slug}`}
-                className="ticket-card p-4 hover:shadow-tactile transition-all group flex-1 flex items-center gap-4"
+                className="ticket-card p-5 hover:shadow-tactile transition-all group flex-1 flex flex-col sm:flex-row items-center gap-4"
               >
-                <div className="w-24 h-24 flex-shrink-0 border border-ink overflow-hidden bg-sand">
+                <div className="w-full sm:w-32 aspect-[4/3] flex-shrink-0 border border-ink overflow-hidden bg-sand shadow-tactile-sm">
                   <PostThumbnail src={post.coverImage} title={post.title} />
                 </div>
 
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1.5">
+                <div className="flex-1 min-w-0 w-full">
+                  <div className="flex items-center gap-2 mb-2">
                     <span className="pill text-[10px] px-2 py-0.5 bg-sand">
                       {post.category}
                     </span>
@@ -149,11 +149,11 @@ export default function HomepageBlogSection() {
                       {post.readTime}m read
                     </span>
                   </div>
-                  <h4 className="font-display font-bold text-sm sm:text-base leading-snug tracking-tight line-clamp-2 group-hover:text-signal transition-colors mb-1">
+                  <h4 className="font-display font-bold text-base leading-snug tracking-tight line-clamp-2 group-hover:text-signal transition-colors mb-2">
                     {post.title}
                   </h4>
-                  <div className="font-mono text-[11px] text-signal flex items-center gap-1">
-                    <span>Read</span>
+                  <div className="font-mono text-xs text-signal font-semibold flex items-center gap-1">
+                    <span>Read Guide</span>
                     <span className="group-hover:translate-x-1 transition-transform">→</span>
                   </div>
                 </div>
@@ -162,36 +162,46 @@ export default function HomepageBlogSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {bottomPosts.map((post) => (
             <Link
               key={post.id}
               href={`/blog/${post.slug}`}
-              className="ticket-card p-5 hover:shadow-tactile transition-all group flex flex-col sm:flex-row items-center gap-5"
+              className="ticket-card p-5 hover:shadow-tactile transition-all group flex flex-col justify-between"
             >
-              <div className="w-full sm:w-40 aspect-[4/3] sm:h-28 flex-shrink-0 border border-ink overflow-hidden bg-sand">
-                <PostThumbnail src={post.coverImage} title={post.title} />
-              </div>
+              <div>
+                <div className="aspect-[16/10] border border-ink mb-4 overflow-hidden bg-sand shadow-tactile-sm">
+                  <PostThumbnail src={post.coverImage} title={post.title} />
+                </div>
 
-              <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="pill text-[10px] px-2 py-0.5 bg-sand">
                     {post.category}
                   </span>
-                  <span className="font-mono text-xs text-ink/50">
-                    {post.readTime} min read
+                  <span className="font-mono text-[11px] text-ink/50">
+                    {post.readTime}m read
                   </span>
                 </div>
-                <h4 className="font-display font-bold text-base sm:text-lg leading-snug tracking-tight line-clamp-2 group-hover:text-signal transition-colors mb-1.5">
+
+                <h4 className="font-display font-bold text-base leading-snug tracking-tight line-clamp-2 group-hover:text-signal transition-colors mb-2">
                   {post.title}
                 </h4>
-                <p className="text-xs text-ink/70 line-clamp-2 leading-relaxed mb-2">
+
+                <p className="text-xs text-ink/70 leading-relaxed line-clamp-2 mb-4">
                   {post.excerpt}
                 </p>
-                <div className="font-mono text-xs text-signal flex items-center gap-1 font-semibold">
-                  <span>Read Article</span>
-                  <span className="group-hover:translate-x-1 transition-transform">→</span>
-                </div>
+              </div>
+
+              <div className="pt-3 border-t border-ink/15 flex items-center justify-between font-mono text-xs">
+                <span className="text-ink/50">
+                  {new Date(post.createdAt).toLocaleDateString("en-IN", {
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </span>
+                <span className="text-signal font-bold group-hover:translate-x-1 transition-transform">
+                  READ →
+                </span>
               </div>
             </Link>
           ))}

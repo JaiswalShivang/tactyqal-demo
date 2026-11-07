@@ -10,6 +10,7 @@ import FreeToolsSection from "@/components/sections/FreeToolsSection";
 import StudentVoicesSection from "@/components/sections/StudentVoicesSection";
 import PricingSection from "@/components/sections/PricingSection";
 import FAQSection from "@/components/sections/FAQSection";
+import ContactSection from "@/components/sections/ContactSection";
 import Footer from "@/components/Footer";
 import { HeroTicker } from "@/components/MarqueeTicker";
 import TicketIntro from "@/components/TicketIntro";
@@ -71,6 +72,7 @@ export default function HomePage() {
           <HomepageBlogSection />
           <PricingSection />
           <FAQSection />
+          <ContactSection />
         </main>
 
         <Footer />

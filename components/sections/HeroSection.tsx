@@ -1,61 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
-
-function CountUp({
-  target,
-  duration = 1200,
-  prefix = "",
-}: {
-  target: number;
-  duration?: number;
-  prefix?: string;
-}) {
-  const [current, setCurrent] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const hasRun = useRef(false);
-  const prefersReduced = useReducedMotion();
-
-  useEffect(() => {
-    if (!ref.current || hasRun.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting && !hasRun.current) {
-          hasRun.current = true;
-
-          if (prefersReduced) {
-            setCurrent(target);
-            return;
-          }
-
-          const startTime = performance.now();
-          const animate = (now: number) => {
-            const elapsed = now - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            setCurrent(Math.floor(eased * target));
-            if (progress < 1) requestAnimationFrame(animate);
-          };
-          requestAnimationFrame(animate);
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [target, duration, prefersReduced]);
-
-  return (
-    <span ref={ref} className="font-mono tabular-nums">
-      {prefix}
-      {current.toLocaleString("en-IN")}
-    </span>
-  );
-}
 
 function Barcode({ digits }: { digits: string }) {
   const heights = Array.from(digits).map((d) => 18 + parseInt(d) * 2.2);
@@ -180,7 +127,7 @@ export default function HeroSection() {
 
           <div className="flex flex-col sm:flex-row gap-4 max-w-md">
             <Link
-              href="#pricing"
+              href="#contact"
               className="tactile-btn-signal px-7 py-3.5 text-sm font-semibold text-center tracking-wide"
             >
               Book Free Consultation
@@ -191,6 +138,26 @@ export default function HeroSection() {
             >
               Explore Student Apps
             </Link>
+          </div>
+
+          <div className="mt-8 border border-ink bg-ivory p-3 shadow-tactile-sm max-w-xl">
+            <div className="flex items-center justify-between pb-2 mb-2 border-b border-ink/15 font-mono text-[11px] text-ink/60">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-signal animate-pulse" />
+                <span className="font-bold text-ink uppercase tracking-wider">LIVE BUILDER FEED // COHORT_04</span>
+              </div>
+              <span className="text-[10px] uppercase tracking-wider text-ink/40">STUDENT IN SESSION</span>
+            </div>
+            <div className="relative aspect-[16/9] border border-ink overflow-hidden bg-ink">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+                src="https://www.tactyqal.com/application/assets/videos/kid_impact.mp4"
+              />
+            </div>
           </div>
         </div>
 
@@ -259,7 +226,7 @@ export default function HeroSection() {
                     ₹25,000
                   </span>
                   <span className="font-display text-[clamp(2.75rem,4.5vw,4.25rem)] font-extrabold text-signal leading-none tracking-tight">
-                    <CountUp target={16000} prefix="₹" duration={1200} />
+                    ₹16,000
                   </span>
                 </div>
                 <div className="font-mono text-xs text-ink/50 stamp-text">
@@ -298,19 +265,17 @@ export default function HeroSection() {
 
               <div className="space-y-2.5">
                 <Link
-                  href="#pricing"
+                  href="#contact"
                   className="tactile-btn-signal w-full py-3 text-center font-semibold block text-sm tracking-wide"
                 >
                   Enrol In 8-Week Cohort →
                 </Link>
-                <a
-                  href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3JlaCrNitoPs8Bdr-FUP0cRfFI-MopSIH2azaPNDpRk56h6drYLbXSh-mDc9sfEZAQUKGdsUXs?gv=true"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="#contact"
                   className="tactile-btn w-full py-2.5 text-center font-medium block text-xs bg-ivory tracking-wide"
                 >
                   Schedule Founder Call ↗
-                </a>
+                </Link>
               </div>
             </div>
           </motion.div>

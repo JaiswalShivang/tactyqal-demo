@@ -47,6 +47,7 @@ export default function Footer() {
                 { href: "/blog", label: "Blog" },
                 { href: "#pricing", label: "Pricing & Enrol" },
                 { href: "#faq", label: "FAQ" },
+                { href: "#contact", label: "Contact & Booking" },
                 { href: "/admin/blog", label: "Admin CMS" },
               ].map((link) => (
                 <div key={link.href}>

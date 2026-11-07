@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: "/blog", label: "Blog" },
   { href: "#pricing", label: "Pricing" },
   { href: "#faq", label: "FAQ" },
+  { href: "#contact", label: "Contact" },
 ];
 
 export default function Header() {
@@ -113,7 +114,7 @@ export default function Header() {
             </Link>
 
             <Link
-              href="#pricing"
+              href="#contact"
               className="hidden sm:inline-flex tactile-btn-signal px-4 py-2.5 text-xs font-semibold tracking-wide whitespace-nowrap"
             >
               Book Free Consultation
@@ -194,7 +195,7 @@ export default function Header() {
                 NEXT COHORT · 15 SPOTS AVAILABLE
               </div>
               <Link
-                href="#pricing"
+                href="#contact"
                 onClick={() => setMenuOpen(false)}
                 className="tactile-btn-signal w-full py-3 text-center font-semibold block text-sm"
               >

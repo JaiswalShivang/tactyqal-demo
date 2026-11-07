@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import Link from "next/link";
 import { SectionHeader } from "@/components/SectionHeader";
 
 export default function PricingSection() {
@@ -95,14 +96,12 @@ export default function PricingSection() {
               </div>
 
               <div className="space-y-3 pt-2 border-t border-ink/15">
-                <a
-                  href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3JlaCrNitoPs8Bdr-FUP0cRfFI-MopSIH2azaPNDpRk56h6drYLbXSh-mDc9sfEZAQUKGdsUXs?gv=true"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="#contact"
                   className="tactile-btn-signal w-full py-4 text-center font-bold block text-sm tracking-wide"
                 >
                   Book Free 1:1 Consultation Call →
-                </a>
+                </Link>
                 <div className="font-mono text-[11px] text-ink/50 text-center">
                   Consultation includes a 20-minute startup ideation review with founders.
                 </div>
