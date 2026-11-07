@@ -74,7 +74,7 @@ export default function BlueprintSection() {
     <section
       id="blueprint"
       ref={sectionRef}
-      className="py-20 md:py-28 px-4 bg-paper border-y border-ink relative overflow-hidden"
+      className="py-16 md:py-22 px-4 bg-paper border-y border-ink relative overflow-hidden"
       aria-label="8-Week Blueprint"
     >
       <div className="max-w-7xl mx-auto">

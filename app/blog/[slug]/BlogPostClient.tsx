@@ -104,12 +104,21 @@ export default function BlogPostClient({
       <main id="main-content" className="min-h-screen pt-20">
         <article className="max-w-7xl mx-auto px-4 py-12">
           <div className="mb-8">
-            <Link
-              href="/blog"
-              className="font-mono text-xs text-ink/60 hover:text-signal transition-colors stamp-text inline-flex items-center gap-1 mb-6"
-            >
-              ← ALL ARTICLES
-            </Link>
+            <div className="flex items-center justify-between gap-4 mb-6">
+              <Link
+                href="/blog"
+                className="font-mono text-xs text-ink/60 hover:text-signal transition-colors stamp-text inline-flex items-center gap-1"
+              >
+                ← ALL ARTICLES
+              </Link>
+              <Link
+                href="/admin/blog"
+                className="font-mono text-xs px-3 py-1.5 border border-ink bg-ivory hover:bg-sand transition-colors inline-flex items-center gap-1.5 font-medium shadow-tactile-sm"
+              >
+                <span className="text-signal">⌘</span>
+                <span>Edit in CMS (/admin/blog)</span>
+              </Link>
+            </div>
 
             <div className="flex flex-wrap items-center gap-3 mb-4">
               <span className="pill pill-volt text-xs">{post.category}</span>
@@ -120,11 +129,11 @@ export default function BlogPostClient({
               <span className="font-mono text-xs text-ink/50">BY {post.author.toUpperCase()}</span>
             </div>
 
-            <h1 className="headline-display text-3xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+            <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-6">
               {post.title}
             </h1>
 
-            <p className="text-lg text-ink/70 leading-relaxed max-w-3xl border-l-4 border-signal pl-4 italic mb-8">
+            <p className="text-lg text-ink/75 leading-relaxed max-w-3xl border-l-4 border-signal pl-4 italic mb-8">
               {post.excerpt}
             </p>
 
@@ -172,7 +181,7 @@ export default function BlogPostClient({
                       const text = String(children);
                       const id = text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
                       return (
-                        <h2 id={id} className="scroll-mt-24">
+                        <h2 id={id} className="scroll-mt-24 font-display font-bold text-2xl mt-8 mb-4">
                           {children}
                         </h2>
                       );
@@ -183,12 +192,31 @@ export default function BlogPostClient({
                 </ReactMarkdown>
               </div>
 
-              <div className="mt-16 pt-8 border-t border-ink/20">
-                <div className="bg-volt border border-ink p-6 mb-12">
+              <div className="border border-ink bg-ivory p-6 mt-12 shadow-tactile-sm">
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="w-12 h-12 border border-ink bg-sand flex items-center justify-center font-display font-bold text-xl text-ink">
+                    {post.author.charAt(0)}
+                  </div>
+                  <div>
+                    <div className="font-display font-bold text-base text-ink">
+                      {post.author} · Editorial Director
+                    </div>
+                    <div className="font-mono text-xs text-ink/50">
+                      TACTYQAL LABS RESEARCH & FOUNDER MENTORSHIP
+                    </div>
+                  </div>
+                </div>
+                <p className="text-xs text-ink/70 leading-relaxed">
+                  Tactyqal Labs mentors high-school founders building real-world AI and no-code software ventures that achieve actual revenue and top tier university admissions.
+                </p>
+              </div>
+
+              <div className="mt-12 pt-8 border-t border-ink/20">
+                <div className="bg-sand border border-ink p-6 mb-12 shadow-tactile-sm">
                   <div className="font-mono text-xs text-ink/50 mb-2 stamp-text">
                     APPLY FOR THE COHORT
                   </div>
-                  <h3 className="font-boomdang text-2xl font-bold mb-2">
+                  <h3 className="font-display text-2xl font-bold mb-2">
                     Ready to build your startup in 8 weeks?
                   </h3>
                   <p className="text-sm text-ink/80 mb-4">
@@ -209,7 +237,7 @@ export default function BlogPostClient({
                       className="border border-ink p-4 bg-ivory hover:bg-sand/30 transition-colors block group"
                     >
                       <div className="font-mono text-xs text-ink/40 mb-1 stamp-text">← PREVIOUS POST</div>
-                      <div className="font-boomdang font-bold text-sm line-clamp-2 group-hover:text-signal transition-colors">
+                      <div className="font-display font-bold text-sm line-clamp-2 group-hover:text-signal transition-colors">
                         {prevPost.title}
                       </div>
                     </Link>
@@ -221,7 +249,7 @@ export default function BlogPostClient({
                       className="border border-ink p-4 bg-ivory hover:bg-sand/30 transition-colors block text-right group"
                     >
                       <div className="font-mono text-xs text-ink/40 mb-1 stamp-text">NEXT POST →</div>
-                      <div className="font-boomdang font-bold text-sm line-clamp-2 group-hover:text-signal transition-colors">
+                      <div className="font-display font-bold text-sm line-clamp-2 group-hover:text-signal transition-colors">
                         {nextPost.title}
                       </div>
                     </Link>
@@ -232,7 +260,7 @@ export default function BlogPostClient({
 
             <aside className="lg:col-span-4 lg:sticky lg:top-24 space-y-8" aria-label="Table of contents and related">
               {headings.length > 0 && (
-                <div className="border border-ink bg-ivory p-5">
+                <div className="border border-ink bg-ivory p-5 shadow-tactile-sm">
                   <div className="font-mono text-xs text-ink/40 mb-3 stamp-text border-b border-ink/20 pb-2">
                     TABLE OF CONTENTS
                   </div>
@@ -255,7 +283,7 @@ export default function BlogPostClient({
               )}
 
               {related.length > 0 && (
-                <div className="border border-ink bg-paper p-5">
+                <div className="border border-ink bg-paper p-5 shadow-tactile-sm">
                   <div className="font-mono text-xs text-ink/40 mb-3 stamp-text border-b border-ink/20 pb-2">
                     RELATED ARTICLES
                   </div>
@@ -269,7 +297,7 @@ export default function BlogPostClient({
                         <span className="pill text-[10px] py-0.5 px-2 mb-1 inline-block">
                           {item.category}
                         </span>
-                        <h4 className="font-boomdang text-sm font-bold leading-snug group-hover:text-signal transition-colors">
+                        <h4 className="font-display text-sm font-bold leading-snug group-hover:text-signal transition-colors">
                           {item.title}
                         </h4>
                         <span className="font-mono text-[10px] text-ink/40">

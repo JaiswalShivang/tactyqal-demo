@@ -60,7 +60,7 @@ export default function HomepageBlogSection() {
   return (
     <section
       id="blog-preview"
-      className="py-20 md:py-28 px-4 bg-paper border-y border-ink"
+      className="py-16 md:py-22 px-4 bg-paper border-y border-ink"
       aria-label="Latest insights from our founders"
     >
       <div className="max-w-7xl mx-auto">

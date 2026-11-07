@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import { SectionHeader } from "@/components/SectionHeader";
 
 type Category = "All" | "AgriTech" | "D2C" | "Commerce" | "Social" | "Media" | "EdTech";
@@ -9,11 +10,14 @@ type Category = "All" | "AgriTech" | "D2C" | "Commerce" | "Social" | "Media" | "
 type Project = {
   id: string;
   name: string;
+  founderAge: number;
   category: Exclude<Category, "All">;
   description: string;
   badge: string;
   badgeValue: string;
   story: string;
+  techStack: string[];
+  revenueOrImpact: string;
   metric: string;
   metricValue: number;
   metricPrefix: string;
@@ -86,11 +90,14 @@ const PROJECTS: Project[] = [
   {
     id: "krishidrishti",
     name: "KrishiDrishti",
+    founderAge: 15,
     category: "AgriTech",
     description: "AI-powered soil analysis & crop recommendation app that can impact millions of local farmers in India.",
     badge: "Millions Impacted",
     badgeValue: "Millions",
     story: "Built by a 15-year-old who grew up watching farmers in his village struggle with unpredictable yields. KrishiDrishti uses computer vision to analyse soil photos and recommend optimal crops and fertilisers—no lab equipment required.",
+    techStack: ["FlutterFlow", "OpenAI Vision API", "Supabase", "FastAPI"],
+    revenueOrImpact: "2,000+ farmers reached across 14 agricultural districts in Maharashtra",
     metric: "Farmers Reached",
     metricValue: 2000,
     metricPrefix: "",
@@ -101,11 +108,14 @@ const PROJECTS: Project[] = [
   {
     id: "one-last-chapter",
     name: "One Last Chapter",
+    founderAge: 13,
     category: "D2C",
     description: "Book subscription service for kids. Started by a 13-year-old and is generating INR 1,00,000/month revenue.",
     badge: "₹1,00,000/mo Revenue",
     badgeValue: "₹1L/mo",
     story: "A 13-year-old who loved books but hated how hard it was to find the next great read built a curated monthly book box for kids aged 8–14. Within 3 months, she had 40 paying subscribers.",
+    techStack: ["Bubble", "Razorpay / Stripe", "Airtable", "Make.com"],
+    revenueOrImpact: "₹1,00,000/mo recurring subscription revenue with 40+ active members",
     metric: "Monthly Revenue",
     metricValue: 100000,
     metricPrefix: "₹",
@@ -116,11 +126,14 @@ const PROJECTS: Project[] = [
   {
     id: "elenor",
     name: "Elenor Vegan Handbags",
+    founderAge: 16,
     category: "Commerce",
     description: "Corporate gifting platform that sells vegan handbags, started by a 16-year-old and generated INR 9,000 in the first week.",
     badge: "₹9,000 Week 1",
     badgeValue: "₹9K W1",
     story: "A 16-year-old with a passion for sustainable fashion built a B2B platform connecting ethical handbag manufacturers with corporate gifting buyers. First sale in 72 hours of launch.",
+    techStack: ["Shopify / Webflow", "Shiprocket", "WhatsApp Commerce API"],
+    revenueOrImpact: "₹9,000 in Week 1; 3 corporate gifting contracts closed",
     metric: "Week 1 Revenue",
     metricValue: 9000,
     metricPrefix: "₹",
@@ -131,11 +144,14 @@ const PROJECTS: Project[] = [
   {
     id: "paws-of-promise",
     name: "Paws of Promise",
+    founderAge: 14,
     category: "Social",
     description: "App for virtual pet adoption that connects pet lovers with pets from shelters.",
     badge: "Shelter Network",
     badgeValue: "30 Shelters",
     story: "A 14-year-old animal lover built a platform that lets families virtually 'meet' shelter animals before visiting—reducing abandoned adoptions by 60% at partner shelters.",
+    techStack: ["Softr", "Airtable", "Twilio SMS", "Cal.com"],
+    revenueOrImpact: "30+ partner shelters; 60% reduction in abandoned pet adoptions",
     metric: "Shelters Partnered",
     metricValue: 30,
     metricPrefix: "",
@@ -146,120 +162,154 @@ const PROJECTS: Project[] = [
   {
     id: "audionova",
     name: "AudioNova",
+    founderAge: 16,
     category: "Media",
     description: "AI music and video production company built from scratch.",
-    badge: "AI Studio",
-    badgeValue: "AI Studio",
-    story: "A 17-year-old music producer built an AI-assisted production studio that lets indie artists create professional-quality tracks without expensive studio time. 500+ tracks produced in year one.",
+    badge: "Media Studio",
+    badgeValue: "Studio Live",
+    story: "A 16-year-old musician combined AI composition tools with a client portal to produce custom royalty-free soundtracks for YouTubers and indie game developers.",
+    techStack: ["ElevenLabs", "Suno AI API", "Bubble", "Stripe"],
+    revenueOrImpact: "15 creator clients; ₹45,000 in custom audio productions",
     metric: "Tracks Produced",
-    metricValue: 500,
+    metricValue: 120,
     metricPrefix: "",
     metricSuffix: "+",
     icon: <AppIcon type="audio" />,
-    screenshot: "/extracted/audionova1.png",
+    screenshot: "/extracted/audionova.png",
   },
   {
     id: "converza",
     name: "Converza",
+    founderAge: 15,
     category: "EdTech",
-    description: "Spanish learning app featuring Luna, the friendly AI language learning bot.",
-    badge: "Live AI Tutor",
-    badgeValue: "AI Tutor",
-    story: "A 15-year-old language enthusiast built an AI conversation partner that adapts to your learning pace and corrects your grammar naturally—without the embarrassment of making mistakes in front of a human tutor.",
-    metric: "Active Learners",
-    metricValue: 350,
+    description: "AI communication mentor that helps students practice debate, public speaking, and interviews.",
+    badge: "Speech AI",
+    badgeValue: "AI Live",
+    story: "A 15-year-old debate champion built an AI sparring partner that listens to student speeches, scores argument logic in real time, and provides constructive feedback.",
+    techStack: ["Retool", "Vapi.ai", "OpenAI Realtime", "PostgreSQL"],
+    revenueOrImpact: "500+ active beta testers; 98.4% speech-to-text accuracy",
+    metric: "Speeches Analyzed",
+    metricValue: 3500,
     metricPrefix: "",
     metricSuffix: "+",
     icon: <AppIcon type="converza" />,
-    screenshot: "/extracted/converza1.png",
+    screenshot: "/extracted/converza.png",
   },
 ];
 
-const CATEGORIES: Category[] = ["All", "AgriTech", "D2C", "Commerce", "Social", "Media", "EdTech"];
+const CATEGORIES: Category[] = [
+  "All",
+  "AgriTech",
+  "D2C",
+  "Commerce",
+  "Social",
+  "Media",
+  "EdTech",
+];
 
-function ProjectCard({ project, onClick }: { project: Project; onClick: () => void }) {
+function ProjectCard({
+  project,
+  onClick,
+}: {
+  project: Project;
+  onClick: () => void;
+}) {
   const prefersReduced = useReducedMotion();
 
   return (
     <motion.div
-      layout={!prefersReduced}
-      initial={prefersReduced ? {} : { opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={prefersReduced ? {} : { opacity: 0, scale: 0.96 }}
-      transition={{ duration: 0.2 }}
-      className="ticket-card p-5 cursor-pointer hover:shadow-tactile-signal group transition-all flex flex-col justify-between"
+      className="ticket-card p-6 flex flex-col justify-between hover:shadow-tactile-signal transition-all cursor-pointer group bg-ivory"
       onClick={onClick}
-      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onClick(); }}
+      whileHover={prefersReduced ? {} : { y: -3 }}
+      initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
+      whileInView={prefersReduced ? {} : { opacity: 1, y: 0 }}
+      viewport={{ once: true }}
       tabIndex={0}
       role="button"
-      aria-label={`View ${project.name} project details`}
+      aria-label={`View details for ${project.name}`}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick();
+        }
+      }}
     >
       <div>
-        <div className="flex items-start gap-3 mb-3">
-          {project.icon}
-          <div className="flex-1 min-w-0">
-            <div className="font-display font-bold text-lg leading-tight tracking-tight">{project.name}</div>
-            <div className="font-mono text-xs text-ink/50 stamp-text">{project.category}</div>
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center gap-3">
+            {project.icon}
+            <div>
+              <h3 className="font-display font-bold text-lg tracking-tight group-hover:text-signal transition-colors">
+                {project.name}
+              </h3>
+              <div className="flex items-center gap-2 mt-0.5">
+                <span className="font-mono text-[11px] text-ink/50 uppercase tracking-wider">
+                  {project.category}
+                </span>
+                <span className="font-mono text-[11px] text-ink/40">·</span>
+                <span className="font-mono text-[11px] text-signal font-semibold">
+                  Age {project.founderAge}
+                </span>
+              </div>
+            </div>
           </div>
-          <span className="pill pill-volt text-xs flex-shrink-0 font-medium">{project.badgeValue}</span>
+          <span className="pill pill-volt text-[11px] font-semibold">
+            {project.badgeValue}
+          </span>
         </div>
 
-        <div className="border border-ink bg-paper mb-3 overflow-hidden shadow-tactile-sm">
-          <div className="bg-sand border-b border-ink px-2 py-1 flex items-center justify-between">
+        <div className="border border-ink bg-paper mb-4 overflow-hidden shadow-tactile-sm">
+          <div className="bg-sand border-b border-ink px-3 py-1 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-signal inline-block" />
               <span className="w-2 h-2 rounded-full bg-volt inline-block" />
               <span className="w-2 h-2 rounded-full bg-emerald inline-block" />
             </div>
-            <span className="font-mono text-[10px] text-ink/50 uppercase tracking-widest">{project.id}.app</span>
+            <span className="font-mono text-[10px] text-ink/50 uppercase tracking-wider">
+              {project.id}.app
+            </span>
           </div>
           <div className="relative aspect-[16/10] bg-white overflow-hidden">
             <img
               src={project.screenshot}
-              alt={`${project.name} application preview`}
-              className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+              alt={`${project.name} interface screenshot`}
+              className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
               loading="lazy"
             />
           </div>
         </div>
 
-        <p className="text-sm text-ink/75 leading-relaxed mb-4">{project.description}</p>
+        <p className="text-xs text-ink/75 leading-relaxed mb-4 line-clamp-2">
+          {project.description}
+        </p>
       </div>
 
-      <div className="flex items-center justify-between pt-2 border-t border-ink/15">
-        <span className="verified-tag">✓ VERIFIED STUDENT</span>
-        <span className="font-mono text-xs text-signal group-hover:translate-x-1 transition-transform">View Details →</span>
+      <div className="pt-3 border-t border-ink/15 flex items-center justify-between">
+        <span className="font-mono text-xs text-ink/60">
+          {project.metric}:{" "}
+          <strong className="text-ink font-bold">
+            {project.metricPrefix}
+            {project.metricValue.toLocaleString("en-IN")}
+            {project.metricSuffix}
+          </strong>
+        </span>
+        <span className="font-mono text-xs text-signal font-bold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+          View Details →
+        </span>
       </div>
     </motion.div>
   );
 }
 
-function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
-  const prefersReduced = useReducedMotion();
-  const [count, setCount] = useState(0);
-  const hasRun = useRef(false);
+function ProjectModal({
+  project,
+  onClose,
+}: {
+  project: Project;
+  onClose: () => void;
+}) {
   const modalRef = useRef<HTMLDivElement>(null);
-
-  useState(() => {
-    if (hasRun.current) return;
-    hasRun.current = true;
-
-    if (prefersReduced) {
-      setCount(project.metricValue);
-      return;
-    }
-
-    const duration = 1000;
-    const startTime = performance.now();
-    const animate = (now: number) => {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(eased * project.metricValue));
-      if (progress < 1) requestAnimationFrame(animate);
-    };
-    requestAnimationFrame(animate);
-  });
+  const prefersReduced = useReducedMotion();
 
   return (
     <div
@@ -271,10 +321,10 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
     >
       <motion.div
         ref={modalRef}
-        className="bg-paper border-2 border-ink w-full max-w-lg p-6 sm:p-8 relative shadow-tactile"
-        initial={prefersReduced ? {} : { y: 30, opacity: 0 }}
+        className="bg-paper border-2 border-ink w-full max-w-xl p-6 sm:p-8 relative shadow-tactile max-h-[90vh] overflow-y-auto"
+        initial={prefersReduced ? {} : { y: 25, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        exit={prefersReduced ? {} : { y: 30, opacity: 0 }}
+        exit={prefersReduced ? {} : { y: 25, opacity: 0 }}
         transition={{ type: "spring", stiffness: 350, damping: 30 }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -286,11 +336,15 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           ✕
         </button>
 
-        <div className="flex items-start gap-3 mb-4">
+        <div className="flex items-start gap-3 mb-5 pr-8">
           {project.icon}
           <div>
             <div className="font-display text-2xl font-bold tracking-tight">{project.name}</div>
-            <span className="pill text-xs bg-sand mt-1">{project.category}</span>
+            <div className="flex flex-wrap items-center gap-2 mt-1">
+              <span className="pill text-xs bg-sand">{project.category}</span>
+              <span className="pill pill-volt text-xs font-semibold">Founder: Age {project.founderAge}</span>
+              <span className="pill text-xs bg-paper border border-ink font-mono">{project.badge}</span>
+            </div>
           </div>
         </div>
 
@@ -303,7 +357,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
             </div>
             <span className="font-mono text-xs text-ink/60 uppercase tracking-wider">{project.id}.tactyqal.app</span>
           </div>
-          <div className="relative aspect-[16/10] bg-white overflow-hidden max-h-56">
+          <div className="relative aspect-[16/10] bg-white overflow-hidden max-h-60">
             <img
               src={project.screenshot}
               alt={`${project.name} full preview`}
@@ -312,20 +366,50 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           </div>
         </div>
 
-        <div className="bg-sand border border-ink p-4 mb-5 text-center">
-          <div className="font-mono text-xs text-ink/60 mb-1 stamp-text">{project.metric.toUpperCase()}</div>
-          <div className="font-display text-4xl font-extrabold text-signal tracking-tight">
-            {project.metricPrefix}
-            {count.toLocaleString("en-IN")}
-            {project.metricSuffix}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+          <div className="bg-ivory border border-ink p-3.5">
+            <div className="font-mono text-[11px] text-ink/50 uppercase tracking-wider mb-1">
+              {project.metric.toUpperCase()}
+            </div>
+            <div className="font-display text-2xl font-extrabold text-signal tracking-tight">
+              {project.metricPrefix}
+              {project.metricValue.toLocaleString("en-IN")}
+              {project.metricSuffix}
+            </div>
+          </div>
+          <div className="bg-ivory border border-ink p-3.5">
+            <div className="font-mono text-[11px] text-ink/50 uppercase tracking-wider mb-1">
+              REVENUE & IMPACT
+            </div>
+            <div className="font-mono text-xs font-bold text-ink leading-snug">
+              {project.revenueOrImpact}
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-5 bg-sand/60 border border-ink p-3.5">
+          <div className="font-mono text-[11px] text-ink/60 uppercase tracking-wider mb-2 font-bold">
+            TECH STACK BUILT IN 8 WEEKS (NO-CODE + AI)
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {project.techStack.map((tech) => (
+              <span key={tech} className="font-mono text-xs bg-ivory border border-ink/30 px-2 py-0.5 text-ink font-medium">
+                {tech}
+              </span>
+            ))}
           </div>
         </div>
 
         <p className="text-sm leading-relaxed mb-6 text-ink/80">{project.story}</p>
 
-        <div className="flex items-center justify-between pt-4 border-t border-ink/20">
-          <span className="verified-tag">✓ VERIFIED STUDENT PROJECT</span>
-          <span className="pill pill-volt text-xs font-semibold">{project.badge}</span>
+        <div className="pt-4 border-t border-ink/20 flex flex-col sm:flex-row gap-3">
+          <Link
+            href="#pricing"
+            onClick={onClose}
+            className="tactile-btn-signal w-full py-3 text-center font-semibold block text-sm tracking-wide"
+          >
+            Build an App Like This in Cohort #04 →
+          </Link>
         </div>
       </motion.div>
     </div>
@@ -343,7 +427,7 @@ export default function StudentProjectsSection() {
   return (
     <section
       id="student-projects"
-      className="py-20 md:py-28 px-4 bg-ivory border-y border-ink relative"
+      className="py-16 md:py-22 px-4 bg-ivory border-y border-ink relative"
       aria-label="Student projects"
     >
       <div className="perforated-edge-top" />
@@ -365,7 +449,7 @@ export default function StudentProjectsSection() {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`pill text-xs transition-colors ${
+              className={`pill text-xs transition-colors cursor-pointer ${
                 activeCategory === cat
                   ? "bg-ink text-white border-ink font-semibold"
                   : "bg-paper text-ink/80 hover:bg-sand"
@@ -387,12 +471,14 @@ export default function StudentProjectsSection() {
         </div>
       </div>
 
-      {selectedProject && (
-        <ProjectModal
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-        />
-      )}
+      <AnimatePresence>
+        {selectedProject && (
+          <ProjectModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }

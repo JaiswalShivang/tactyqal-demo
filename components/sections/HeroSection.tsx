@@ -117,19 +117,30 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-[calc(100vh-3.5rem)] py-16 md:py-24 px-4 grid-bg overflow-hidden flex flex-col justify-center"
+      className="relative min-h-[calc(100vh-3.5rem)] py-16 md:py-20 px-4 grid-bg overflow-hidden flex flex-col justify-center border-b border-ink"
       aria-label="Hero section"
     >
-      <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      <div className="absolute inset-0 pointer-events-none select-none opacity-40" aria-hidden="true">
+        <div className="absolute top-8 left-6 font-mono text-[12px] text-ink/30 font-bold">+</div>
+        <div className="absolute top-8 right-6 font-mono text-[12px] text-ink/30 font-bold">+</div>
+        <div className="absolute bottom-8 left-6 font-mono text-[12px] text-ink/30 font-bold">+</div>
+        <div className="absolute bottom-8 right-6 font-mono text-[12px] text-ink/30 font-bold">+</div>
+        <div className="hidden lg:block absolute top-0 bottom-0 left-[58.333%] border-r border-dashed border-ink/20" />
+      </div>
+
+      <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
         <div className="lg:col-span-7">
           <div className="section-number mb-4">№ 01 / 08 · THE PROGRAM</div>
 
-          <h1 className="font-display font-extrabold text-[clamp(2.75rem,5.5vw,5.5rem)] tracking-[-0.035em] leading-[1.02] text-ink mb-6 max-w-2xl">
+          <h1 className="font-display font-extrabold text-[clamp(2.5rem,4.4vw,4.1rem)] tracking-[-0.035em] leading-[1.04] text-ink mb-6">
             Empower Your Kid To{" "}
-            <span className="font-serif italic font-normal text-signal tracking-normal text-[1.12em]">
+            <span className="font-serif italic font-normal text-signal tracking-normal text-[1.1em]">
               Build
             </span>{" "}
-            The Next App That Impacts Millions, in 8 Weeks.
+            The Next App That Impacts Millions,{" "}
+            <span className="whitespace-nowrap font-serif italic font-normal text-signal tracking-normal text-[1.05em]">
+              in 8 Weeks.
+            </span>
           </h1>
 
           <div className="flex flex-wrap gap-2 mb-8">

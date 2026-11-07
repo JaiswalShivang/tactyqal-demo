@@ -85,7 +85,7 @@ export default function WhyParentsSection() {
   return (
     <section
       id="why-parents"
-      className="py-20 md:py-28 px-4 bg-paper border-y border-ink"
+      className="py-16 md:py-22 px-4 bg-paper border-y border-ink"
       aria-label="Why parents choose Tactyqal Labs"
     >
       <div className="max-w-7xl mx-auto">

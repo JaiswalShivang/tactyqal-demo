@@ -46,7 +46,7 @@ export default function FAQSection() {
   return (
     <section
       id="faq"
-      className="py-20 md:py-28 px-4 bg-paper border-y border-ink"
+      className="py-16 md:py-22 px-4 bg-paper border-y border-ink"
       aria-label="Frequently asked questions"
     >
       <div className="max-w-4xl mx-auto">
@@ -95,8 +95,10 @@ export default function FAQSection() {
                       transition={{ duration: 0.25, ease: "easeInOut" }}
                       className="overflow-hidden"
                     >
-                      <div className="p-5 sm:p-6 pt-0 border-t border-ink/10 text-sm leading-relaxed text-ink/80 bg-paper/30">
-                        {faq.a}
+                      <div className="pt-3 pb-5 px-6 border-t border-[#121316]/15 bg-[#F6F4EE]/60">
+                        <div className="border-l-[3px] border-signal pl-4 py-1 text-sm leading-relaxed text-ink/85">
+                          {faq.a}
+                        </div>
                       </div>
                     </motion.div>
                   )}

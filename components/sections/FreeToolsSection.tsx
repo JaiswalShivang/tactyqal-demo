@@ -258,7 +258,7 @@ export default function FreeToolsSection() {
   return (
     <section
       id="free-tools"
-      className="py-20 md:py-28 px-4 bg-[#121316] text-[#F6F4EE] free-tools-dots border-y border-[#2E3138] relative perforated-tear-top perforated-tear-bottom"
+      className="py-16 md:py-22 px-4 bg-[#121316] text-[#F6F4EE] free-tools-dots border-y border-[#2E3138] relative perforated-tear-top perforated-tear-bottom"
       aria-label="Free startup diagnostic tools"
     >
       <div className="max-w-7xl mx-auto relative z-20">

@@ -54,7 +54,7 @@ export default function StudentVoicesSection() {
   return (
     <section
       id="student-voices"
-      className="py-20 md:py-28 px-4 bg-sand border-y border-ink"
+      className="py-16 md:py-22 px-4 bg-sand border-y border-ink"
       aria-label="Student testimonials"
     >
       <div className="max-w-7xl mx-auto">

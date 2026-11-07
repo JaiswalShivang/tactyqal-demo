@@ -5,10 +5,10 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
-  { href: "#student-projects", label: "Success Stories" },
+  { href: "#student-projects", label: "Stories" },
   { href: "#blueprint", label: "8-Week Program" },
   { href: "#why-parents", label: "Why Us" },
-  { href: "#free-tools", label: "Free Tools" },
+  { href: "#free-tools", label: "Tools" },
   { href: "/blog", label: "Blog" },
   { href: "#pricing", label: "Pricing" },
   { href: "#faq", label: "FAQ" },
@@ -83,7 +83,7 @@ export default function Header() {
           </Link>
 
           <nav
-            className="hidden lg:flex items-center gap-6"
+            className="hidden lg:flex items-center gap-5 xl:gap-6"
             aria-label="Main navigation"
           >
             {NAV_LINKS.map((link) => {
@@ -92,7 +92,7 @@ export default function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`font-mono text-xs tracking-wider transition-colors hover:text-signal ${
+                  className={`whitespace-nowrap text-[13px] font-medium transition-colors hover:text-signal ${
                     isActive ? "text-signal font-bold" : "text-ink/80"
                   }`}
                 >
@@ -105,24 +105,19 @@ export default function Header() {
           <div className="flex items-center gap-3">
             <Link
               href="/admin/blog"
-              className="hidden sm:inline-flex items-center gap-1.5 font-mono text-xs border border-ink px-2.5 py-1 bg-ivory hover:bg-sand transition-colors"
+              className="hidden sm:inline-flex items-center gap-2 font-mono text-xs border border-ink px-2.5 py-1.5 bg-ivory hover:bg-sand transition-colors whitespace-nowrap shadow-tactile-sm"
               title="Admin CMS Studio"
             >
-              <span className="text-signal">⌘</span>
-              <span>/admin/blog</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald inline-block animate-pulse" />
+              <span className="text-ink font-semibold">CMS Studio</span>
             </Link>
 
             <Link
               href="#pricing"
-              className="hidden sm:inline-flex tactile-btn-signal px-4 py-2 text-xs font-semibold tracking-wide"
+              className="hidden sm:inline-flex tactile-btn-signal px-4 py-2.5 text-xs font-semibold tracking-wide whitespace-nowrap"
             >
               Book Free Consultation
             </Link>
-
-            <span className="hidden xl:inline-flex items-center gap-1.5 text-xs font-mono bg-volt text-ink border border-ink px-2 py-1 font-medium">
-              <span className="w-2 h-2 rounded-full bg-emerald inline-block animate-pulse" />
-              COHORT OPEN · 15 SPOTS
-            </span>
 
             <button
               onClick={() => setMenuOpen(!menuOpen)}
