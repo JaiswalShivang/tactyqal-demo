@@ -87,9 +87,9 @@ export default function HomepageBlogSection() {
           }
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch mb-6">
           {lead && (
-            <div className="md:col-span-7 h-full flex flex-col">
+            <div className="lg:col-span-7 h-full flex flex-col justify-between">
               <Link
                 href={`/blog/${lead.slug}`}
                 className="ticket-card h-full flex flex-col justify-between hover:shadow-tactile-signal transition-all group p-6 sm:p-7"
@@ -137,16 +137,16 @@ export default function HomepageBlogSection() {
             </div>
           )}
 
-          <div className="md:col-span-5 h-full flex flex-col justify-between gap-5">
+          <div className="lg:col-span-5 grid grid-rows-2 gap-6 h-full">
             {sidePosts.map((post) => (
               <Link
                 key={post.id}
                 href={`/blog/${post.slug}`}
-                className="ticket-card p-5 sm:p-5.5 hover:shadow-tactile transition-all group flex-1 flex flex-col justify-between"
+                className="ticket-card p-5 h-full flex flex-col justify-between hover:shadow-tactile transition-all group"
               >
                 <div>
-                  <div className="aspect-[16/9] border border-ink mb-3 overflow-hidden bg-sand shadow-tactile-sm">
-                    <PostThumbnail src={post.coverImage} title={post.title} />
+                  <div className="h-44 sm:h-48 w-full border border-ink mb-3 overflow-hidden bg-sand shadow-tactile-sm">
+                    <PostThumbnail src={post.coverImage} title={post.title} className="w-full h-full object-cover" />
                   </div>
 
                   <div className="flex items-center gap-2 mb-2">

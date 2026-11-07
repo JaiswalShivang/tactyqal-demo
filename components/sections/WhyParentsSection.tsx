@@ -100,48 +100,63 @@ export default function WhyParentsSection() {
                 </span>
               </div>
 
-              <div className="relative aspect-video border-y-[1.5px] border-[#2E3138] bg-black mb-4 overflow-hidden">
+              <div className="relative aspect-video border-y-[1.5px] border-[#2E3138] bg-[#0A0B0E] mb-4 overflow-hidden">
                 {!isPlaying ? (
                   <div
                     onClick={() => setIsPlaying(true)}
-                    className="absolute inset-0 cursor-pointer group flex flex-col justify-between p-3.5"
+                    className="absolute inset-0 cursor-pointer group flex flex-col justify-between p-4 bg-gradient-to-br from-[#12161A] via-[#0B0F14] to-[#0A0B0E] select-none"
                   >
-                    <img
-                      src="https://img.youtube.com/vi/UyUH06CfLbk/hqdefault.jpg"
-                      alt="Startup Ideas 101 Masterclass"
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-90"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40 group-hover:from-black/75 transition-colors" />
+                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
                     <div className="relative z-10 flex items-center justify-between">
-                      <span className="pill pill-volt text-[10px] font-semibold">
-                        A CH Tribe Event · Live Recording
-                      </span>
-                      <span className="font-mono text-[10px] text-white bg-[#121316]/80 px-2 py-0.5 border border-white/20">
-                        12 MIN
+                      <div className="flex items-center gap-2 bg-[#121316]/90 border border-white/20 px-2.5 py-1 rounded-sm">
+                        <span className="w-2 h-2 rounded-full bg-signal animate-pulse" />
+                        <span className="font-mono text-[10px] text-white font-bold tracking-wider">
+                          A CH TRIBE EVENT · RECORDED MASTERCLASS
+                        </span>
+                      </div>
+                      <span className="font-mono text-[10px] text-volt bg-black/80 px-2 py-0.5 border border-volt/30 font-bold">
+                        12 MINS
                       </span>
                     </div>
 
-                    <div className="relative z-10 flex items-center justify-center my-auto">
-                      <button
-                        type="button"
-                        className="tactile-btn-signal px-4 py-2 text-xs font-bold flex items-center gap-2 shadow-tactile group-hover:scale-105 transition-transform"
-                      >
-                        <span className="w-0 h-0 border-y-[5px] border-y-transparent border-l-[9px] border-l-white ml-0.5" />
-                        Watch with Sound ▶
-                      </button>
+                    <div className="relative z-10 my-auto text-center px-4">
+                      <div className="inline-block border border-volt/40 bg-volt/10 text-volt font-mono text-[11px] font-bold px-3 py-1 mb-2">
+                        SLIDE 09 // INVERSION TECHNIQUE
+                      </div>
+                      <h4 className="font-display font-extrabold text-lg sm:text-xl text-white tracking-tight mb-3">
+                        How to Come Up with Startup Ideas?
+                      </h4>
+
+                      <div className="inline-flex items-center gap-3">
+                        <button
+                          type="button"
+                          className="tactile-btn-signal px-5 py-2.5 text-xs font-bold flex items-center gap-2.5 shadow-tactile group-hover:scale-105 transition-transform"
+                        >
+                          <span className="w-0 h-0 border-y-[6px] border-y-transparent border-l-[10px] border-l-white ml-0.5" />
+                          <span>Watch with Sound ▶</span>
+                        </button>
+                      </div>
                     </div>
 
-                    <div className="relative z-10 flex items-center justify-between font-mono text-[10px] text-paper/80">
-                      <span>Partha Chakraborty · Founder</span>
-                      <span className="text-signal font-bold">CLICK TO PLAY INLINE</span>
+                    <div className="relative z-10 flex items-center justify-between pt-2 border-t border-white/10 font-mono text-[10px] text-paper/70">
+                      <div className="flex items-center gap-2">
+                        <span className="text-white font-bold">Partha Chakraborty</span>
+                        <span>· Founder, Tactyqal</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-signal font-bold">
+                        <span className="w-1.5 h-3 bg-signal animate-pulse" />
+                        <span className="w-1.5 h-4 bg-signal animate-pulse delay-75" />
+                        <span className="w-1.5 h-2 bg-signal animate-pulse delay-150" />
+                        <span className="ml-1 uppercase">CLICK TO PLAY</span>
+                      </div>
                     </div>
                   </div>
                 ) : (
                   <iframe
                     src={`https://www.youtube.com/embed/UyUH06CfLbk?start=${selectedTimestamp}&autoplay=1&rel=0`}
                     title="How to Come Up with Startup Ideas? | A CH Tribe Event with Partha Chakraborty"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
                     className="w-full h-full border-0"
                   />
@@ -157,23 +172,35 @@ export default function WhyParentsSection() {
               </p>
             </div>
 
-            <div className="pt-3 border-t border-[#2E3138] flex flex-wrap items-center gap-2">
-              <span className="font-mono text-[10px] text-paper/50 uppercase tracking-wider mr-1">
-                Chapters:
-              </span>
-              {CHAPTERS.map((ch) => (
+            <div className="pt-3 border-t border-[#2E3138] flex flex-wrap items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="font-mono text-[10px] text-paper/50 uppercase tracking-wider mr-1">
+                  Chapters:
+                </span>
+                {CHAPTERS.map((ch) => (
+                  <button
+                    key={ch.time}
+                    onClick={() => handlePlayChapter(ch.time)}
+                    className={`font-mono text-[10px] px-2.5 py-1 border transition-colors cursor-pointer ${
+                      selectedTimestamp === ch.time && isPlaying
+                        ? "bg-signal text-white border-signal font-bold"
+                        : "border-[#2E3138] text-paper/70 hover:border-paper bg-[#1C1E22]"
+                    }`}
+                  >
+                    {ch.label}
+                  </button>
+                ))}
+              </div>
+
+              {isPlaying && (
                 <button
-                  key={ch.time}
-                  onClick={() => handlePlayChapter(ch.time)}
-                  className={`font-mono text-[10px] px-2.5 py-1 border transition-colors cursor-pointer ${
-                    selectedTimestamp === ch.time && isPlaying
-                      ? "bg-signal text-white border-signal font-bold"
-                      : "border-[#2E3138] text-paper/70 hover:border-paper bg-[#1C1E22]"
-                  }`}
+                  type="button"
+                  onClick={() => setIsPlaying(false)}
+                  className="font-mono text-[10px] text-paper/60 hover:text-white border border-[#2E3138] px-2 py-0.5"
                 >
-                  {ch.label}
+                  Reset Poster
                 </button>
-              ))}
+              )}
             </div>
           </div>
 

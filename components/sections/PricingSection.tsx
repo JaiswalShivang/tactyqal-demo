@@ -36,7 +36,7 @@ export default function PricingSection() {
           eyebrow="№ 07 / 08 · INVESTMENT"
           title="The Builder's Vault"
           accent="Vault"
-          accentColor="signal"
+          accentColor="volt"
           description="Transparent, all-inclusive tuition for the complete 8-week 1:1 cohort. Results guaranteed or 100% refunded."
           dark={true}
         />

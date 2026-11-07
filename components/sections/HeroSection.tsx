@@ -65,7 +65,7 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-[calc(100vh-3.5rem)] py-12 md:py-16 px-4 bg-[#0B0C0E] text-[#F6F4EE] overflow-hidden flex flex-col justify-center border-b border-[#2E3138]"
+      className="relative min-h-[calc(100vh-3.5rem)] py-14 lg:py-20 px-4 bg-[#0B0C0E] text-[#F6F4EE] overflow-hidden flex flex-col justify-center border-b border-[#2E3138]"
       aria-label="Hero section"
     >
       <video
@@ -73,12 +73,15 @@ export default function HeroSection() {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0 opacity-45 scale-[1.02] pointer-events-none"
+        poster="https://img.youtube.com/vi/UyUH06CfLbk/hqdefault.jpg"
+        className="absolute inset-0 w-full h-full object-cover z-0 opacity-65 scale-[1.02] pointer-events-none"
         style={{ filter: "contrast(1.08) saturate(1.1)" }}
-        src="https://www.tactyqal.com/application/assets/videos/kid_impact.mp4"
-      />
+      >
+        <source src="/videos/kid_impact.mp4" type="video/mp4" />
+        <source src="https://www.tactyqal.com/application/assets/videos/kid_impact.mp4" type="video/mp4" />
+      </video>
 
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0B0C0E]/95 via-[#0B0C0E]/75 to-[#0B0C0E]/45 z-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0B0C0E]/90 via-[#0B0C0E]/60 to-[#0B0C0E]/25 z-0 pointer-events-none" />
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:64px_64px] z-0 pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-b from-[#0B0C0E]/40 via-transparent to-[#0B0C0E]/80 z-0 pointer-events-none" />
 
@@ -90,7 +93,7 @@ export default function HeroSection() {
         <div className="hidden lg:block absolute top-0 bottom-0 left-[58.333%] border-r border-dashed border-white/10" />
       </div>
 
-      <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
         <div className="lg:col-span-7">
           <div className="font-mono text-xs text-volt font-bold uppercase tracking-wider mb-3 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-volt animate-pulse" />
@@ -99,11 +102,9 @@ export default function HeroSection() {
 
           <h1 className="font-display font-extrabold text-[clamp(2.4rem,4.2vw,3.9rem)] tracking-[-0.035em] leading-[1.04] text-[#F6F4EE] mb-5">
             Empower Your Kid To{" "}
-            <span className="font-serif italic font-normal text-signal tracking-normal text-[1.1em]">
-              Build
-            </span>{" "}
+            <span className="text-signal font-extrabold">Build</span>{" "}
             The Next App That Impacts Millions,{" "}
-            <span className="whitespace-nowrap font-serif italic font-normal text-signal tracking-normal text-[1.05em]">
+            <span className="whitespace-nowrap text-signal font-extrabold">
               in 8 Weeks.
             </span>
           </h1>
@@ -323,8 +324,10 @@ export default function HeroSection() {
                 controls
                 playsInline
                 className="w-full h-full object-cover"
-                src="https://www.tactyqal.com/application/assets/videos/kid_impact.mp4"
-              />
+              >
+                <source src="/videos/kid_impact.mp4" type="video/mp4" />
+                <source src="https://www.tactyqal.com/application/assets/videos/kid_impact.mp4" type="video/mp4" />
+              </video>
             </div>
           </div>
         </div>
