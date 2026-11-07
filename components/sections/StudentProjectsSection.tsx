@@ -103,7 +103,7 @@ const PROJECTS: Project[] = [
     metricPrefix: "",
     metricSuffix: "+",
     icon: <AppIcon type="agri" />,
-    screenshot: "/extracted/krishidrishti1.png",
+    screenshot: "/extracted/krishidrishti1.webp",
   },
   {
     id: "one-last-chapter",
@@ -121,7 +121,7 @@ const PROJECTS: Project[] = [
     metricPrefix: "₹",
     metricSuffix: "",
     icon: <AppIcon type="book" />,
-    screenshot: "/extracted/olc1.png",
+    screenshot: "/extracted/olc1.webp",
   },
   {
     id: "elenor",
@@ -139,7 +139,7 @@ const PROJECTS: Project[] = [
     metricPrefix: "₹",
     metricSuffix: "",
     icon: <AppIcon type="bag" />,
-    screenshot: "/extracted/elenor1.png",
+    screenshot: "/extracted/elenor1.webp",
   },
   {
     id: "paws-of-promise",
@@ -157,7 +157,7 @@ const PROJECTS: Project[] = [
     metricPrefix: "",
     metricSuffix: "+",
     icon: <AppIcon type="paws" />,
-    screenshot: "/extracted/pop1.png",
+    screenshot: "/extracted/pop1.webp",
   },
   {
     id: "audionova",
@@ -175,7 +175,7 @@ const PROJECTS: Project[] = [
     metricPrefix: "",
     metricSuffix: "+",
     icon: <AppIcon type="audio" />,
-    screenshot: "/extracted/audionova.png",
+    screenshot: "/extracted/audionova1.webp",
   },
   {
     id: "converza",
@@ -193,7 +193,7 @@ const PROJECTS: Project[] = [
     metricPrefix: "",
     metricSuffix: "+",
     icon: <AppIcon type="converza" />,
-    screenshot: "/extracted/converza.png",
+    screenshot: "/extracted/converza1.webp",
   },
 ];
 

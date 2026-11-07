@@ -15,7 +15,6 @@ import { HeroTicker } from "@/components/MarqueeTicker";
 import TicketIntro from "@/components/TicketIntro";
 import CustomCursor from "@/components/CustomCursor";
 import HomepageBlogSection from "@/components/sections/HomepageBlogSection";
-import { ArchitecturalDivider } from "@/components/ArchitecturalDivider";
 
 export default function HomePage() {
   const [mounted, setMounted] = useState(false);
@@ -64,31 +63,11 @@ export default function HomePage() {
 
         <main id="main-content">
           <HeroSection />
-          <ArchitecturalDivider
-            code="SEC_01 // PROOF_OF_WORK"
-            label="6 LIVE STUDENT APPS // PRODUCTION SPEC"
-          />
           <StudentProjectsSection />
-          <ArchitecturalDivider
-            code="SEC_02 // CURRICULUM_SPEC"
-            label="8-WEEK MILESTONE BLUEPRINT"
-          />
           <BlueprintSection />
-          <ArchitecturalDivider
-            code="SEC_03 // THE_ADVANTAGE"
-            label="PARENT & FOUNDER ALIGNMENT"
-          />
           <WhyParentsSection />
           <FreeToolsSection />
-          <ArchitecturalDivider
-            code="SEC_05 // ALUMNI_CORPS"
-            label="100+ STUDENT TESTIMONIALS"
-          />
           <StudentVoicesSection />
-          <ArchitecturalDivider
-            code="SEC_06 // EDITORIAL_DESK"
-            label="FOUNDER BLUEPRINTS & ESSAYS"
-          />
           <HomepageBlogSection />
           <PricingSection />
           <FAQSection />
