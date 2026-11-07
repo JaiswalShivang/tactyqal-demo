@@ -3,129 +3,194 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Post } from "@/lib/types";
+import { SEED_POSTS } from "@/lib/memory-store";
+import { SectionHeader } from "@/components/SectionHeader";
+
+function PostThumbnail({
+  src,
+  title,
+  className = "w-full h-full",
+}: {
+  src?: string | null;
+  title: string;
+  className?: string;
+}) {
+  const [hasError, setHasError] = useState(false);
+
+  if (!src || hasError) {
+    return (
+      <div className={`bg-sand flex items-center justify-center font-display font-bold text-ink/40 text-2xl ${className}`}>
+        {title.charAt(0)}
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={title}
+      className={`object-cover object-top transition-transform duration-300 group-hover:scale-105 ${className}`}
+      onError={() => setHasError(true)}
+      loading="lazy"
+    />
+  );
+}
 
 export default function HomepageBlogSection() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState<Post[]>(SEED_POSTS.slice(0, 6));
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const cached = localStorage.getItem("tactyqal-blog-cache");
-        if (cached) {
-          const { posts: cachedPosts, ts } = JSON.parse(cached) as { posts: Post[]; ts: number };
-          if (Date.now() - ts < 5 * 60 * 1000) {
-            setPosts(cachedPosts.slice(0, 3));
-            setLoading(false);
-          }
+        const res = await fetch("/api/posts?limit=6&published=true");
+        const json = (await res.json()) as { data: Post[] };
+        if (json.data && json.data.length >= 6) {
+          setPosts(json.data.slice(0, 6));
         }
-
-        const res = await fetch("/api/posts?limit=3&published=true");
-        const json = await res.json() as { data: Post[] };
-        if (json.data) {
-          setPosts(json.data.slice(0, 3));
-          localStorage.setItem(
-            "tactyqal-blog-cache",
-            JSON.stringify({ posts: json.data, ts: Date.now() })
-          );
-        }
-      } catch {
-      } finally {
-        setLoading(false);
-      }
+      } catch {}
     };
 
     fetchPosts();
   }, []);
 
-  if (loading) {
-    return (
-      <section className="py-24 px-4 bg-paper border-y border-ink">
-        <div className="max-w-7xl mx-auto">
-          <div className="section-number mb-3">№ 06.5 / 08 · INSIGHTS</div>
-          <div className="font-mono text-xs text-ink/40 stamp-text">LOADING LATEST POSTS...</div>
-        </div>
-      </section>
-    );
-  }
-
-  if (posts.length === 0) return null;
+  const lead = posts[0];
+  const sidePosts = posts.slice(1, 4);
+  const bottomPosts = posts.slice(4, 6);
 
   return (
     <section
       id="blog-preview"
-      className="py-24 px-4 bg-paper border-y border-ink"
-      aria-label="Latest blog posts"
+      className="py-20 md:py-28 px-4 bg-paper border-y border-ink"
+      aria-label="Latest insights from our founders"
     >
       <div className="max-w-7xl mx-auto">
-        <div className="mb-12 flex items-end justify-between gap-4">
-          <div>
-            <div className="section-number mb-3">№ 06.5 / 08 · INSIGHTS</div>
-            <h2 className="headline-display">
-              From The <span className="volt-highlight">Founders</span> Desk
-            </h2>
+        <SectionHeader
+          eyebrow="№ 06.5 / 08 · INSIGHTS"
+          title="From The Founders Desk"
+          accent="Founders"
+          description="Tactical blueprints, venture ideas, and mental models for high-schoolers launching software."
+          action={
+            <Link
+              href="/blog"
+              className="font-mono text-xs text-ink/70 hover:text-signal transition-colors uppercase tracking-[0.08em] font-semibold border-b border-ink/40 pb-0.5 hover:border-signal"
+            >
+              ALL POSTS →
+            </Link>
+          }
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch mb-6">
+          {lead && (
+            <div className="md:col-span-7">
+              <Link
+                href={`/blog/${lead.slug}`}
+                className="ticket-card h-full flex flex-col justify-between hover:shadow-tactile-signal transition-all group p-6 sm:p-7"
+              >
+                <div>
+                  <div className="border border-ink mb-5 overflow-hidden bg-white shadow-tactile-sm">
+                    <div className="relative aspect-[16/10] overflow-hidden bg-sand">
+                      <PostThumbnail src={lead.coverImage} title={lead.title} />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 mb-3">
+                    <span className="pill pill-volt text-xs font-medium">
+                      {lead.category}
+                    </span>
+                    <span className="font-mono text-xs text-ink/50">
+                      {lead.readTime} min read
+                    </span>
+                    <span className="font-mono text-xs text-ink/40">·</span>
+                    <span className="font-mono text-xs text-ink/50">
+                      {new Date(lead.createdAt).toLocaleDateString("en-IN", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                  </div>
+
+                  <h3 className="font-display font-bold text-2xl sm:text-3xl leading-snug tracking-tight mb-3 group-hover:text-signal transition-colors">
+                    {lead.title}
+                  </h3>
+
+                  <p className="text-sm text-ink/75 leading-relaxed line-clamp-3 mb-6">
+                    {lead.excerpt}
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-ink/15 flex items-center justify-between font-mono text-xs">
+                  <span className="text-ink/50">By {lead.author}</span>
+                  <span className="text-signal font-bold group-hover:translate-x-1 transition-transform">
+                    READ FULL STORY →
+                  </span>
+                </div>
+              </Link>
+            </div>
+          )}
+
+          <div className="md:col-span-5 flex flex-col justify-between gap-4">
+            {sidePosts.map((post) => (
+              <Link
+                key={post.id}
+                href={`/blog/${post.slug}`}
+                className="ticket-card p-4 hover:shadow-tactile transition-all group flex-1 flex items-center gap-4"
+              >
+                <div className="w-24 h-24 flex-shrink-0 border border-ink overflow-hidden bg-sand">
+                  <PostThumbnail src={post.coverImage} title={post.title} />
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="pill text-[10px] px-2 py-0.5 bg-sand">
+                      {post.category}
+                    </span>
+                    <span className="font-mono text-[11px] text-ink/50">
+                      {post.readTime}m read
+                    </span>
+                  </div>
+                  <h4 className="font-display font-bold text-sm sm:text-base leading-snug tracking-tight line-clamp-2 group-hover:text-signal transition-colors mb-1">
+                    {post.title}
+                  </h4>
+                  <div className="font-mono text-[11px] text-signal flex items-center gap-1">
+                    <span>Read</span>
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
-          <Link
-            href="/blog"
-            className="font-mono text-sm text-ink/60 hover:text-signal transition-colors stamp-text flex-shrink-0"
-          >
-            ALL POSTS →
-          </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {posts.map((post, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {bottomPosts.map((post) => (
             <Link
               key={post.id}
               href={`/blog/${post.slug}`}
-              className={`ticket-card hover:shadow-tactile-signal transition-all group ${
-                i === 0 ? "md:col-span-2" : ""
-              }`}
+              className="ticket-card p-5 hover:shadow-tactile transition-all group flex flex-col sm:flex-row items-center gap-5"
             >
-              <div className="p-5">
-                {post.coverImage && (
-                  <div className="border border-ink mb-4 overflow-hidden bg-white shadow-tactile-sm">
-                    <div className="relative aspect-[16/9] overflow-hidden">
-                      <img
-                        src={post.coverImage}
-                        alt={post.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        loading="lazy"
-                      />
-                    </div>
-                  </div>
-                )}
+              <div className="w-full sm:w-40 aspect-[4/3] sm:h-28 flex-shrink-0 border border-ink overflow-hidden bg-sand">
+                <PostThumbnail src={post.coverImage} title={post.title} />
+              </div>
 
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="pill pill-volt text-xs">{post.category}</span>
-                  <span className="font-mono text-xs text-ink/40">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="pill text-[10px] px-2 py-0.5 bg-sand">
+                    {post.category}
+                  </span>
+                  <span className="font-mono text-xs text-ink/50">
                     {post.readTime} min read
                   </span>
                 </div>
-
-                <h3
-                  className={`font-boomdang font-bold leading-tight mb-2 group-hover:text-signal transition-colors ${
-                    i === 0 ? "text-xl" : "text-base"
-                  }`}
-                >
+                <h4 className="font-display font-bold text-base sm:text-lg leading-snug tracking-tight line-clamp-2 group-hover:text-signal transition-colors mb-1.5">
                   {post.title}
-                </h3>
-
-                <p className="text-sm text-ink/60 leading-relaxed line-clamp-2">
+                </h4>
+                <p className="text-xs text-ink/70 line-clamp-2 leading-relaxed mb-2">
                   {post.excerpt}
                 </p>
-
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="font-mono text-xs text-ink/40">
-                    {new Date(post.createdAt).toLocaleDateString("en-IN", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </span>
-                  <span className="font-mono text-xs text-signal group-hover:translate-x-1 transition-transform stamp-text">
-                    READ →
-                  </span>
+                <div className="font-mono text-xs text-signal flex items-center gap-1 font-semibold">
+                  <span>Read Article</span>
+                  <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </div>
               </div>
             </Link>
@@ -135,4 +200,3 @@ export default function HomepageBlogSection() {
     </section>
   );
 }
-

@@ -1,253 +1,216 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { SectionHeader } from "@/components/SectionHeader";
 
 const PHASES = [
   {
-    weeks: "Week 1–2",
-    label: "Ideation & Market Research",
-    deliverables: [
+    num: "01",
+    weeks: "WEEKS 1–2",
+    tag: "DISCOVERY",
+    title: "Ideation & Market Research",
+    bullets: [
       "Identify real problems worth solving",
       "Validate startup ideas with real users",
-      "Competitor landscape mapping",
-      "Target customer personas",
+      "Map competitors and customer personas",
     ],
-    color: "#FF4F18",
+    output: "OUTPUT: Validated Problem Spec",
+    accent: "text-signal",
   },
   {
-    weeks: "Week 3–4",
-    label: "Design & Prototyping",
-    deliverables: [
-      "UI/UX wireframing",
-      "User flow mapping",
-      "High-converting landing page design",
-      "Figma prototype for user testing",
+    num: "02",
+    weeks: "WEEKS 3–4",
+    tag: "PROTOTYPING",
+    title: "Design & Prototyping",
+    bullets: [
+      "UI/UX wireframes and user flows",
+      "High-converting landing page structure",
+      "Interactive Figma prototype for testing",
     ],
-    color: "#D2FF28",
+    output: "OUTPUT: Interactive Figma Prototype",
+    accent: "text-ink",
   },
   {
-    weeks: "Week 5–6",
-    label: "Full-Stack Development",
-    deliverables: [
+    num: "03",
+    weeks: "WEEKS 5–6",
+    tag: "ENGINEERING",
+    title: "Full-Stack Development",
+    bullets: [
       "No-code + AI full-stack architecture",
-      "Database and backend setup",
-      "Automated workflows",
-      "Working MVP deployed live",
+      "Database schema and backend setup",
+      "Automated logic and working MVP",
     ],
-    color: "#0D5C46",
+    output: "OUTPUT: Full-Stack AI App",
+    accent: "text-emerald",
   },
   {
-    weeks: "Week 7–8",
-    label: "Launch & Marketing",
-    deliverables: [
+    num: "04",
+    weeks: "WEEKS 7–8",
+    tag: "GO-TO-MARKET",
+    title: "Launch & Marketing",
+    bullets: [
       "Product Hunt launch campaign",
       "Investor pitch deck creation",
-      "First paying customers strategy",
-      "Press and media outreach",
+      "First paying customer acquisition",
     ],
-    color: "#121316",
+    output: "OUTPUT: Product Hunt Launch",
+    accent: "text-signal",
   },
 ];
 
 export default function BlueprintSection() {
   const prefersReduced = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
-  const pathRef = useRef<SVGPathElement>(null);
-  const [activePhase, setActivePhase] = useState<number | null>(null);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
 
-  useEffect(() => {
-    if (prefersReduced || !pathRef.current) return;
-
-    const unsubscribe = scrollYProgress.on("change", (v) => {
-      if (pathRef.current) {
-        const clamped = Math.min(1, Math.max(0, (v - 0.1) / 0.6));
-        pathRef.current.style.strokeDashoffset = `${1 - clamped}`;
-      }
-    });
-
-    return unsubscribe;
-  }, [scrollYProgress, prefersReduced]);
-
-  const pathProgress = useTransform(scrollYProgress, [0.1, 0.7], [1, 0]);
+  const pathLength = useTransform(scrollYProgress, [0.15, 0.65], [0, 1]);
 
   return (
     <section
       id="blueprint"
       ref={sectionRef}
-      className="py-24 px-4 bg-paper border-y border-ink relative overflow-hidden"
+      className="py-20 md:py-28 px-4 bg-paper border-y border-ink relative overflow-hidden"
       aria-label="8-Week Blueprint"
     >
       <div className="max-w-7xl mx-auto">
-        <div className="mb-16">
-          <div className="section-number mb-3">№ 03 / 08 · THE PROGRAM</div>
-          <h2 className="headline-display mb-4">
-            From Idea to Full App{" "}
-            <span className="signal-underline">in 8 Weeks</span>
-          </h2>
+        <SectionHeader
+          eyebrow="№ 03 / 08 · THE ARCHITECTURE"
+          title="From Idea to Full App in 8 Weeks"
+          accent="8 Weeks"
+          description="A structured, milestone-driven curriculum engineered to take high schoolers from zero to a live, monetizable software startup."
+        />
 
-          <div className="inline-flex flex-wrap gap-x-6 gap-y-2 border border-ink px-6 py-3 bg-volt text-sm font-medium font-mono">
-            <span>Personal 1:1 Live Sessions</span>
-            <span className="text-ink/40">·</span>
-            <span>1 Hour Each</span>
-            <span className="text-ink/40">·</span>
-            <span>Expert Guidance</span>
-            <span className="text-ink/40">·</span>
-            <span>2–3 Hours/Week Total Commitment</span>
-          </div>
-        </div>
-
-        <div className="relative">
-          <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-ink/10 -translate-x-1/2" />
-
-          <div className="hidden lg:block absolute left-0 top-8 w-full" aria-hidden="true">
+        <div className="hidden lg:block mb-8">
+          <div className="relative">
             <svg
-              viewBox="0 0 800 400"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-full opacity-20"
+              viewBox="0 0 1200 40"
+              className="w-full h-10 overflow-visible"
               aria-hidden="true"
             >
-              {[0, 50, 100, 150, 200, 250, 300, 350, 400].map((x) => (
-                <line
-                  key={x}
-                  x1={x}
-                  y1="0"
-                  x2={x}
-                  y2="400"
-                  stroke="#121316"
-                  strokeWidth="0.5"
-                  strokeDasharray="2 4"
-                />
-              ))}
-              {[0, 100, 200, 300, 400].map((y) => (
-                <line
-                  key={y}
-                  x1="0"
-                  y1={y}
-                  x2="800"
-                  y2={y}
-                  stroke="#121316"
-                  strokeWidth="0.5"
-                  strokeDasharray="2 4"
-                />
-              ))}
-              <path
-                ref={pathRef}
-                d="M 50 50 C 100 50 150 150 200 150 C 250 150 300 250 350 250 C 400 250 450 350 500 350 C 550 350 600 300 650 300 C 700 300 750 200 800 200"
+              <line
+                x1="0"
+                y1="20"
+                x2="1200"
+                y2="20"
+                stroke="#121316"
+                strokeWidth="1.5"
+                strokeDasharray="4 4"
+                opacity="0.3"
+              />
+              <motion.line
+                x1="0"
+                y1="20"
+                x2="1200"
+                y2="20"
                 stroke="#FF4F18"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeDasharray="1"
-                pathLength="1"
+                strokeWidth="2.5"
                 style={
                   prefersReduced
-                    ? { strokeDashoffset: 0 }
-                    : { strokeDashoffset: pathProgress as unknown as number }
+                    ? { pathLength: 1 }
+                    : { pathLength }
                 }
               />
+              {[150, 450, 750, 1050].map((cx, idx) => (
+                <g key={cx}>
+                  <circle
+                    cx={cx}
+                    cy="20"
+                    r="8"
+                    fill="#F6F4EE"
+                    stroke="#121316"
+                    strokeWidth="2"
+                  />
+                  <circle cx={cx} cy="20" r="3" fill="#FF4F18" />
+                  <text
+                    x={cx}
+                    y="36"
+                    textAnchor="middle"
+                    className="font-mono text-[10px] fill-ink/60 font-medium"
+                  >
+                    PHASE {idx + 1}
+                  </text>
+                </g>
+              ))}
             </svg>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {PHASES.map((phase, i) => (
-              <motion.div
-                key={phase.weeks}
-                className="border border-ink bg-ivory cursor-pointer"
-                initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
-                whileInView={prefersReduced ? {} : { opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                onClick={() =>
-                  setActivePhase(activePhase === i ? null : i)
-                }
-              >
-                <div className="flex items-start gap-4 p-5">
-                  <div
-                    className="w-10 h-10 flex-shrink-0 border border-ink flex items-center justify-center font-mono font-bold text-lg"
-                    style={{ backgroundColor: phase.color, color: phase.color === "#D2FF28" || phase.color === "#F6F4EE" ? "#121316" : "white" }}
-                  >
-                    {String(i + 1).padStart(2, "0")}
-                  </div>
-
-                  <div className="flex-1">
-                    <div className="font-mono text-xs text-ink/50 mb-1 stamp-text">
-                      {phase.weeks.toUpperCase()}
-                    </div>
-                    <div className="font-boomdang text-xl font-bold mb-2">
-                      {phase.label}
-                    </div>
-
-                    <div
-                      className={`overflow-hidden transition-all duration-300 ${
-                        activePhase === i ? "max-h-48" : "max-h-0"
-                      }`}
-                    >
-                      <ul className="mt-3 space-y-1.5">
-                        {phase.deliverables.map((d) => (
-                          <li
-                            key={d}
-                            className="flex items-start gap-2 text-sm text-ink/70"
-                          >
-                            <span
-                              className="mt-1 w-3 h-3 flex-shrink-0 border border-ink inline-block"
-                              style={{ backgroundColor: phase.color }}
-                              aria-hidden="true"
-                            />
-                            {d}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-
-                  <span
-                    className="font-mono text-ink/40 transition-transform duration-200"
-                    style={{
-                      transform:
-                        activePhase === i ? "rotate(90deg)" : "none",
-                    }}
-                    aria-hidden="true"
-                  >
-                    →
-                  </span>
-                </div>
-              </motion.div>
-            ))}
           </div>
         </div>
 
-        <motion.div
-          className="mt-16 border-l-4 border-signal bg-ivory p-8 relative"
-          initial={prefersReduced ? {} : { opacity: 0, x: -20 }}
-          whileInView={prefersReduced ? {} : { opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-        >
-          <div className="font-boomdang text-2xl lg:text-3xl leading-tight mb-4 italic">
-            &ldquo;Learn to sell. Learn to build. If you can do both, you will be unstoppable.&rdquo;
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-stretch mb-12">
+          {PHASES.map((phase, idx) => (
+            <div
+              key={phase.num}
+              className={`border-[1.5px] border-ink bg-ivory p-6 sm:p-7 flex flex-col justify-between relative ${
+                idx > 0 ? "lg:-ml-[1.5px]" : ""
+              } ${idx >= 2 ? "md:-mt-[1.5px] lg:mt-0" : ""}`}
+            >
+              <div>
+                <div className="flex items-center justify-between border-b border-ink/15 pb-3 mb-4">
+                  <span className="font-mono text-xs font-bold text-ink">
+                    {phase.num} / {phase.weeks}
+                  </span>
+                  <span className="font-mono text-[10px] tracking-wider uppercase px-2 py-0.5 bg-sand text-ink/80 border border-ink/20">
+                    {phase.tag}
+                  </span>
+                </div>
+
+                <h3 className="font-display font-bold text-xl tracking-tight leading-snug mb-4 text-ink">
+                  {phase.title}
+                </h3>
+
+                <ul className="space-y-2.5 mb-8">
+                  {phase.bullets.map((bullet) => (
+                    <li key={bullet} className="text-sm text-ink/75 leading-relaxed flex items-start gap-2">
+                      <span className="text-signal font-bold mt-0.5">▸</span>
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="pt-4 border-t border-dashed border-ink/25">
+                <span className="font-mono text-xs font-bold text-ink bg-sand/70 border border-ink/30 px-2.5 py-1.5 block text-center">
+                  {phase.output}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="border border-ink bg-sand p-6 sm:p-8 mb-8 shadow-tactile-sm">
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="font-mono text-xs text-ink/50 uppercase tracking-widest block mb-3">
+              NAVAL RAVIKANT · THE NEW LEVERAGE
+            </span>
+            <blockquote className="font-serif italic text-xl sm:text-2xl text-ink leading-relaxed mb-4">
+              &ldquo;Coding, writing books, recorded podcasts, tweets, YouTubes, software — these are all permissionless leverage. You don&apos;t need anyone&apos;s permission to build.&rdquo;
+            </blockquote>
+            <div className="font-mono text-xs text-signal font-bold uppercase tracking-wider">
+              — Teach kids to own permissionless leverage before college
+            </div>
           </div>
+        </div>
+
+        <div className="border border-ink px-6 py-4 bg-ivory flex flex-wrap items-center justify-between gap-4 font-mono text-xs sm:text-sm">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-ink text-paper flex items-center justify-center font-mono font-bold text-xs">
-              NR
-            </div>
-            <div>
-              <div className="font-bold">Naval Ravikant</div>
-              <div className="font-mono text-xs text-ink/50 stamp-text">ENTREPRENEUR · INVESTOR · PHILOSOPHER</div>
-            </div>
-            <div className="ml-auto">
-              <span className="bg-signal text-white font-mono text-xs px-3 py-1 stamp-text rotate-2 inline-block">
-                STAMPED
-              </span>
-            </div>
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald" />
+            <span className="font-semibold uppercase tracking-wider">Cohort Spec:</span>
           </div>
-        </motion.div>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-ink/80">
+            <span>Personal 1:1 Live Sessions</span>
+            <span>·</span>
+            <span>1 Hour Each</span>
+            <span>·</span>
+            <span>Expert Guidance</span>
+            <span>·</span>
+            <span>2–3 Hours/Week Total</span>
+          </div>
+        </div>
       </div>
     </section>
   );
 }
-

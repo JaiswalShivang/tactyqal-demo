@@ -2,46 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "Bontang";
-  src: url("/fonts/Bontang-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Bontang";
-  src: url("/fonts/Bontang-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "BDO Grotesk";
-  src: url("/fonts/BDOGrotesk-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "BDO Grotesk";
-  src: url("/fonts/BDOGrotesk-Medium.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "BDO Grotesk";
-  src: url("/fonts/BDOGrotesk-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   --paper: #F6F4EE;
   --ivory: #FFFFFF;
@@ -79,7 +39,7 @@ html {
 body {
   background-color: var(--paper);
   color: var(--ink);
-  font-family: var(--font-plus-jakarta), system-ui, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   position: relative;
   overflow-x: hidden;
 }
@@ -104,6 +64,11 @@ body::before {
       transparent calc(100% / 12)
     );
   background-size: 100% 100%;
+}
+
+.free-tools-dots {
+  background-image: radial-gradient(#2E3138 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 .perforated-edge {
@@ -143,6 +108,42 @@ body::before {
   background-repeat: repeat-x;
   pointer-events: none;
   z-index: 1;
+}
+
+.perforated-tear-top {
+  position: relative;
+}
+
+.perforated-tear-top::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 16px;
+  background-image: radial-gradient(circle at 50% 100%, #121316 8px, transparent 8px);
+  background-size: 24px 16px;
+  background-repeat: repeat-x;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.perforated-tear-bottom {
+  position: relative;
+}
+
+.perforated-tear-bottom::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 16px;
+  background-image: radial-gradient(circle at 50% 0%, #121316 8px, transparent 8px);
+  background-size: 24px 16px;
+  background-repeat: repeat-x;
+  pointer-events: none;
+  z-index: 10;
 }
 
 .tactile-btn {
@@ -190,46 +191,45 @@ body::before {
   }
 }
 
-.font-boomdang {
-  font-family: "Bontang", "BDO Grotesk", var(--font-dangrek), sans-serif;
-}
-
 .stamp-text {
-  font-family: var(--font-jetbrains), monospace;
-  letter-spacing: 0.15em;
+  font-family: var(--font-mono), monospace;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .section-number {
-  font-family: var(--font-jetbrains), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 0.75rem;
-  letter-spacing: 0.2em;
-  color: rgba(18, 19, 22, 0.4);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(18, 19, 22, 0.5);
 }
 
 .headline-display {
-  font-family: "Bontang", "BDO Grotesk", var(--font-dangrek), sans-serif;
-  font-size: clamp(2.5rem, 5.2vw, 5.25rem);
-  line-height: 1.04;
-  letter-spacing: -0.025em;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2rem, 4.2vw, 3.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
   font-weight: 700;
 }
 
 .headline-xl {
-  font-size: clamp(3rem, 7.5vw, 7.5rem);
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2.75rem, 6.5vw, 6rem);
   line-height: 1.02;
-  letter-spacing: -0.03em;
-  font-weight: 700;
+  letter-spacing: -0.035em;
+  font-weight: 800;
 }
 
 .volt-highlight {
   background-color: var(--volt);
   color: var(--ink);
-  padding: 0.02em 0.18em;
+  padding: 0.08em 0.28em;
   display: inline-block;
   vertical-align: baseline;
-  line-height: 0.95;
+  line-height: 1;
   border-radius: 2px;
+  font-weight: 600;
 }
 
 .signal-underline {
@@ -272,21 +272,21 @@ body::before {
 
 .ticket-notch {
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background-color: var(--paper);
   border: 1.5px solid var(--ink);
 }
 
 .ticket-notch-left {
-  left: -10px;
+  left: -13px;
   top: 50%;
   transform: translateY(-50%);
 }
 
 .ticket-notch-right {
-  right: -10px;
+  right: -13px;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -298,8 +298,8 @@ body::before {
   background-color: var(--emerald);
   color: white;
   font-size: 0.65rem;
-  font-family: var(--font-jetbrains), monospace;
-  letter-spacing: 0.1em;
+  font-family: var(--font-mono), monospace;
+  letter-spacing: 0.08em;
   padding: 0.15rem 0.5rem;
   border-radius: 999px;
   text-transform: uppercase;
@@ -319,6 +319,7 @@ body::before {
 
 .pill-volt {
   background-color: var(--volt);
+  color: var(--ink);
   border-color: var(--ink);
 }
 
@@ -388,7 +389,7 @@ body::before {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(18, 19, 22, 0.8);
+  background: rgba(18, 19, 22, 0.85);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -411,12 +412,13 @@ body::before {
 }
 
 .prose-tactyqal h2 {
-  font-family: "Bontang", "BDO Grotesk", var(--font-dangrek), sans-serif;
+  font-family: var(--font-display), sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
   margin-top: 2rem;
   margin-bottom: 0.75rem;
   line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 .prose-tactyqal p {
@@ -440,11 +442,13 @@ body::before {
   padding-left: 1.25rem;
   margin: 1.5rem 0;
   font-style: italic;
-  color: rgba(18, 19, 22, 0.75);
+  font-family: var(--font-serif), serif;
+  font-size: 1.15rem;
+  color: rgba(18, 19, 22, 0.85);
 }
 
 .prose-tactyqal code {
-  font-family: var(--font-jetbrains), monospace;
+  font-family: var(--font-mono), monospace;
   background: var(--sand);
   padding: 0.1em 0.4em;
   border-radius: 2px;
@@ -473,11 +477,12 @@ body::before {
 
 .drop-cap::first-letter {
   float: left;
-  font-family: "Bontang", "BDO Grotesk", var(--font-dangrek), sans-serif;
+  font-family: var(--font-serif), serif;
+  font-style: italic;
   font-size: 4.5rem;
   line-height: 0.85;
-  margin-right: 0.1em;
+  margin-right: 0.12em;
   margin-top: 0.05em;
-  font-weight: 700;
+  font-weight: 400;
   color: var(--signal);
 }

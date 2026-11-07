@@ -11,7 +11,7 @@ import StudentVoicesSection from "@/components/sections/StudentVoicesSection";
 import PricingSection from "@/components/sections/PricingSection";
 import FAQSection from "@/components/sections/FAQSection";
 import Footer from "@/components/Footer";
-import { HeroTicker, HomepageTicker } from "@/components/MarqueeTicker";
+import { HeroTicker } from "@/components/MarqueeTicker";
 import TicketIntro from "@/components/TicketIntro";
 import CustomCursor from "@/components/CustomCursor";
 import HomepageBlogSection from "@/components/sections/HomepageBlogSection";
@@ -57,11 +57,12 @@ export default function HomePage() {
 
         <Header />
 
-        <HeroTicker />
+        <div className="pt-14">
+          <HeroTicker />
+        </div>
 
         <main id="main-content">
           <HeroSection />
-          <HomepageTicker />
           <StudentProjectsSection />
           <BlueprintSection />
           <WhyParentsSection />

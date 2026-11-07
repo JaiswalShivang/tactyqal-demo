@@ -121,7 +121,7 @@ export default function BlogListClient({
 
           {filtered.length === 0 ? (
             <div className="text-center py-24">
-              <div className="font-boomdang text-4xl font-bold mb-4">
+              <div className="font-display font-bold text-4xl mb-4">
                 No articles found
               </div>
               <p className="text-ink/60 mb-6">
@@ -163,7 +163,7 @@ export default function BlogListClient({
                           {featured.readTime} min
                         </span>
                       </div>
-                      <h2 className="font-boomdang text-3xl font-bold mb-3 leading-tight group-hover:text-signal transition-colors">
+                      <h2 className="font-display text-3xl font-bold mb-3 leading-tight group-hover:text-signal transition-colors">
                         {highlightMatch(featured.title, query)}
                       </h2>
                       <p className="text-ink/60 leading-relaxed mb-4">
@@ -212,7 +212,7 @@ export default function BlogListClient({
                             {post.readTime} min
                           </span>
                         </div>
-                        <h3 className="font-boomdang font-bold text-lg mb-2 leading-tight group-hover:text-signal transition-colors">
+                        <h3 className="font-display font-bold text-lg mb-2 leading-tight group-hover:text-signal transition-colors">
                           {highlightMatch(post.title, query)}
                         </h3>
                         <p className="text-sm text-ink/60 line-clamp-2 mb-3">
@@ -257,7 +257,7 @@ export default function BlogListClient({
                   <div className="font-mono text-xs text-ink/40 mb-3 stamp-text">
                     FREE COHORT
                   </div>
-                  <div className="font-boomdang text-xl font-bold mb-2">
+                  <div className="font-display text-xl font-bold mb-2">
                     Join the next cohort
                   </div>
                   <p className="text-sm text-ink/70 mb-4">

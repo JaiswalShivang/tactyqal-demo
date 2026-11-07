@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { SectionHeader } from "@/components/SectionHeader";
 
 type Category = "All" | "AgriTech" | "D2C" | "Commerce" | "Social" | "Media" | "EdTech";
 
@@ -78,7 +79,7 @@ function AppIcon({ type }: { type: string }) {
     ),
   };
 
-  return <div className="w-12 h-12 flex-shrink-0">{configs[type]}</div>;
+  return <div className="w-10 h-10 flex-shrink-0">{configs[type]}</div>;
 }
 
 const PROJECTS: Project[] = [
@@ -182,50 +183,52 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
   return (
     <motion.div
       layout={!prefersReduced}
-      initial={prefersReduced ? {} : { opacity: 0, scale: 0.95 }}
+      initial={prefersReduced ? {} : { opacity: 0, scale: 0.96 }}
       animate={{ opacity: 1, scale: 1 }}
-      exit={prefersReduced ? {} : { opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.25 }}
-      className="ticket-card p-5 cursor-pointer hover:shadow-tactile-signal group transition-all"
+      exit={prefersReduced ? {} : { opacity: 0, scale: 0.96 }}
+      transition={{ duration: 0.2 }}
+      className="ticket-card p-5 cursor-pointer hover:shadow-tactile-signal group transition-all flex flex-col justify-between"
       onClick={onClick}
       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onClick(); }}
       tabIndex={0}
       role="button"
       aria-label={`View ${project.name} project details`}
     >
-      <div className="flex items-start gap-3 mb-3">
-        {project.icon}
-        <div className="flex-1 min-w-0">
-          <div className="font-boomdang font-bold text-lg leading-tight">{project.name}</div>
-          <div className="font-mono text-xs text-ink/40 stamp-text">{project.category}</div>
-        </div>
-        <span className="pill pill-volt text-xs flex-shrink-0">{project.badgeValue}</span>
-      </div>
-
-      <div className="border border-ink bg-paper mb-3 overflow-hidden shadow-tactile-sm">
-        <div className="bg-sand border-b border-ink px-2 py-1 flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-signal" />
-            <span className="w-2 h-2 rounded-full bg-volt" />
-            <span className="w-2 h-2 rounded-full bg-emerald" />
+      <div>
+        <div className="flex items-start gap-3 mb-3">
+          {project.icon}
+          <div className="flex-1 min-w-0">
+            <div className="font-display font-bold text-lg leading-tight tracking-tight">{project.name}</div>
+            <div className="font-mono text-xs text-ink/50 stamp-text">{project.category}</div>
           </div>
-          <span className="font-mono text-[10px] text-ink/50 uppercase tracking-widest">{project.id}.app</span>
+          <span className="pill pill-volt text-xs flex-shrink-0 font-medium">{project.badgeValue}</span>
         </div>
-        <div className="relative aspect-[16/10] bg-white overflow-hidden">
-          <img
-            src={project.screenshot}
-            alt={`${project.name} application preview`}
-            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
-            loading="lazy"
-          />
+
+        <div className="border border-ink bg-paper mb-3 overflow-hidden shadow-tactile-sm">
+          <div className="bg-sand border-b border-ink px-2 py-1 flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-signal inline-block" />
+              <span className="w-2 h-2 rounded-full bg-volt inline-block" />
+              <span className="w-2 h-2 rounded-full bg-emerald inline-block" />
+            </div>
+            <span className="font-mono text-[10px] text-ink/50 uppercase tracking-widest">{project.id}.app</span>
+          </div>
+          <div className="relative aspect-[16/10] bg-white overflow-hidden">
+            <img
+              src={project.screenshot}
+              alt={`${project.name} application preview`}
+              className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+            />
+          </div>
         </div>
+
+        <p className="text-sm text-ink/75 leading-relaxed mb-4">{project.description}</p>
       </div>
 
-      <p className="text-sm text-ink/70 leading-relaxed mb-3">{project.description}</p>
-
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pt-2 border-t border-ink/15">
         <span className="verified-tag">✓ VERIFIED STUDENT</span>
-        <span className="font-mono text-xs text-ink/40">View →</span>
+        <span className="font-mono text-xs text-signal group-hover:translate-x-1 transition-transform">View Details →</span>
       </div>
     </motion.div>
   );
@@ -235,7 +238,6 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   const prefersReduced = useReducedMotion();
   const [count, setCount] = useState(0);
   const hasRun = useRef(false);
-
   const modalRef = useRef<HTMLDivElement>(null);
 
   useState(() => {
@@ -247,7 +249,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
       return;
     }
 
-    const duration = 1200;
+    const duration = 1000;
     const startTime = performance.now();
     const animate = (now: number) => {
       const elapsed = now - startTime;
@@ -269,35 +271,35 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
     >
       <motion.div
         ref={modalRef}
-        className="bg-paper border border-ink w-full max-w-lg p-8 relative"
-        initial={prefersReduced ? {} : { y: 40, opacity: 0 }}
+        className="bg-paper border-2 border-ink w-full max-w-lg p-6 sm:p-8 relative shadow-tactile"
+        initial={prefersReduced ? {} : { y: 30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        exit={prefersReduced ? {} : { y: 40, opacity: 0 }}
-        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+        exit={prefersReduced ? {} : { y: 30, opacity: 0 }}
+        transition={{ type: "spring", stiffness: 350, damping: 30 }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 border border-ink flex items-center justify-center hover:bg-ink hover:text-paper transition-colors"
+          className="absolute top-4 right-4 w-8 h-8 border border-ink flex items-center justify-center hover:bg-ink hover:text-paper transition-colors font-mono"
           aria-label="Close modal"
         >
           ✕
         </button>
 
-        <div className="flex items-start gap-4 mb-4">
+        <div className="flex items-start gap-3 mb-4">
           {project.icon}
           <div>
-            <div className="font-boomdang text-2xl font-bold">{project.name}</div>
-            <span className="pill text-xs">{project.category}</span>
+            <div className="font-display text-2xl font-bold tracking-tight">{project.name}</div>
+            <span className="pill text-xs bg-sand mt-1">{project.category}</span>
           </div>
         </div>
 
         <div className="border border-ink bg-paper mb-5 overflow-hidden shadow-tactile-sm">
           <div className="bg-sand border-b border-ink px-3 py-1.5 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-signal" />
-              <span className="w-2.5 h-2.5 rounded-full bg-volt" />
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald" />
+              <span className="w-2.5 h-2.5 rounded-full bg-signal inline-block" />
+              <span className="w-2.5 h-2.5 rounded-full bg-volt inline-block" />
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald inline-block" />
             </div>
             <span className="font-mono text-xs text-ink/60 uppercase tracking-wider">{project.id}.tactyqal.app</span>
           </div>
@@ -310,20 +312,20 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           </div>
         </div>
 
-        <div className="bg-volt border border-ink p-4 mb-6 text-center">
+        <div className="bg-sand border border-ink p-4 mb-5 text-center">
           <div className="font-mono text-xs text-ink/60 mb-1 stamp-text">{project.metric.toUpperCase()}</div>
-          <div className="font-boomdang text-4xl font-bold">
+          <div className="font-display text-4xl font-extrabold text-signal tracking-tight">
             {project.metricPrefix}
             {count.toLocaleString("en-IN")}
             {project.metricSuffix}
           </div>
         </div>
 
-        <p className="text-sm leading-relaxed mb-4">{project.story}</p>
+        <p className="text-sm leading-relaxed mb-6 text-ink/80">{project.story}</p>
 
         <div className="flex items-center justify-between pt-4 border-t border-ink/20">
           <span className="verified-tag">✓ VERIFIED STUDENT PROJECT</span>
-          <span className="pill pill-volt text-xs">{project.badge}</span>
+          <span className="pill pill-volt text-xs font-semibold">{project.badge}</span>
         </div>
       </motion.div>
     </div>
@@ -341,65 +343,56 @@ export default function StudentProjectsSection() {
   return (
     <section
       id="student-projects"
-      className="py-24 px-4 bg-ivory border-y border-ink relative"
+      className="py-20 md:py-28 px-4 bg-ivory border-y border-ink relative"
       aria-label="Student projects"
     >
       <div className="perforated-edge-top" />
 
       <div className="max-w-7xl mx-auto">
-        <div className="mb-12">
-          <div className="section-number mb-3">№ 02 / 08 · PROOF OF WORK</div>
-          <h2 className="headline-display mb-4">
-            Real Students. Real Apps.{" "}
-            <span className="volt-highlight">Real Success.</span>
-          </h2>
-          <p className="text-ink/60 max-w-xl">
-            Every project below was built by a teenager in an 8-week cohort—with real users, real revenue, and a real impact.
-          </p>
-        </div>
+        <SectionHeader
+          eyebrow="№ 02 / 08 · PROOF OF WORK"
+          title="Real Students. Real Apps. Real Success."
+          accent="Success."
+          description="Every project below was built by a teenager in an 8-week cohort—with real users, real revenue, and a real impact."
+        />
 
-        <div className="flex flex-wrap gap-2 mb-8" role="group" aria-label="Filter by category">
+        <div
+          className="flex flex-wrap gap-2 mb-10"
+          role="group"
+          aria-label="Filter projects by category"
+        >
           {CATEGORIES.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`pill text-sm transition-colors ${
+              className={`pill text-xs transition-colors ${
                 activeCategory === cat
-                  ? "bg-ink text-paper border-ink"
-                  : "hover:bg-sand"
+                  ? "bg-ink text-white border-ink font-semibold"
+                  : "bg-paper text-ink/80 hover:bg-sand"
               }`}
-              aria-pressed={activeCategory === cat}
             >
               {cat}
             </button>
           ))}
         </div>
 
-        <motion.div
-          layout
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
-        >
-          <AnimatePresence mode="popLayout">
-            {filtered.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                onClick={() => setSelectedProject(project)}
-              />
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onClick={() => setSelectedProject(project)}
+            />
+          ))}
+        </div>
       </div>
 
-      <AnimatePresence>
-        {selectedProject && (
-          <ProjectModal
-            project={selectedProject}
-            onClose={() => setSelectedProject(null)}
-          />
-        )}
-      </AnimatePresence>
+      {selectedProject && (
+        <ProjectModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
     </section>
   );
 }
-

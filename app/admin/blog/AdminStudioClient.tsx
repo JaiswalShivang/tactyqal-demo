@@ -420,8 +420,8 @@ function APIInspector({ dataSource }: { dataSource: string }) {
         {tab === "why" && (
           <div className="prose-tactyqal text-sm max-h-[600px] overflow-y-auto">
             {WHY_CONTENT.split("\n").map((line, i) => {
-              if (line.startsWith("# ")) return <h1 key={i} className="font-boomdang text-2xl font-bold mb-4 mt-2">{line.slice(2)}</h1>;
-              if (line.startsWith("## ")) return <h2 key={i} className="font-boomdang text-lg font-bold mt-6 mb-2">{line.slice(3)}</h2>;
+              if (line.startsWith("# ")) return <h1 key={i} className="font-display text-2xl font-bold mb-4 mt-2">{line.slice(2)}</h1>;
+              if (line.startsWith("## ")) return <h2 key={i} className="font-display text-lg font-bold mt-6 mb-2">{line.slice(3)}</h2>;
               if (line.startsWith("### ")) return <h3 key={i} className="font-semibold mt-4 mb-1">{line.slice(4)}</h3>;
               if (line.startsWith("- **")) {
                 const match = line.match(/- \*\*(.+?)\*\*:? ?(.*)/);
@@ -636,7 +636,7 @@ export default function AdminStudioClient() {
     <div className="min-h-screen bg-paper">
       <div className="bg-ink text-white border-b border-ink sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center gap-6">
-          <Link href="/" className="font-boomdang font-bold text-sm hover:text-volt transition-colors">
+          <Link href="/" className="font-display font-bold text-sm hover:text-volt transition-colors">
             TACTYQAL
           </Link>
           <span className="text-white/20">/</span>
@@ -665,7 +665,7 @@ export default function AdminStudioClient() {
           ].map((stat) => (
             <div key={stat.label} className="border border-ink bg-ivory p-4">
               <div className="font-mono text-xs text-ink/40 mb-1 stamp-text">{stat.label}</div>
-              <div className="font-boomdang text-2xl font-bold">{stat.value}</div>
+              <div className="font-display text-2xl font-bold">{stat.value}</div>
             </div>
           ))}
         </div>
@@ -728,7 +728,7 @@ export default function AdminStudioClient() {
               </div>
             ) : filtered.length === 0 ? (
               <div className="p-8 text-center">
-                <div className="font-boomdang text-2xl font-bold mb-2">No posts found</div>
+                <div className="font-display text-2xl font-bold mb-2">No posts found</div>
                 <p className="text-ink/60 text-sm mb-4">Try a different search or create a new post.</p>
               </div>
             ) : (

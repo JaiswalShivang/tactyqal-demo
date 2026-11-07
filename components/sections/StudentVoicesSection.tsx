@@ -1,51 +1,50 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { SectionHeader } from "@/components/SectionHeader";
 
 const VOICES = [
   {
     name: "Aarav Sharma",
     quote: "I had to struggle to find a tech cofounder. After Tactyqal, I became my own CTO. I wish I had done this sooner.",
     initials: "AS",
-    color: "bg-signal",
-    rotation: "-1.5deg",
-  },
-  {
-    name: "Isha Patel",
-    quote: "Now I feel independent and can build anything I want. The 1:1 sessions made all the difference.",
-    initials: "IP",
-    color: "bg-volt",
-    rotation: "1deg",
-    textColor: "text-ink",
-  },
-  {
-    name: "Rohan Verma",
-    quote: "It's the future. Every teenager should know how to build a product, not just use one.",
-    initials: "RV",
-    color: "bg-emerald",
+    color: "bg-signal text-white",
     rotation: "-0.8deg",
   },
   {
+    name: "Isha Patel",
+    quote: "Now I feel independent and can build anything I want. The 1:1 sessions made all the difference in the world.",
+    initials: "IP",
+    color: "bg-sand text-ink",
+    rotation: "0.7deg",
+  },
+  {
+    name: "Rohan Verma",
+    quote: "It's the future. Every teenager should know how to build a software product, not just consume one.",
+    initials: "RV",
+    color: "bg-emerald text-white",
+    rotation: "-0.5deg",
+  },
+  {
     name: "Simran Kaur",
-    quote: "I can focus on the creative side and don't have to worry about whether it can be built. That's freedom.",
+    quote: "I can focus on the creative side and don't have to worry about whether it can be built. That's real leverage.",
     initials: "SK",
-    color: "bg-ink",
-    rotation: "1.5deg",
+    color: "bg-ink text-white",
+    rotation: "0.8deg",
   },
   {
     name: "Devansh Mehta",
-    quote: "I went on from having no idea to launching my app in 8 weeks. Tactyqal made the impossible feel obvious.",
+    quote: "I went on from having zero tech skills to launching my app in 8 weeks. Tactyqal made the impossible feel obvious.",
     initials: "DM",
-    color: "bg-sand",
-    rotation: "-0.5deg",
-    textColor: "text-ink",
+    color: "bg-sand text-ink",
+    rotation: "-0.6deg",
   },
   {
     name: "Priya Nair",
-    quote: "My impact app was only in my head till I built it. Now it's live and helping real people.",
+    quote: "My impact app was only in my head till I built it. Now it's live, deployed, and helping real people daily.",
     initials: "PN",
-    color: "bg-signal",
-    rotation: "1.2deg",
+    color: "bg-signal text-white",
+    rotation: "0.5deg",
   },
 ];
 
@@ -55,60 +54,60 @@ export default function StudentVoicesSection() {
   return (
     <section
       id="student-voices"
-      className="py-24 px-4 bg-sand border-y border-ink"
+      className="py-20 md:py-28 px-4 bg-sand border-y border-ink"
       aria-label="Student testimonials"
     >
       <div className="max-w-7xl mx-auto">
-        <div className="mb-12">
-          <div className="section-number mb-3">№ 06 / 08 · PROOF</div>
-          <h2 className="headline-display">
-            What Our <span className="signal-underline">Students</span> Say
-          </h2>
-        </div>
+        <SectionHeader
+          eyebrow="№ 06 / 08 · STUDENT VOICES"
+          title="What Our Students Say"
+          accent="Students"
+          description="Direct feedback from teen builders who designed, launched, and scaled real software in our cohorts."
+        />
 
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
           {VOICES.map((voice, i) => (
             <motion.div
               key={voice.name}
-              className="break-inside-avoid"
-              initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
+              className="border-[1.5px] border-ink bg-ivory p-7 shadow-tactile flex flex-col justify-between transition-all"
+              style={{
+                transform: prefersReduced ? "none" : `rotate(${voice.rotation})`,
+              }}
+              initial={prefersReduced ? {} : { opacity: 0, y: 15 }}
               whileInView={prefersReduced ? {} : { opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.08 }}
+              transition={{ delay: i * 0.05 }}
+              whileHover={
+                prefersReduced
+                  ? {}
+                  : {
+                      transform: "rotate(0deg) translateY(-3px)",
+                      boxShadow: "4px 4px 0 #FF4F18",
+                    }
+              }
             >
-              <div
-                className="border border-ink bg-ivory p-5 hover:shadow-tactile transition-all cursor-default"
-                style={{
-                  transform: prefersReduced
-                    ? "none"
-                    : `rotate(${voice.rotation})`,
-                }}
-                onMouseEnter={(e) => {
-                  if (prefersReduced) return;
-                  (e.currentTarget as HTMLDivElement).style.transform = "rotate(0deg) translateY(-4px)";
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "4px 4px 0 #121316";
-                }}
-                onMouseLeave={(e) => {
-                  if (prefersReduced) return;
-                  (e.currentTarget as HTMLDivElement).style.transform = `rotate(${voice.rotation})`;
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "";
-                }}
-              >
-                <div className="flex items-center gap-3 mb-3">
+              <div className="mb-6">
+                <span className="text-3xl text-signal font-serif leading-none block mb-2">&ldquo;</span>
+                <blockquote className="font-serif italic text-xl text-ink leading-relaxed">
+                  {voice.quote}
+                </blockquote>
+              </div>
+
+              <div className="pt-4 border-t border-ink/15 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0">
                   <div
-                    className={`w-9 h-9 rounded-none flex items-center justify-center ${voice.color} ${voice.textColor ?? "text-white"} font-mono font-bold text-xs flex-shrink-0`}
+                    className={`w-9 h-9 border border-ink flex items-center justify-center font-mono font-bold text-xs flex-shrink-0 ${voice.color}`}
                   >
                     {voice.initials}
                   </div>
-                  <div>
-                    <div className="font-bold text-sm">{voice.name}</div>
-                    <span className="verified-tag">✓ VERIFIED STUDENT</span>
+                  <div className="font-display font-bold text-sm text-ink truncate">
+                    {voice.name}
                   </div>
                 </div>
 
-                <blockquote className="text-sm leading-relaxed text-ink/80 italic border-l-2 border-ink/20 pl-3">
-                  &ldquo;{voice.quote}&rdquo;
-                </blockquote>
+                <span className="verified-tag flex-shrink-0">
+                  ✓ VERIFIED
+                </span>
               </div>
             </motion.div>
           ))}
@@ -117,4 +116,3 @@ export default function StudentVoicesSection() {
     </section>
   );
 }
-

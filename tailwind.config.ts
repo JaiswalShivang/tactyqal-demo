@@ -19,10 +19,10 @@ const config: Config = {
         emerald: "#0D5C46",
       },
       fontFamily: {
-        display: ["var(--font-dangrek)", "sans-serif"],
-        body: ["var(--font-plus-jakarta)", "sans-serif"],
-        mono: ["var(--font-jetbrains)", "monospace"],
-        boomdang: ["Bontang", "BDO Grotesk", "var(--font-dangrek)", "sans-serif"],
+        display: ["var(--font-display)", "sans-serif"],
+        serif: ["var(--font-serif)", "serif"],
+        sans: ["var(--font-sans)", "sans-serif"],
+        mono: ["var(--font-mono)", "monospace"],
       },
       borderWidth: {
         DEFAULT: "1.5px",
@@ -82,4 +82,3 @@ const config: Config = {
 };
 
 export default config;
-

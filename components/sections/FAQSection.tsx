@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { SectionHeader } from "@/components/SectionHeader";
 
 const FAQS = [
   {
@@ -45,17 +46,16 @@ export default function FAQSection() {
   return (
     <section
       id="faq"
-      className="py-24 px-4 bg-paper border-y border-ink"
+      className="py-20 md:py-28 px-4 bg-paper border-y border-ink"
       aria-label="Frequently asked questions"
     >
       <div className="max-w-4xl mx-auto">
-        <div className="mb-12">
-          <div className="section-number mb-3">№ 08 / 08 · QUESTIONS</div>
-          <h2 className="headline-display">
-            Everything You Want{" "}
-            <span className="volt-highlight">To Know</span>
-          </h2>
-        </div>
+        <SectionHeader
+          eyebrow="№ 08 / 08 · QUESTIONS & ANSWERS"
+          title="Everything You Want To Know"
+          accent="To Know"
+          description="Clear answers on time commitments, prerequisites, college admissions impact, and guarantees."
+        />
 
         <div className="space-y-0" role="list">
           {FAQS.map((faq, i) => {
@@ -63,50 +63,39 @@ export default function FAQSection() {
             return (
               <div
                 key={i}
-                className="border border-ink border-b-0 last:border-b"
+                className="border border-ink border-b-0 last:border-b bg-ivory"
                 role="listitem"
               >
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : i)}
-                  className="w-full text-left p-5 flex items-start justify-between gap-4 hover:bg-sand/50 transition-colors"
+                  className="w-full text-left p-5 sm:p-6 flex items-center justify-between gap-4 hover:bg-sand/40 transition-colors cursor-pointer"
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${i}`}
-                  id={`faq-question-${i}`}
                 >
-                  <div className="flex items-start gap-4">
-                    <span className="font-mono text-xs text-ink/40 stamp-text flex-shrink-0 mt-0.5">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="font-semibold text-sm leading-snug">
-                      {faq.q}
-                    </span>
-                  </div>
-                  <motion.span
-                    className="font-mono text-ink/40 flex-shrink-0 mt-0.5"
-                    animate={{ rotate: isOpen ? 90 : 0 }}
-                    transition={prefersReduced ? { duration: 0 } : { duration: 0.2 }}
+                  <span className="font-display font-bold text-base sm:text-lg text-ink leading-snug tracking-tight">
+                    {faq.q}
+                  </span>
+                  <span
+                    className={`font-mono text-lg font-bold flex-shrink-0 w-8 h-8 border border-ink flex items-center justify-center transition-transform ${
+                      isOpen ? "bg-signal text-white rotate-45" : "bg-paper text-ink"
+                    }`}
                     aria-hidden="true"
                   >
-                    →
-                  </motion.span>
+                    +
+                  </span>
                 </button>
 
                 <AnimatePresence initial={false}>
                   {isOpen && (
                     <motion.div
                       id={`faq-answer-${i}`}
-                      role="region"
-                      aria-labelledby={`faq-question-${i}`}
                       initial={prefersReduced ? {} : { height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={prefersReduced ? {} : { height: 0, opacity: 0 }}
-                      transition={{
-                        height: { duration: 0.25 },
-                        opacity: { duration: 0.2 },
-                      }}
-                      style={{ overflow: "hidden" }}
+                      transition={{ duration: 0.25, ease: "easeInOut" }}
+                      className="overflow-hidden"
                     >
-                      <div className="px-5 pb-5 pl-14 text-sm text-ink/70 leading-relaxed">
+                      <div className="p-5 sm:p-6 pt-0 border-t border-ink/10 text-sm leading-relaxed text-ink/80 bg-paper/30">
                         {faq.a}
                       </div>
                     </motion.div>
@@ -120,4 +109,3 @@ export default function FAQSection() {
     </section>
   );
 }
-

@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
-const TICKER_1 = [
+const TICKER_ITEMS = [
   "TACTYQAL LABS",
   "COHORT OPEN",
   "15 SPOTS LEFT",
@@ -12,38 +11,21 @@ const TICKER_1 = [
   "FULL STACK APP",
   "NO CODING NEEDED",
   "RESULTS GUARANTEED",
-];
-
-const TICKER_2 = [
-  "SUCCESS STORIES",
+  "100+ STUDENTS",
   "REAL REVENUE",
   "UNIVERSITY ADMITS",
-  "IVY LEAGUE",
   "PRODUCT HUNT LAUNCH",
-  "AI TOOLS",
-  "NO-CODE MAGIC",
-  "100+ STUDENTS",
 ];
 
-function TickerTape({
-  items,
-  direction = "left",
-  bg = "bg-volt",
-  textColor = "text-ink",
-}: {
-  items: string[];
-  direction?: "left" | "right";
-  bg?: string;
-  textColor?: string;
-}) {
+export function HeroTicker() {
   const prefersReduced = useReducedMotion();
-  const content = [...items, ...items];
+  const content = [...TICKER_ITEMS, ...TICKER_ITEMS];
 
   if (prefersReduced) {
     return (
-      <div className={`${bg} ${textColor} border-y border-ink py-2 overflow-hidden`}>
-        <div className="flex gap-8 px-4 font-mono text-xs stamp-text flex-wrap">
-          {items.map((item) => (
+      <div className="bg-sand text-ink border-b border-ink py-2.5 overflow-hidden">
+        <div className="flex gap-8 px-4 font-mono text-xs sm:text-sm tracking-[0.08em] uppercase flex-wrap">
+          {TICKER_ITEMS.map((item) => (
             <span key={item}>{item}</span>
           ))}
         </div>
@@ -53,26 +35,27 @@ function TickerTape({
 
   return (
     <div
-      className={`${bg} ${textColor} border-y border-ink py-2 overflow-hidden relative`}
+      className="bg-sand text-ink border-b border-ink py-2.5 overflow-hidden relative group cursor-default"
       role="marquee"
-      aria-label="Tactyqal Labs highlights"
+      aria-label="Tactyqal Labs highlights ticker"
     >
       <motion.div
-        className="flex gap-10 whitespace-nowrap"
-        animate={{
-          x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"],
-        }}
+        className="flex gap-12 whitespace-nowrap group-hover:[animation-play-state:paused]"
+        animate={{ x: ["0%", "-50%"] }}
         transition={{
-          duration: 20,
+          duration: 28,
           repeat: Infinity,
           ease: "linear",
         }}
         style={{ width: "max-content" }}
       >
         {content.map((item, i) => (
-          <span key={i} className="font-mono text-xs stamp-text flex items-center gap-6">
-            {item}
-            <span className="opacity-40">·</span>
+          <span
+            key={i}
+            className="font-mono text-xs sm:text-sm tracking-[0.08em] uppercase flex items-center gap-8 font-medium text-ink/90"
+          >
+            <span>{item}</span>
+            <span className="text-signal font-bold">✦</span>
           </span>
         ))}
       </motion.div>
@@ -80,35 +63,6 @@ function TickerTape({
   );
 }
 
-export function HeroTicker() {
-  return (
-    <div className="sticky top-14 z-30">
-      <TickerTape
-        items={TICKER_1}
-        direction="left"
-        bg="bg-volt"
-        textColor="text-ink"
-      />
-      <TickerTape
-        items={TICKER_2}
-        direction="right"
-        bg="bg-signal"
-        textColor="text-white"
-      />
-    </div>
-  );
-}
-
 export function HomepageTicker() {
-  return (
-    <div className="border-y border-ink">
-      <TickerTape
-        items={TICKER_1}
-        direction="left"
-        bg="bg-ink"
-        textColor="text-volt"
-      />
-    </div>
-  );
+  return null;
 }
-

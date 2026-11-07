@@ -68,15 +68,15 @@ export default function Header() {
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-150 ${
           scrolled
-            ? "bg-paper/95 backdrop-blur-sm border-b border-ink/20"
-            : "bg-transparent"
+            ? "bg-paper/95 backdrop-blur-sm border-b border-ink"
+            : "bg-paper border-b border-ink"
         }`}
         role="banner"
       >
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
           <Link
             href="/"
-            className="font-boomdang font-bold text-lg tracking-tight hover:text-signal transition-colors flex-shrink-0"
+            className="font-display font-bold text-lg tracking-tight hover:text-signal transition-colors flex-shrink-0"
             aria-label="Tactyqal Labs home"
           >
             TACTYQAL LABS
@@ -84,19 +84,16 @@ export default function Header() {
 
           <nav
             className="hidden lg:flex items-center gap-6"
-            role="navigation"
             aria-label="Main navigation"
           >
             {NAV_LINKS.map((link) => {
-              const isActive =
-                link.href.startsWith("#") &&
-                activeSection === link.href.slice(1);
+              const isActive = activeSection === link.href.slice(1);
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`font-body text-sm font-medium transition-colors hover:text-signal ${
-                    isActive ? "text-signal" : "text-ink/70"
+                  className={`font-mono text-xs tracking-wider transition-colors hover:text-signal ${
+                    isActive ? "text-signal font-bold" : "text-ink/80"
                   }`}
                 >
                   {link.label}
@@ -105,132 +102,113 @@ export default function Header() {
             })}
           </nav>
 
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="flex items-center gap-3">
             <Link
               href="/admin/blog"
-              className="font-mono text-xs px-3 py-1.5 border border-ink/30 hover:border-ink transition-colors bg-sand/50"
-              aria-label="Admin CMS"
+              className="hidden sm:inline-flex items-center gap-1.5 font-mono text-xs border border-ink px-2.5 py-1 bg-ivory hover:bg-sand transition-colors"
+              title="Admin CMS Studio"
             >
-              ⌘ /admin/blog
+              <span className="text-signal">⌘</span>
+              <span>/admin/blog</span>
             </Link>
+
             <Link
               href="#pricing"
-              className="tactile-btn-signal px-4 py-2 text-sm font-semibold"
+              className="hidden sm:inline-flex tactile-btn-signal px-4 py-2 text-xs font-semibold tracking-wide"
             >
               Book Free Consultation
             </Link>
-          </div>
 
-          <div className="flex items-center gap-3 lg:hidden">
-            <span className="pill pill-volt text-xs font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-ink animate-pulse-dot inline-block" />
+            <span className="hidden xl:inline-flex items-center gap-1.5 text-xs font-mono bg-volt text-ink border border-ink px-2 py-1 font-medium">
+              <span className="w-2 h-2 rounded-full bg-emerald inline-block animate-pulse" />
               COHORT OPEN · 15 SPOTS
             </span>
+
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="p-2 border border-ink/30 hover:border-ink transition-colors"
+              className="lg:hidden p-2 border border-ink bg-ivory hover:bg-sand transition-colors"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
-              aria-controls="mobile-menu"
+              aria-controls="mobile-nav"
             >
-              <span className="sr-only">{menuOpen ? "Close" : "Menu"}</span>
-              <div className="w-5 flex flex-col gap-1.5">
+              <div className="w-5 h-4 flex flex-col justify-between">
                 <span
-                  className={`block h-0.5 bg-ink transition-all ${
-                    menuOpen ? "rotate-45 translate-y-2" : ""
+                  className={`block h-0.5 bg-ink transition-transform ${
+                    menuOpen ? "rotate-45 translate-y-1.5" : ""
                   }`}
                 />
                 <span
-                  className={`block h-0.5 bg-ink transition-all ${
+                  className={`block h-0.5 bg-ink transition-opacity ${
                     menuOpen ? "opacity-0" : ""
                   }`}
                 />
                 <span
-                  className={`block h-0.5 bg-ink transition-all ${
-                    menuOpen ? "-rotate-45 -translate-y-2" : ""
+                  className={`block h-0.5 bg-ink transition-transform ${
+                    menuOpen ? "-rotate-45 -translate-y-1.5" : ""
                   }`}
                 />
               </div>
             </button>
-          </div>
-
-          <div className="hidden lg:flex items-center">
-            <span className="pill pill-volt text-xs font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-ink animate-pulse-dot inline-block" />
-              COHORT OPEN · 15 SPOTS
-            </span>
           </div>
         </div>
       </header>
 
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
-            id="mobile-menu"
+          <div
+            id="mobile-nav"
             ref={menuRef}
+            className="fixed inset-0 z-50 bg-paper/98 pt-20 px-6 pb-8 flex flex-col justify-between lg:hidden border-b-2 border-ink"
             role="dialog"
             aria-modal="true"
             aria-label="Mobile navigation"
-            className="fixed inset-0 z-50 bg-paper lg:hidden"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 400, damping: 35 }}
           >
-            <div className="flex flex-col h-full p-6">
-              <div className="flex items-center justify-between mb-12">
-                <span className="font-boomdang font-bold text-xl">
-                  TACTYQAL LABS
-                </span>
-                <button
-                  onClick={() => setMenuOpen(false)}
-                  className="p-2 border border-ink hover:bg-ink hover:text-paper transition-colors"
-                  aria-label="Close menu"
-                >
-                  ✕
-                </button>
-              </div>
-
-              <nav className="flex flex-col gap-2 flex-1">
-                {NAV_LINKS.map((link, i) => (
-                  <motion.div
-                    key={link.href}
-                    initial={{ x: 40, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: i * 0.05 }}
-                  >
-                    <Link
-                      href={link.href}
-                      onClick={() => setMenuOpen(false)}
-                      className="block font-boomdang text-3xl font-bold py-3 border-b border-ink/10 hover:text-signal transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  </motion.div>
-                ))}
-              </nav>
-
-              <div className="mt-auto flex flex-col gap-3">
-                <Link
-                  href="/admin/blog"
-                  onClick={() => setMenuOpen(false)}
-                  className="font-mono text-sm px-4 py-3 border border-ink text-center"
-                >
-                  ⌘ /admin/blog
-                </Link>
-                <Link
-                  href="#pricing"
-                  onClick={() => setMenuOpen(false)}
-                  className="tactile-btn-signal px-4 py-3 text-base font-semibold text-center"
-                >
-                  Book Free Consultation
-                </Link>
-              </div>
+            <div className="flex justify-between items-center mb-8 border-b border-ink pb-4">
+              <span className="font-display font-bold text-xl">NAVIGATION</span>
+              <button
+                onClick={() => setMenuOpen(false)}
+                className="font-mono text-sm border border-ink px-3 py-1 hover:bg-ink hover:text-paper"
+              >
+                CLOSE ✕
+              </button>
             </div>
-          </motion.div>
+
+            <nav className="flex flex-col gap-4">
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="font-display text-2xl font-bold hover:text-signal transition-colors py-1 border-b border-ink/10"
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <Link
+                href="/admin/blog"
+                onClick={() => setMenuOpen(false)}
+                className="font-mono text-sm text-signal font-semibold pt-2"
+              >
+                ⌘ Admin Blog Studio (/admin/blog) →
+              </Link>
+            </nav>
+
+            <div className="pt-8 border-t border-ink space-y-3">
+              <div className="flex items-center gap-2 font-mono text-xs text-ink/60">
+                <span className="w-2 h-2 rounded-full bg-emerald animate-pulse" />
+                NEXT COHORT · 15 SPOTS AVAILABLE
+              </div>
+              <Link
+                href="#pricing"
+                onClick={() => setMenuOpen(false)}
+                className="tactile-btn-signal w-full py-3 text-center font-semibold block text-sm"
+              >
+                Book Free Consultation
+              </Link>
+            </div>
+          </div>
         )}
       </AnimatePresence>
     </>
   );
 }
-

@@ -53,7 +53,7 @@ export default function TicketIntro({ onDone }: { onDone: () => void }) {
             TACTYQAL LABS · ADMISSION TICKET
           </div>
 
-          <div className="font-boomdang text-3xl font-bold mb-4 leading-none">
+          <div className="font-display font-bold text-3xl mb-4 leading-none tracking-tight">
             THE BUILDER&apos;S
             <br />
             TICKET

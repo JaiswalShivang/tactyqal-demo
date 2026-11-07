@@ -1,28 +1,38 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import {
+  Bricolage_Grotesque,
+  Instrument_Serif,
+  Plus_Jakarta_Sans,
+  JetBrains_Mono,
+} from "next/font/google";
 import "./globals.css";
 
-const dangrek = localFont({
-  src: "../public/fonts/Dangrek.woff2",
-  variable: "--font-dangrek",
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  variable: "--font-display",
   display: "swap",
 });
 
-const outfit = localFont({
-  src: "../public/fonts/Outfit.woff2",
-  variable: "--font-outfit",
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-serif",
   display: "swap",
 });
 
-const plusJakarta = localFont({
-  src: "../public/fonts/PlusJakartaSans.woff2",
-  variable: "--font-plus-jakarta",
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-sans",
   display: "swap",
 });
 
-const jetbrainsMono = localFont({
-  src: "../public/fonts/JetBrainsMono.woff2",
-  variable: "--font-jetbrains",
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["500", "700"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -81,9 +91,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${outfit.variable} ${dangrek.variable} ${plusJakarta.variable} ${jetbrainsMono.variable}`}
+      className={`${bricolage.variable} ${instrumentSerif.variable} ${plusJakarta.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="bg-paper text-ink font-body min-h-screen antialiased">
+      <body className="bg-paper text-ink font-sans min-h-screen antialiased">
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
