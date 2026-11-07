@@ -123,11 +123,11 @@ export default function HeroSection() {
       className="relative min-h-screen pt-24 pb-16 px-4 grid-bg overflow-hidden"
       aria-label="Hero section"
     >
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-start">
-        <div className="pt-8">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        <div className="lg:col-span-7 pt-4">
           <div className="section-number mb-6">№ 01 / 08 · THE PROGRAM</div>
 
-          <h1 className="headline-display mb-8">
+          <h1 className="headline-display mb-8 max-w-2xl">
             Empower Your Kid To{" "}
             <span className="volt-highlight">Build</span> The Next App That
             Impacts Millions, in 8 Weeks.
@@ -174,7 +174,7 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <div className="flex justify-center lg:justify-end pt-8">
+        <div className="lg:col-span-5 flex justify-center lg:justify-end pt-4">
           <motion.div
             ref={cardRef}
             className="ticket-card w-full max-w-sm cursor-pointer"
