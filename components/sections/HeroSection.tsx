@@ -65,22 +65,39 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-[calc(100vh-3.5rem)] py-16 md:py-20 px-4 grid-bg overflow-hidden flex flex-col justify-center border-b border-ink"
+      className="relative min-h-[calc(100vh-3.5rem)] py-12 md:py-16 px-4 bg-[#0B0C0E] text-[#F6F4EE] overflow-hidden flex flex-col justify-center border-b border-[#2E3138]"
       aria-label="Hero section"
     >
-      <div className="absolute inset-0 pointer-events-none select-none opacity-40" aria-hidden="true">
-        <div className="absolute top-8 left-6 font-mono text-[12px] text-ink/30 font-bold">+</div>
-        <div className="absolute top-8 right-6 font-mono text-[12px] text-ink/30 font-bold">+</div>
-        <div className="absolute bottom-8 left-6 font-mono text-[12px] text-ink/30 font-bold">+</div>
-        <div className="absolute bottom-8 right-6 font-mono text-[12px] text-ink/30 font-bold">+</div>
-        <div className="hidden lg:block absolute top-0 bottom-0 left-[58.333%] border-r border-dashed border-ink/20" />
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0 opacity-45 scale-[1.02] pointer-events-none"
+        style={{ filter: "contrast(1.08) saturate(1.1)" }}
+        src="https://www.tactyqal.com/application/assets/videos/kid_impact.mp4"
+      />
+
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0B0C0E]/95 via-[#0B0C0E]/75 to-[#0B0C0E]/45 z-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:64px_64px] z-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0B0C0E]/40 via-transparent to-[#0B0C0E]/80 z-0 pointer-events-none" />
+
+      <div className="absolute inset-0 pointer-events-none select-none z-0" aria-hidden="true">
+        <div className="absolute top-6 left-6 font-mono text-[12px] text-white/30 font-bold">+</div>
+        <div className="absolute top-6 right-6 font-mono text-[12px] text-white/30 font-bold">+</div>
+        <div className="absolute bottom-6 left-6 font-mono text-[12px] text-white/30 font-bold">+</div>
+        <div className="absolute bottom-6 right-6 font-mono text-[12px] text-white/30 font-bold">+</div>
+        <div className="hidden lg:block absolute top-0 bottom-0 left-[58.333%] border-r border-dashed border-white/10" />
       </div>
 
       <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
         <div className="lg:col-span-7">
-          <div className="section-number mb-4">№ 01 / 08 · THE PROGRAM</div>
+          <div className="font-mono text-xs text-volt font-bold uppercase tracking-wider mb-3 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-volt animate-pulse" />
+            № 01 / 08 · THE PROGRAM
+          </div>
 
-          <h1 className="font-display font-extrabold text-[clamp(2.5rem,4.4vw,4.1rem)] tracking-[-0.035em] leading-[1.04] text-ink mb-6">
+          <h1 className="font-display font-extrabold text-[clamp(2.4rem,4.2vw,3.9rem)] tracking-[-0.035em] leading-[1.04] text-[#F6F4EE] mb-5">
             Empower Your Kid To{" "}
             <span className="font-serif italic font-normal text-signal tracking-normal text-[1.1em]">
               Build
@@ -91,36 +108,39 @@ export default function HeroSection() {
             </span>
           </h1>
 
-          <div className="flex flex-wrap gap-2 mb-8">
+          <div className="flex flex-wrap gap-2 mb-6">
             {PILLS.map((pill) => (
-              <span key={pill} className="pill text-xs bg-ivory/80">
+              <span
+                key={pill}
+                className="text-xs px-3 py-1 rounded-full bg-[#121316]/85 backdrop-blur-sm border border-[#F6F4EE]/25 text-[#F6F4EE] hover:border-[#FF4F18] transition-colors font-sans"
+              >
                 {pill}
               </span>
             ))}
           </div>
 
-          <div className="grid grid-cols-3 gap-3 mb-8 border border-ink p-4 bg-ivory max-w-xl shadow-tactile-sm">
+          <div className="grid grid-cols-3 gap-3 mb-6 border-[1.5px] border-[#121316] p-4 bg-[#F6F4EE] text-[#121316] max-w-xl shadow-[4px_4px_0px_0px_#FF4F18]">
             <div className="text-center border-r border-ink/20 pr-2">
               <div className="font-display text-2xl sm:text-3xl font-extrabold text-signal tracking-tight">
                 100+
               </div>
-              <div className="text-[11px] text-ink/60 font-mono mt-1 stamp-text">
+              <div className="text-[10px] sm:text-[11px] text-ink/70 font-mono mt-0.5 stamp-text">
                 STUDENTS MENTORED
               </div>
             </div>
             <div className="text-center border-r border-ink/20 px-2">
-              <div className="font-display text-xl sm:text-2xl font-bold tracking-tight">
+              <div className="font-display text-xl sm:text-2xl font-bold tracking-tight text-ink">
                 TOP
               </div>
-              <div className="text-[11px] text-ink/60 font-mono mt-1 stamp-text">
+              <div className="text-[10px] sm:text-[11px] text-ink/70 font-mono mt-0.5 stamp-text">
                 UNIVERSITY ADMITS
               </div>
             </div>
             <div className="text-center pl-2">
-              <div className="font-display text-lg sm:text-xl font-bold tracking-tight">
+              <div className="font-display text-lg sm:text-xl font-bold tracking-tight text-ink">
                 ₹ THOUSANDS
               </div>
-              <div className="text-[11px] text-ink/60 font-mono mt-1 stamp-text">
+              <div className="text-[10px] sm:text-[11px] text-ink/70 font-mono mt-0.5 stamp-text">
                 REAL REVENUE
               </div>
             </div>
@@ -129,13 +149,13 @@ export default function HeroSection() {
           <div className="flex flex-col sm:flex-row gap-4 max-w-md">
             <Link
               href="#contact"
-              className="tactile-btn-signal px-7 py-3.5 text-sm font-semibold text-center tracking-wide"
+              className="px-7 py-3 text-sm font-bold text-center tracking-wide bg-signal text-white border-2 border-white shadow-[4px_4px_0px_0px_#F6F4EE] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#F6F4EE] transition-all cursor-pointer"
             >
               Book Free Consultation
             </Link>
             <Link
               href="#student-projects"
-              className="tactile-btn px-7 py-3.5 text-sm font-semibold text-center bg-ivory tracking-wide"
+              className="px-7 py-3 text-sm font-bold text-center tracking-wide bg-white text-ink border-2 border-ink shadow-[4px_4px_0px_0px_#FF4F18] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#FF4F18] transition-all cursor-pointer"
             >
               Explore Student Apps
             </Link>
@@ -145,7 +165,7 @@ export default function HeroSection() {
         <div className="lg:col-span-5 flex justify-center lg:justify-end">
           <motion.div
             ref={cardRef}
-            className="ticket-card w-full max-w-md cursor-pointer bg-ivory"
+            className="ticket-card w-full max-w-md cursor-pointer bg-white text-ink border-2 border-[#121316] shadow-[8px_8px_0px_0px_#FF4F18]"
             style={
               prefersReduced
                 ? {}
@@ -173,9 +193,9 @@ export default function HeroSection() {
             <div className="ticket-notch ticket-notch-right" />
 
             <div className="p-6">
-              <div className="flex items-start justify-between mb-4 border-b border-ink/15 pb-3">
+              <div className="flex items-start justify-between mb-3 border-b border-ink/15 pb-3">
                 <div>
-                  <div className="font-mono text-xs text-ink/50 stamp-text mb-1">
+                  <div className="font-mono text-xs text-ink/50 stamp-text mb-0.5">
                     ADMISSION TICKET
                   </div>
                   <div className="font-display text-2xl font-bold tracking-tight">
@@ -190,33 +210,6 @@ export default function HeroSection() {
                     #04
                   </div>
                 </div>
-              </div>
-
-              <div className="mb-4 border-[1.5px] border-ink overflow-hidden relative bg-ink group aspect-[16/7] w-full shadow-tactile-sm">
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="w-full h-full object-cover opacity-90 transition-transform duration-300 group-hover:scale-105"
-                  src="https://www.tactyqal.com/application/assets/videos/kid_impact.mp4"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
-                <div className="absolute top-2 left-2 flex items-center gap-1.5 bg-ink/90 border border-white/20 px-2 py-0.5 rounded-sm font-mono text-[10px] text-white">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald animate-pulse" />
-                  <span className="tracking-wider">LIVE COHORT REEL • 1:1 MENTORING</span>
-                </div>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsModalOpen(true);
-                  }}
-                  className="absolute bottom-2 right-2 font-mono text-[10px] font-bold text-ink bg-volt hover:bg-white border border-ink px-2 py-0.5 shadow-sm transition-colors cursor-pointer flex items-center gap-1"
-                >
-                  <span>Expand Reel</span>
-                  <span>↗</span>
-                </button>
               </div>
 
               <div className="mb-4">
@@ -242,7 +235,7 @@ export default function HeroSection() {
                 </div>
               </div>
 
-              <div className="border-t border-dashed border-ink/30 my-4" />
+              <div className="border-t border-dashed border-ink/30 my-3.5" />
 
               <div className="mb-4">
                 <div className="font-mono text-xs text-ink/60 uppercase tracking-wider mb-2">
@@ -290,6 +283,18 @@ export default function HeroSection() {
         </div>
       </div>
 
+      <div className="absolute bottom-4 right-4 z-20 hidden sm:flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+          className="flex items-center gap-2 bg-[#121316]/90 backdrop-blur-md border border-white/20 hover:border-signal px-3 py-1.5 text-white font-mono text-[11px] shadow-tactile-sm transition-colors cursor-pointer group"
+        >
+          <span className="w-2 h-2 rounded-full bg-signal animate-pulse" />
+          <span className="text-white/80 group-hover:text-white">LIVE COHORT FEED // SOUND OFF</span>
+          <span className="text-volt font-bold ml-1">Expand ↗</span>
+        </button>
+      </div>
+
       {isModalOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
@@ -325,7 +330,7 @@ export default function HeroSection() {
         </div>
       )}
 
-      <div className="perforated-edge mt-12" />
+      <div className="perforated-edge mt-8" />
     </section>
   );
 }
