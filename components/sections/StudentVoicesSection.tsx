@@ -6,44 +6,44 @@ import { SectionHeader } from "@/components/SectionHeader";
 const VOICES = [
   {
     name: "Aarav Sharma",
+    role: "Alumni · Cohort #01",
     quote: "I had to struggle to find a tech cofounder. After Tactyqal, I became my own CTO. I wish I had done this sooner.",
-    initials: "AS",
-    color: "bg-signal text-white",
+    avatar: "/avatars/avatar-aarav.webp",
     rotation: "-0.8deg",
   },
   {
     name: "Isha Patel",
+    role: "Alumni · Cohort #02",
     quote: "Now I feel independent and can build anything I want. The 1:1 sessions made all the difference in the world.",
-    initials: "IP",
-    color: "bg-sand text-ink",
+    avatar: "/avatars/avatar-isha.webp",
     rotation: "0.7deg",
   },
   {
     name: "Rohan Verma",
+    role: "Alumni · Cohort #01",
     quote: "It's the future. Every teenager should know how to build a software product, not just consume one.",
-    initials: "RV",
-    color: "bg-emerald text-white",
+    avatar: "/avatars/avatar-rohan.webp",
     rotation: "-0.5deg",
   },
   {
     name: "Simran Kaur",
+    role: "Alumni · Cohort #03",
     quote: "I can focus on the creative side and don't have to worry about whether it can be built. That's real leverage.",
-    initials: "SK",
-    color: "bg-ink text-white",
+    avatar: "/avatars/avatar-simran.webp",
     rotation: "0.8deg",
   },
   {
     name: "Devansh Mehta",
+    role: "Alumni · Cohort #02",
     quote: "I went on from having zero tech skills to launching my app in 8 weeks. Tactyqal made the impossible feel obvious.",
-    initials: "DM",
-    color: "bg-sand text-ink",
+    avatar: "/avatars/avatar-devansh.webp",
     rotation: "-0.6deg",
   },
   {
     name: "Priya Nair",
+    role: "Alumni · Cohort #03",
     quote: "My impact app was only in my head till I built it. Now it's live, deployed, and helping real people daily.",
-    initials: "PN",
-    color: "bg-signal text-white",
+    avatar: "/avatars/avatar-priya.webp",
     rotation: "0.5deg",
   },
 ];
@@ -95,13 +95,21 @@ export default function StudentVoicesSection() {
 
               <div className="pt-4 border-t border-ink/15 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div
-                    className={`w-9 h-9 border border-ink flex items-center justify-center font-mono font-bold text-xs flex-shrink-0 ${voice.color}`}
-                  >
-                    {voice.initials}
+                  <div className="w-10 h-10 border border-ink overflow-hidden bg-sand flex-shrink-0 shadow-tactile-sm">
+                    <img
+                      src={voice.avatar}
+                      alt={`${voice.name} portrait`}
+                      className="w-full h-full object-cover object-top"
+                      loading="lazy"
+                    />
                   </div>
-                  <div className="font-display font-bold text-sm text-ink truncate">
-                    {voice.name}
+                  <div className="min-w-0">
+                    <div className="font-display font-bold text-sm text-ink truncate">
+                      {voice.name}
+                    </div>
+                    <div className="font-mono text-[10px] text-ink/50 uppercase tracking-wider truncate">
+                      {voice.role}
+                    </div>
                   </div>
                 </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { SectionHeader } from "@/components/SectionHeader";
@@ -311,6 +311,14 @@ function ProjectModal({
   const modalRef = useRef<HTMLDivElement>(null);
   const prefersReduced = useReducedMotion();
 
+  useEffect(() => {
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = original;
+    };
+  }, []);
+
   return (
     <div
       className="modal-overlay"
@@ -321,7 +329,7 @@ function ProjectModal({
     >
       <motion.div
         ref={modalRef}
-        className="bg-paper border-2 border-ink w-full max-w-xl p-6 sm:p-8 relative shadow-tactile max-h-[90vh] overflow-y-auto"
+        className="bg-[#F6F4EE] border-2 border-ink w-full max-w-xl p-6 sm:p-8 relative z-10 shadow-tactile max-h-[90vh] overflow-y-auto"
         initial={prefersReduced ? {} : { y: 25, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={prefersReduced ? {} : { y: 25, opacity: 0 }}
