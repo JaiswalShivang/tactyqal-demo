@@ -1,25 +1,22 @@
 import type { Metadata } from "next";
-import { Dangrek, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const dangrek = Dangrek({
+const dangrek = localFont({
+  src: "../public/fonts/Dangrek.woff2",
   variable: "--font-dangrek",
-  subsets: ["latin"],
-  weight: "400",
   display: "swap",
 });
 
-const plusJakarta = Plus_Jakarta_Sans({
+const plusJakarta = localFont({
+  src: "../public/fonts/PlusJakartaSans.woff2",
   variable: "--font-plus-jakarta",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const jetbrainsMono = localFont({
+  src: "../public/fonts/JetBrainsMono.woff2",
   variable: "--font-jetbrains",
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
   display: "swap",
 });
 

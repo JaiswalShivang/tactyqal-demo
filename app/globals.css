@@ -209,23 +209,26 @@ body::before {
 
 .headline-display {
   font-family: "Bontang", "BDO Grotesk", var(--font-dangrek), sans-serif;
-  font-size: clamp(2.5rem, 7vw, 7rem);
-  line-height: 0.92;
+  font-size: clamp(2.25rem, 5.5vw, 5.5rem);
+  line-height: 1.05;
   letter-spacing: -0.02em;
   font-weight: 700;
 }
 
 .headline-xl {
-  font-size: clamp(3rem, 9vw, 9rem);
-  line-height: 0.9;
+  font-size: clamp(2.75rem, 7vw, 7.5rem);
+  line-height: 1.02;
   letter-spacing: -0.03em;
   font-weight: 700;
 }
 
 .volt-highlight {
   background-color: var(--volt);
-  padding: 0 0.1em;
-  display: inline;
+  color: var(--ink);
+  padding: 0 0.15em;
+  display: inline-block;
+  line-height: 1;
+  border-radius: 2px;
 }
 
 .signal-underline {

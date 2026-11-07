@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 import Header from "@/components/Header";
 import HeroSection from "@/components/sections/HeroSection";
 import StudentProjectsSection from "@/components/sections/StudentProjectsSection";
@@ -13,23 +12,17 @@ import PricingSection from "@/components/sections/PricingSection";
 import FAQSection from "@/components/sections/FAQSection";
 import Footer from "@/components/Footer";
 import { HeroTicker, HomepageTicker } from "@/components/MarqueeTicker";
-
-const TicketIntro = dynamic(() => import("@/components/TicketIntro"), {
-  ssr: false,
-});
-const CustomCursor = dynamic(() => import("@/components/CustomCursor"), {
-  ssr: false,
-});
-const HomepageBlogSection = dynamic(
-  () => import("@/components/sections/HomepageBlogSection"),
-  { ssr: false }
-);
+import TicketIntro from "@/components/TicketIntro";
+import CustomCursor from "@/components/CustomCursor";
+import HomepageBlogSection from "@/components/sections/HomepageBlogSection";
 
 export default function HomePage() {
+  const [mounted, setMounted] = useState(false);
   const [introShown, setIntroShown] = useState(false);
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const hasSeenIntro = sessionStorage.getItem("tactyqal-intro-seen");
     if (hasSeenIntro) {
       setIntroShown(true);
@@ -47,9 +40,9 @@ export default function HomePage() {
 
   return (
     <>
-      <CustomCursor />
+      {mounted && <CustomCursor />}
 
-      {!introShown && (
+      {mounted && !introShown && (
         <TicketIntro onDone={handleIntroDone} />
       )}
 
