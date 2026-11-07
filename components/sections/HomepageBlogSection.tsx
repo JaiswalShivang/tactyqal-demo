@@ -53,9 +53,17 @@ export default function HomepageBlogSection() {
     fetchPosts();
   }, []);
 
-  const lead = posts[0];
-  const sidePosts = posts.slice(1, 3);
-  const bottomPosts = posts.slice(3, 6);
+  const lead = posts.find((p) => p.slug === "50-no-code-startup-app-ideas") || posts[0];
+  const pool = posts.filter((p) => p.id !== lead?.id);
+  const sidePosts = [
+    pool.find((p) => p.slug === "the-elevator-pitch-for-business-entrepreneurs") || pool[0],
+    pool.find((p) => p.slug === "how-to-build-a-tech-startup-team") || pool[1],
+  ].filter(Boolean) as Post[];
+  const bottomPosts = [
+    pool.find((p) => p.slug === "11-reasons-why-startups-fail-at-the-idea-stage") || pool[2],
+    pool.find((p) => p.slug === "30-startup-ideas-to-solve-food-waste-problems") || pool[3],
+    pool.find((p) => p.slug === "50-startup-ideas-for-gen-z-entrepreneurs") || pool[4],
+  ].filter(Boolean) as Post[];
 
   return (
     <section
@@ -81,7 +89,7 @@ export default function HomepageBlogSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch mb-6">
           {lead && (
-            <div className="md:col-span-7">
+            <div className="md:col-span-7 h-full flex flex-col">
               <Link
                 href={`/blog/${lead.slug}`}
                 className="ticket-card h-full flex flex-col justify-between hover:shadow-tactile-signal transition-all group p-6 sm:p-7"
@@ -129,12 +137,12 @@ export default function HomepageBlogSection() {
             </div>
           )}
 
-          <div className="md:col-span-5 flex flex-col justify-between gap-5">
+          <div className="md:col-span-5 h-full flex flex-col justify-between gap-5">
             {sidePosts.map((post) => (
               <Link
                 key={post.id}
                 href={`/blog/${post.slug}`}
-                className="ticket-card p-5 hover:shadow-tactile transition-all group flex-1 flex flex-col sm:flex-row items-center gap-4"
+                className="ticket-card p-5 hover:shadow-tactile transition-all group flex-1 flex flex-col sm:flex-row items-center gap-4 justify-between"
               >
                 <div className="w-full sm:w-32 aspect-[4/3] flex-shrink-0 border border-ink overflow-hidden bg-sand shadow-tactile-sm">
                   <PostThumbnail src={post.coverImage} title={post.title} />
@@ -162,48 +170,49 @@ export default function HomepageBlogSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           {bottomPosts.map((post) => (
-            <Link
-              key={post.id}
-              href={`/blog/${post.slug}`}
-              className="ticket-card p-5 hover:shadow-tactile transition-all group flex flex-col justify-between"
-            >
-              <div>
-                <div className="aspect-[16/10] border border-ink mb-4 overflow-hidden bg-sand shadow-tactile-sm">
-                  <PostThumbnail src={post.coverImage} title={post.title} />
+            <div key={post.id} className="h-full flex flex-col">
+              <Link
+                href={`/blog/${post.slug}`}
+                className="ticket-card h-full p-5 hover:shadow-tactile transition-all group flex flex-col justify-between"
+              >
+                <div>
+                  <div className="aspect-[16/10] border border-ink mb-4 overflow-hidden bg-sand shadow-tactile-sm">
+                    <PostThumbnail src={post.coverImage} title={post.title} />
+                  </div>
+
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="pill text-[10px] px-2 py-0.5 bg-sand">
+                      {post.category}
+                    </span>
+                    <span className="font-mono text-[11px] text-ink/50">
+                      {post.readTime}m read
+                    </span>
+                  </div>
+
+                  <h4 className="font-display font-bold text-base leading-snug tracking-tight line-clamp-2 group-hover:text-signal transition-colors mb-2">
+                    {post.title}
+                  </h4>
+
+                  <p className="text-xs text-ink/70 leading-relaxed line-clamp-2 mb-4">
+                    {post.excerpt}
+                  </p>
                 </div>
 
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="pill text-[10px] px-2 py-0.5 bg-sand">
-                    {post.category}
+                <div className="pt-3 border-t border-ink/15 flex items-center justify-between font-mono text-xs">
+                  <span className="text-ink/50">
+                    {new Date(post.createdAt).toLocaleDateString("en-IN", {
+                      month: "short",
+                      day: "numeric",
+                    })}
                   </span>
-                  <span className="font-mono text-[11px] text-ink/50">
-                    {post.readTime}m read
+                  <span className="text-signal font-bold group-hover:translate-x-1 transition-transform">
+                    READ →
                   </span>
                 </div>
-
-                <h4 className="font-display font-bold text-base leading-snug tracking-tight line-clamp-2 group-hover:text-signal transition-colors mb-2">
-                  {post.title}
-                </h4>
-
-                <p className="text-xs text-ink/70 leading-relaxed line-clamp-2 mb-4">
-                  {post.excerpt}
-                </p>
-              </div>
-
-              <div className="pt-3 border-t border-ink/15 flex items-center justify-between font-mono text-xs">
-                <span className="text-ink/50">
-                  {new Date(post.createdAt).toLocaleDateString("en-IN", {
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </span>
-                <span className="text-signal font-bold group-hover:translate-x-1 transition-transform">
-                  READ →
-                </span>
-              </div>
-            </Link>
+              </Link>
+            </div>
           ))}
         </div>
       </div>

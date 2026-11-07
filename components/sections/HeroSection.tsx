@@ -67,6 +67,15 @@ export default function HeroSection() {
       className="relative min-h-[calc(100vh-3.5rem)] py-16 md:py-20 px-4 grid-bg overflow-hidden flex flex-col justify-center border-b border-ink"
       aria-label="Hero section"
     >
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute right-0 top-0 w-1/2 h-full object-cover opacity-10 pointer-events-none mix-blend-luminosity hidden lg:block"
+        src="https://www.tactyqal.com/application/assets/videos/kid_impact.mp4"
+      />
+
       <div className="absolute inset-0 pointer-events-none select-none opacity-40" aria-hidden="true">
         <div className="absolute top-8 left-6 font-mono text-[12px] text-ink/30 font-bold">+</div>
         <div className="absolute top-8 right-6 font-mono text-[12px] text-ink/30 font-bold">+</div>
@@ -138,26 +147,6 @@ export default function HeroSection() {
             >
               Explore Student Apps
             </Link>
-          </div>
-
-          <div className="mt-8 border border-ink bg-ivory p-3 shadow-tactile-sm max-w-xl">
-            <div className="flex items-center justify-between pb-2 mb-2 border-b border-ink/15 font-mono text-[11px] text-ink/60">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-signal animate-pulse" />
-                <span className="font-bold text-ink uppercase tracking-wider">LIVE BUILDER FEED // COHORT_04</span>
-              </div>
-              <span className="text-[10px] uppercase tracking-wider text-ink/40">STUDENT IN SESSION</span>
-            </div>
-            <div className="relative aspect-[16/9] border border-ink overflow-hidden bg-ink">
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-cover"
-                src="https://www.tactyqal.com/application/assets/videos/kid_impact.mp4"
-              />
-            </div>
           </div>
         </div>
 
@@ -276,6 +265,14 @@ export default function HeroSection() {
                 >
                   Schedule Founder Call ↗
                 </Link>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-ink/15 flex items-center justify-between font-mono text-[11px] text-ink/70">
+                <span className="flex items-center gap-1.5 font-semibold text-signal">
+                  <span className="w-2 h-2 rounded-full bg-signal animate-pulse" />
+                  LIVE BUILDER COHORT
+                </span>
+                <span className="text-ink/50 uppercase">8 WEEKS · ZERO CODE</span>
               </div>
             </div>
           </motion.div>
