@@ -261,7 +261,7 @@ export default function BlogListClient({
                     Join the next cohort
                   </div>
                   <p className="text-sm text-ink/70 mb-4">
-                    15 spots. 8 weeks. Your teen's startup, built live.
+                    15 spots. 8 weeks. Your teen&apos;s startup, built live.
                   </p>
                   <Link
                     href="#pricing"
