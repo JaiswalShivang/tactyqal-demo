@@ -53,14 +53,14 @@ export default function ContactSection() {
     >
       <div className="max-w-7xl mx-auto">
         <SectionHeader
-          eyebrow="№ 09 / 09 · CONTACT & BOOKING"
+          eyebrow="№ 09 / 09 · FAQ & DIRECT BOOKING"
           title="Book Your Free Founder Consultation"
           accent="Founder Consultation"
           description="Schedule a 1:1 strategy session with our founder Partha Chakraborty or reach our admissions desk directly."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          <div className="lg:col-span-5 ticket-card bg-ivory p-6 sm:p-8 flex flex-col justify-between shadow-tactile border-[1.5px] border-ink">
+          <div className="lg:col-span-5 ticket-card bg-ivory p-6 sm:p-8 flex flex-col justify-between shadow-tactile border-[1.5px] border-ink h-full">
             <div>
               <div className="font-mono text-xs text-signal font-bold uppercase tracking-wider mb-2 stamp-text">
                 DIRECT ADMISSIONS DESK
@@ -125,7 +125,7 @@ export default function ContactSection() {
             </div>
           </div>
 
-          <div className="lg:col-span-7 border-[1.5px] border-[#121316] bg-white shadow-[6px_6px_0px_0px_#121316] flex flex-col justify-between">
+          <div className="lg:col-span-7 border-[1.5px] border-[#121316] bg-white shadow-[6px_6px_0px_0px_#121316] flex flex-col justify-between h-full">
             <div className="bg-[#121316] text-white px-5 py-3 flex items-center justify-between font-mono text-xs border-b border-ink">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-signal animate-pulse" />

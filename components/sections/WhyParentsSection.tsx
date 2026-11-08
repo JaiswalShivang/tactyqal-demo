@@ -60,8 +60,8 @@ const PILLARS_ROW2 = [
 
 const CHAPTERS = [
   { time: 0, label: "00:00 · The Thesis" },
-  { time: 105, label: "01:45 · Idea Matrix" },
-  { time: 495, label: "08:15 · First Customers" },
+  { time: 105, label: "05:40 · Idea Matrix" },
+  { time: 495, label: "12:10 · First Customers" },
 ];
 
 export default function WhyParentsSection() {
@@ -81,7 +81,7 @@ export default function WhyParentsSection() {
     >
       <div className="max-w-7xl mx-auto">
         <SectionHeader
-          eyebrow="№ 04 / 08 · THE ADVANTAGE"
+          eyebrow="№ 04 / 09 · THE ADVANTAGE"
           title="Why Parents Choose Tactyqal Labs"
           accent="Tactyqal Labs"
           description="We replace passive screen time with high-agency software entrepreneurship under 1:1 executive mentorship."
@@ -124,7 +124,7 @@ export default function WhyParentsSection() {
                       <div className="inline-block border border-volt/40 bg-volt/10 text-volt font-mono text-[11px] font-bold px-3 py-1 mb-2">
                         SLIDE 09 // INVERSION TECHNIQUE
                       </div>
-                      <h4 className="font-display font-extrabold text-lg sm:text-xl text-white tracking-tight mb-3">
+                      <h4 className="font-display font-extrabold text-lg sm:text-xl text-white tracking-normal mb-3">
                         How to Come Up with Startup Ideas?
                       </h4>
 
@@ -163,11 +163,11 @@ export default function WhyParentsSection() {
                 )}
               </div>
 
-              <h3 className="font-display font-bold text-xl sm:text-2xl tracking-tight mb-1 text-white">
+              <h3 className="font-display font-bold text-xl sm:text-2xl tracking-normal mb-1 text-white">
                 Startup Ideas 101 with Partha Chakraborty
               </h3>
 
-              <p className="text-xs sm:text-sm text-paper/75 leading-relaxed mb-4">
+              <p className="text-xs sm:text-sm text-paper/75 leading-relaxed tracking-normal mb-4">
                 How teenagers spot real daily friction and turn it into scalable software before writing a single line of code.
               </p>
             </div>
@@ -204,7 +204,7 @@ export default function WhyParentsSection() {
             </div>
           </div>
 
-          <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4 h-full">
+          <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-6 h-full">
             {PILLARS_ROW1.map((p) => (
               <div
                 key={p.num}
@@ -214,10 +214,10 @@ export default function WhyParentsSection() {
                   <div className="font-mono text-xs mb-2 opacity-60 stamp-text">
                     № {p.num}
                   </div>
-                  <h4 className="font-display font-bold text-base sm:text-lg leading-snug tracking-tight mb-2">
+                  <h4 className="font-display font-bold text-base sm:text-lg leading-snug tracking-normal mb-2">
                     {p.title}
                   </h4>
-                  <p className="text-xs sm:text-sm leading-relaxed opacity-85">
+                  <p className="text-xs sm:text-sm leading-relaxed tracking-normal opacity-85">
                     {p.desc}
                   </p>
                 </div>
@@ -239,10 +239,10 @@ export default function WhyParentsSection() {
                 <div className="font-mono text-xs mb-2 opacity-60 stamp-text">
                   № {p.num}
                 </div>
-                <h4 className="font-display font-bold text-base sm:text-lg leading-snug tracking-tight mb-2">
+                <h4 className="font-display font-bold text-base sm:text-lg leading-snug tracking-normal mb-2">
                   {p.title}
                 </h4>
-                <p className="text-xs sm:text-sm leading-relaxed opacity-85">
+                <p className="text-xs sm:text-sm leading-relaxed tracking-normal opacity-85">
                   {p.desc}
                 </p>
               </div>

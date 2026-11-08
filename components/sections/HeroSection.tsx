@@ -65,7 +65,7 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-[calc(100vh-3.5rem)] py-14 lg:py-20 px-4 bg-[#0B0C0E] text-[#F6F4EE] overflow-hidden flex flex-col justify-center border-b border-[#2E3138]"
+      className="relative min-h-[calc(100vh-3.5rem)] pt-8 pb-14 lg:pt-10 lg:pb-16 px-4 bg-[#0B0C0E] text-[#F6F4EE] overflow-hidden flex flex-col justify-center border-b border-[#2E3138]"
       aria-label="Hero section"
     >
       <video
@@ -93,61 +93,63 @@ export default function HeroSection() {
         <div className="hidden lg:block absolute top-0 bottom-0 left-[58.333%] border-r border-dashed border-white/10" />
       </div>
 
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
-        <div className="lg:col-span-7">
-          <div className="font-mono text-xs text-volt font-bold uppercase tracking-wider mb-3 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-volt animate-pulse" />
-            № 01 / 08 · THE PROGRAM
-          </div>
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch relative z-10">
+        <div className="lg:col-span-7 flex flex-col justify-between h-full">
+          <div>
+            <div className="font-mono text-xs text-volt font-bold uppercase tracking-wider mb-2.5 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-volt animate-pulse" />
+              № 01 / 09 · THE PROGRAM
+            </div>
 
-          <h1 className="font-display font-extrabold text-[clamp(2.4rem,4.2vw,3.9rem)] tracking-[-0.035em] leading-[1.04] text-[#F6F4EE] mb-5">
-            Empower Your Kid To{" "}
-            <span className="text-signal font-extrabold">Build</span>{" "}
-            The Next App That Impacts Millions,{" "}
-            <span className="whitespace-nowrap text-signal font-extrabold">
-              in 8 Weeks.
-            </span>
-          </h1>
-
-          <div className="flex flex-wrap gap-2 mb-6">
-            {PILLS.map((pill) => (
-              <span
-                key={pill}
-                className="text-xs px-3 py-1 rounded-full bg-[#121316]/85 backdrop-blur-sm border border-[#F6F4EE]/25 text-[#F6F4EE] hover:border-[#FF4F18] transition-colors font-sans"
-              >
-                {pill}
+            <h1 className="font-display font-extrabold text-[clamp(2.2rem,3.8vw,3.5rem)] tracking-[-0.025em] leading-[1.04] text-[#F6F4EE] mb-4">
+              Empower Your Kid To{" "}
+              <span className="text-signal font-extrabold">Build</span>{" "}
+              The Next App That Impacts Millions,{" "}
+              <span className="whitespace-nowrap text-signal font-extrabold">
+                in 8 Weeks.
               </span>
-            ))}
+            </h1>
+
+            <div className="flex flex-wrap gap-2 mb-5">
+              {PILLS.map((pill) => (
+                <span
+                  key={pill}
+                  className="text-xs px-3 py-1 rounded-full bg-[#121316]/85 backdrop-blur-sm border border-[#F6F4EE]/25 text-[#F6F4EE] hover:border-[#FF4F18] transition-colors font-sans"
+                >
+                  {pill}
+                </span>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 mb-5 border-[1.5px] border-[#121316] p-3.5 bg-[#F6F4EE] text-[#121316] max-w-xl shadow-[4px_4px_0px_0px_#FF4F18]">
+              <div className="text-center border-r border-ink/20 pr-2">
+                <div className="font-display text-2xl sm:text-3xl font-extrabold text-signal tracking-tight">
+                  100+
+                </div>
+                <div className="text-[10px] sm:text-[11px] text-ink/70 font-mono mt-0.5 stamp-text">
+                  STUDENTS MENTORED
+                </div>
+              </div>
+              <div className="text-center border-r border-ink/20 px-2">
+                <div className="font-display text-xl sm:text-2xl font-bold tracking-tight text-ink">
+                  TOP
+                </div>
+                <div className="text-[10px] sm:text-[11px] text-ink/70 font-mono mt-0.5 stamp-text">
+                  UNIVERSITY ADMITS
+                </div>
+              </div>
+              <div className="text-center pl-2">
+                <div className="font-display text-lg sm:text-xl font-bold tracking-tight text-ink">
+                  ₹ THOUSANDS
+                </div>
+                <div className="text-[10px] sm:text-[11px] text-ink/70 font-mono mt-0.5 stamp-text">
+                  REAL REVENUE
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 mb-6 border-[1.5px] border-[#121316] p-4 bg-[#F6F4EE] text-[#121316] max-w-xl shadow-[4px_4px_0px_0px_#FF4F18]">
-            <div className="text-center border-r border-ink/20 pr-2">
-              <div className="font-display text-2xl sm:text-3xl font-extrabold text-signal tracking-tight">
-                100+
-              </div>
-              <div className="text-[10px] sm:text-[11px] text-ink/70 font-mono mt-0.5 stamp-text">
-                STUDENTS MENTORED
-              </div>
-            </div>
-            <div className="text-center border-r border-ink/20 px-2">
-              <div className="font-display text-xl sm:text-2xl font-bold tracking-tight text-ink">
-                TOP
-              </div>
-              <div className="text-[10px] sm:text-[11px] text-ink/70 font-mono mt-0.5 stamp-text">
-                UNIVERSITY ADMITS
-              </div>
-            </div>
-            <div className="text-center pl-2">
-              <div className="font-display text-lg sm:text-xl font-bold tracking-tight text-ink">
-                ₹ THOUSANDS
-              </div>
-              <div className="text-[10px] sm:text-[11px] text-ink/70 font-mono mt-0.5 stamp-text">
-                REAL REVENUE
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md">
+          <div className="flex flex-col sm:flex-row gap-4 max-w-md pt-1">
             <Link
               href="#contact"
               className="px-7 py-3 text-sm font-bold text-center tracking-wide bg-signal text-white border-2 border-white shadow-[4px_4px_0px_0px_#F6F4EE] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#F6F4EE] transition-all cursor-pointer"
@@ -163,10 +165,10 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <div className="lg:col-span-5 flex justify-center lg:justify-end">
+        <div className="lg:col-span-5 flex justify-center lg:justify-end h-full">
           <motion.div
             ref={cardRef}
-            className="ticket-card w-full max-w-md cursor-pointer bg-white text-ink border-2 border-[#121316] shadow-[8px_8px_0px_0px_#FF4F18]"
+            className="ticket-card w-full max-w-md cursor-pointer bg-white text-ink border-2 border-[#121316] shadow-[8px_8px_0px_0px_#FF4F18] flex flex-col justify-between h-full"
             style={
               prefersReduced
                 ? {}
@@ -193,79 +195,81 @@ export default function HeroSection() {
             <div className="ticket-notch ticket-notch-left" />
             <div className="ticket-notch ticket-notch-right" />
 
-            <div className="p-6">
-              <div className="flex items-start justify-between mb-3 border-b border-ink/15 pb-3">
-                <div>
-                  <div className="font-mono text-xs text-ink/50 stamp-text mb-0.5">
-                    ADMISSION TICKET
+            <div className="p-6 flex flex-col justify-between h-full">
+              <div>
+                <div className="flex items-start justify-between mb-3 border-b border-ink/15 pb-3">
+                  <div>
+                    <div className="font-mono text-xs text-ink/50 stamp-text mb-0.5">
+                      ADMISSION TICKET
+                    </div>
+                    <div className="font-display text-2xl font-bold tracking-tight">
+                      8-WEEK COHORT
+                    </div>
                   </div>
-                  <div className="font-display text-2xl font-bold tracking-tight">
-                    8-WEEK COHORT
+                  <div className="text-right">
+                    <div className="font-mono text-xs text-ink/50 stamp-text">
+                      SEAT NO.
+                    </div>
+                    <div className="font-mono font-bold text-lg text-signal">
+                      #04
+                    </div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="font-mono text-xs text-ink/50 stamp-text">
-                    SEAT NO.
+
+                <div className="mb-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="pill pill-volt text-xs font-semibold">
+                      Limited Time Offer
+                    </span>
+                    <span className="pill text-xs font-mono bg-paper text-ink">
+                      Only 15 spots
+                    </span>
                   </div>
-                  <div className="font-mono font-bold text-lg text-signal">
-                    #04
+
+                  <div className="flex items-baseline gap-4 mb-1">
+                    <span className="font-mono text-2xl line-through text-ink/40">
+                      ₹25,000
+                    </span>
+                    <span className="font-display text-[clamp(2.5rem,4vw,3.75rem)] font-extrabold text-signal leading-none tracking-tight">
+                      ₹16,000
+                    </span>
+                  </div>
+                  <div className="font-mono text-[11px] text-ink/50 stamp-text">
+                    ONE-TIME · FULL PROGRAM ACCESS · TAX INCLUDED
+                  </div>
+                </div>
+
+                <div className="border-t border-dashed border-ink/30 my-3.5" />
+
+                <div className="mb-4">
+                  <div className="font-mono text-xs text-ink/60 uppercase tracking-wider mb-2 font-bold">
+                    Cohort Inclusions:
+                  </div>
+                  <ul className="space-y-2 text-xs sm:text-sm">
+                    <li className="flex items-center gap-2">
+                      <span className="w-4 h-4 rounded-full bg-emerald text-white flex items-center justify-center text-[10px] font-bold">✓</span>
+                      <span className="font-medium">8 Weeks 1:1 Live Mentoring</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="w-4 h-4 rounded-full bg-emerald text-white flex items-center justify-center text-[10px] font-bold">✓</span>
+                      <span className="font-medium">Full-Stack App Production Launch</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="w-4 h-4 rounded-full bg-emerald text-white flex items-center justify-center text-[10px] font-bold">✓</span>
+                      <span className="font-medium">100% Money-Back Guarantee</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="mb-4">
+                  <Barcode digits="160002500008" />
+                  <div className="font-mono text-[10px] text-ink/40 mt-1 tracking-wider">
+                    160002500008-TQLAB-VERIFIED
                   </div>
                 </div>
               </div>
 
-              <div className="mb-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="pill pill-volt text-xs font-semibold">
-                    Limited Time Offer
-                  </span>
-                  <span className="pill text-xs font-mono bg-paper text-ink">
-                    Only 15 spots
-                  </span>
-                </div>
-
-                <div className="flex items-baseline gap-4 mb-1">
-                  <span className="font-mono text-2xl line-through text-ink/40">
-                    ₹25,000
-                  </span>
-                  <span className="font-display text-[clamp(2.5rem,4vw,3.75rem)] font-extrabold text-signal leading-none tracking-tight">
-                    ₹16,000
-                  </span>
-                </div>
-                <div className="font-mono text-[11px] text-ink/50 stamp-text">
-                  ONE-TIME · FULL PROGRAM ACCESS · TAX INCLUDED
-                </div>
-              </div>
-
-              <div className="border-t border-dashed border-ink/30 my-3.5" />
-
-              <div className="mb-4">
-                <div className="font-mono text-xs text-ink/60 uppercase tracking-wider mb-2">
-                  Cohort Inclusions:
-                </div>
-                <ul className="space-y-2 text-xs sm:text-sm">
-                  <li className="flex items-center gap-2">
-                    <span className="w-4 h-4 rounded-full bg-emerald text-white flex items-center justify-center text-[10px] font-bold">✓</span>
-                    <span className="font-medium">8 Weeks 1:1 Live Mentoring</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-4 h-4 rounded-full bg-emerald text-white flex items-center justify-center text-[10px] font-bold">✓</span>
-                    <span className="font-medium">Full-Stack App Production Launch</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-4 h-4 rounded-full bg-emerald text-white flex items-center justify-center text-[10px] font-bold">✓</span>
-                    <span className="font-medium">100% Money-Back Guarantee</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="mb-4">
-                <Barcode digits="160002500008" />
-                <div className="font-mono text-[10px] text-ink/40 mt-1 tracking-wider">
-                  160002500008-TQLAB-VERIFIED
-                </div>
-              </div>
-
-              <div className="space-y-2">
+              <div className="space-y-2 pt-2">
                 <Link
                   href="#contact"
                   className="tactile-btn-signal w-full py-2.5 text-center font-semibold block text-sm tracking-wide"

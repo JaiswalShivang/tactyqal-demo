@@ -8,10 +8,10 @@ export default function PricingSection() {
   const prefersReduced = useReducedMotion();
 
   const INCLUDES = [
-    "8 weeks of dedicated 1:1 live mentoring with founders",
-    "Full-stack software application built and deployed live",
-    "Product Hunt launch campaign and media prep",
-    "Professional investor pitch deck and story architecture",
+    "8 weeks of 1:1 live weekly mentoring with Partha Chakraborty",
+    "Complete no-code and AI engineering tech stack access",
+    "Figma design system, database setup, and payment integration",
+    "Product Hunt launch playbook and public relations distribution",
     "Direct customer acquisition and monetization strategy",
     "Lifetime alumni network and founder mentorship access",
   ];
@@ -28,12 +28,12 @@ export default function PricingSection() {
         muted
         playsInline
         className="absolute inset-0 w-full h-full object-cover opacity-[0.14] mix-blend-luminosity pointer-events-none"
-        src="https://www.tactyqal.com/application/assets/videos/continuous-support.mp4"
+        src="/videos/continuous-support.mp4"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-[#121316] via-[#121316]/85 to-[#121316] pointer-events-none" />
       <div className="max-w-7xl mx-auto relative z-10">
         <SectionHeader
-          eyebrow="№ 07 / 08 · INVESTMENT"
+          eyebrow="№ 08 / 09 · INVESTMENT"
           title="The Builder's Vault"
           accent="Vault"
           accentColor="volt"
@@ -41,9 +41,9 @@ export default function PricingSection() {
           dark={true}
         />
 
-        <div className="grid lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           <motion.div
-            className="lg:col-span-7 ticket-card bg-paper text-ink border-2 border-signal shadow-tactile p-6 sm:p-8"
+            className="lg:col-span-7 ticket-card bg-paper text-ink border-2 border-signal shadow-tactile p-6 sm:p-8 flex flex-col justify-between h-full"
             initial={prefersReduced ? {} : { x: -20, opacity: 0 }}
             whileInView={prefersReduced ? {} : { x: 0, opacity: 1 }}
             viewport={{ once: true }}
@@ -103,66 +103,81 @@ export default function PricingSection() {
                   ))}
                 </ul>
               </div>
+            </div>
 
-              <div className="space-y-3 pt-2 border-t border-ink/15">
-                <Link
-                  href="#contact"
-                  className="tactile-btn-signal w-full py-4 text-center font-bold block text-sm tracking-wide"
-                >
-                  Book Free 1:1 Consultation Call →
-                </Link>
-                <div className="font-mono text-[11px] text-ink/50 text-center">
-                  Consultation includes a 20-minute startup ideation review with founders.
-                </div>
+            <div className="space-y-3 pt-4 border-t border-ink/15">
+              <Link
+                href="#contact"
+                className="tactile-btn-signal w-full py-4 text-center font-bold block text-sm tracking-wide"
+              >
+                Book Free 1:1 Consultation Call →
+              </Link>
+              <div className="font-mono text-[11px] text-ink/50 text-center">
+                Consultation includes a 20-minute startup ideation review with founders.
               </div>
             </div>
           </motion.div>
 
-          <div className="lg:col-span-5 space-y-6">
-            <div className="border border-paper/20 bg-[#1C1E22] p-6 text-paper">
-              <div className="font-mono text-xs text-signal uppercase tracking-wider font-bold mb-3 flex items-center gap-2">
-                <span className="w-2.5 h-2.5 bg-signal rounded-full" />
-                OUR COMMITMENT
+          <div className="lg:col-span-5 flex flex-col justify-between gap-5 h-full">
+            <div className="flex-1 flex flex-col justify-between border border-paper/20 bg-[#1C1E22] p-6 text-paper">
+              <div>
+                <div className="font-mono text-xs text-signal uppercase tracking-wider font-bold mb-3 flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 bg-signal rounded-full" />
+                  OUR COMMITMENT
+                </div>
+                <h3 className="font-display font-bold text-xl tracking-tight mb-2 text-paper">
+                  100% Results Guaranteed
+                </h3>
+                <p className="text-sm text-paper/75 leading-relaxed tracking-normal">
+                  If your child attends all sessions, completes the milestone sprints, and does not have a live, working application launched by Week 8, we refund 100% of your tuition without hesitation.
+                </p>
               </div>
-              <h3 className="font-display font-bold text-xl tracking-tight mb-2 text-paper">
-                100% Results Guaranteed
-              </h3>
-              <p className="text-sm text-paper/75 leading-relaxed">
-                If your child attends all sessions, completes the milestone sprints, and does not have a live, working application launched by Week 8, we refund 100% of your tuition without hesitation.
-              </p>
+              <div className="pt-3 mt-4 border-t border-paper/10 font-mono text-[11px] text-volt uppercase font-bold">
+                ZERO RISK GUARANTEE
+              </div>
             </div>
 
-            <div className="border border-paper/20 bg-[#1C1E22] p-6 text-paper">
-              <div className="font-mono text-xs text-paper/50 uppercase tracking-wider font-bold mb-3">
-                AFTER APPLICATION
+            <div className="flex-1 flex flex-col justify-between border border-paper/20 bg-[#1C1E22] p-6 text-paper">
+              <div>
+                <div className="font-mono text-xs text-paper/50 uppercase tracking-wider font-bold mb-3">
+                  AFTER APPLICATION
+                </div>
+                <ol className="space-y-2.5 text-xs text-paper/80 font-mono">
+                  <li className="flex gap-2">
+                    <span className="text-signal font-bold">01.</span>
+                    <span>Founder fit consultation (20 minutes).</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-signal font-bold">02.</span>
+                    <span>Domain &amp; interest diagnostic mapping.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-signal font-bold">03.</span>
+                    <span>Mentor pairing &amp; onboarding kit sent.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-signal font-bold">04.</span>
+                    <span>Week 1 kick-off live 1:1 session begins.</span>
+                  </li>
+                </ol>
               </div>
-              <ol className="space-y-3 text-xs text-paper/80 font-mono">
-                <li className="flex gap-2">
-                  <span className="text-signal font-bold">01.</span>
-                  <span>Founder fit consultation (20 minutes).</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-signal font-bold">02.</span>
-                  <span>Domain & interest diagnostic mapping.</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-signal font-bold">03.</span>
-                  <span>Mentor pairing & onboarding kit sent.</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-signal font-bold">04.</span>
-                  <span>Week 1 kick-off live 1:1 session begins.</span>
-                </li>
-              </ol>
+              <div className="pt-3 mt-3 border-t border-paper/10 font-mono text-[11px] text-paper/50 uppercase">
+                4-STEP ADMISSIONS PIPELINE
+              </div>
             </div>
 
-            <div className="border border-paper/20 bg-sand text-ink p-6">
-              <div className="font-mono text-xs text-ink/50 uppercase tracking-wider mb-2 font-bold">
-                PAYMENT FLEXIBILITY
+            <div className="flex-1 flex flex-col justify-between border border-paper/20 bg-sand text-ink p-6">
+              <div>
+                <div className="font-mono text-xs text-ink/50 uppercase tracking-wider mb-2 font-bold">
+                  PAYMENT FLEXIBILITY
+                </div>
+                <p className="text-sm text-ink/80 leading-relaxed tracking-normal">
+                  We accept UPI, Net Banking, and all major Indian &amp; International credit cards via secure payment gateway.
+                </p>
               </div>
-              <p className="text-sm text-ink/80 leading-relaxed">
-                We accept UPI, Net Banking, and all major Indian & International credit cards via secure payment gateway.
-              </p>
+              <div className="pt-3 mt-3 border-t border-ink/15 font-mono text-[11px] text-ink/60 font-semibold uppercase">
+                INSTANT ENROLMENT CONFIRMATION
+              </div>
             </div>
           </div>
         </div>

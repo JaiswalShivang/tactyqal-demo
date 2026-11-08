@@ -59,7 +59,7 @@ export default function StudentVoicesSection() {
     >
       <div className="max-w-7xl mx-auto">
         <SectionHeader
-          eyebrow="№ 06 / 08 · STUDENT VOICES"
+          eyebrow="№ 06 / 09 · STUDENT VOICES"
           title="What Our Students Say"
           accent="Students"
           description="Direct feedback from teen builders who designed, launched, and scaled real software in our cohorts."

@@ -442,7 +442,7 @@ export default function StudentProjectsSection() {
 
       <div className="max-w-7xl mx-auto">
         <SectionHeader
-          eyebrow="№ 02 / 08 · PROOF OF WORK"
+          eyebrow="№ 02 / 09 · PROOF OF WORK"
           title="Real Students. Real Apps. Real Success."
           accent="Success."
           description="Every project below was built by a teenager in an 8-week cohort—with real users, real revenue, and a real impact."
