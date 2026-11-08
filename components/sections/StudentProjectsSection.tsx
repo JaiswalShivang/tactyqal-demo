@@ -438,8 +438,6 @@ export default function StudentProjectsSection() {
       className="py-16 md:py-22 px-4 bg-ivory border-y border-ink relative"
       aria-label="Student projects"
     >
-      <div className="perforated-edge-top" />
-
       <div className="max-w-7xl mx-auto">
         <SectionHeader
           title="Real Students. Real Apps. Real Success."
