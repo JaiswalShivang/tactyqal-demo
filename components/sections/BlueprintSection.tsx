@@ -70,7 +70,6 @@ export default function BlueprintSection() {
     >
       <div className="max-w-7xl mx-auto">
         <SectionHeader
-          eyebrow="№ 03 / 09 · THE ARCHITECTURE"
           title="From Idea to Full App in 8 Weeks"
           accent="8 Weeks"
           description="A structured, milestone-driven curriculum engineered to take high schoolers from zero to a live, monetizable software startup."

@@ -73,7 +73,6 @@ export default function HomepageBlogSection() {
     >
       <div className="max-w-7xl mx-auto">
         <SectionHeader
-          eyebrow="№ 07 / 09 · FOUNDERS DESK"
           title="From The Founders Desk"
           accent="Founders"
           description="Tactical blueprints, venture ideas, and mental models for high-schoolers launching software."

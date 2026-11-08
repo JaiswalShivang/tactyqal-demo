@@ -51,7 +51,6 @@ export default function FAQSection() {
     >
       <div className="max-w-4xl mx-auto">
         <SectionHeader
-          eyebrow="№ 09 / 09 · FAQ & DIRECT BOOKING"
           title="Everything You Want To Know"
           accent="To Know"
           description="Clear answers on time commitments, prerequisites, college admissions impact, and guarantees."

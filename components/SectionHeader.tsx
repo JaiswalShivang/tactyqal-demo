@@ -69,7 +69,7 @@ export function SectionHeader({
   className = "",
   dark = false,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   accent?: string;
   accentColor?: "signal" | "ink" | "white" | "volt";
@@ -82,13 +82,15 @@ export function SectionHeader({
     <div className={`mb-12 ${className}`}>
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <div
-            className={`font-mono text-xs uppercase tracking-[0.08em] mb-3 ${
-              dark ? "text-paper/50" : "text-ink/50"
-            }`}
-          >
-            {eyebrow}
-          </div>
+          {eyebrow && (
+            <div
+              className={`font-mono text-xs uppercase tracking-[0.08em] mb-3 ${
+                dark ? "text-paper/50" : "text-ink/50"
+              }`}
+            >
+              {eyebrow}
+            </div>
+          )}
           <Heading
             level="h2"
             title={title}

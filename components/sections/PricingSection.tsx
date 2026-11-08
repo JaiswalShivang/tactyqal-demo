@@ -33,7 +33,6 @@ export default function PricingSection() {
       <div className="absolute inset-0 bg-gradient-to-b from-[#121316] via-[#121316]/85 to-[#121316] pointer-events-none" />
       <div className="max-w-7xl mx-auto relative z-10">
         <SectionHeader
-          eyebrow="№ 08 / 09 · INVESTMENT"
           title="The Builder's Vault"
           accent="Vault"
           accentColor="volt"
