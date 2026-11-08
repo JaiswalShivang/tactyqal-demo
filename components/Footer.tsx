@@ -48,7 +48,6 @@ export default function Footer() {
                 { href: "#pricing", label: "Pricing & Enrol" },
                 { href: "#faq", label: "FAQ" },
                 { href: "#contact", label: "Contact & Booking" },
-                { href: "/admin/blog", label: "Admin CMS" },
               ].map((link) => (
                 <div key={link.href}>
                   <Link
@@ -102,8 +101,6 @@ export default function Footer() {
             <span>Built for teen founders.</span>
             <span>·</span>
             <Link href="/blog" className="hover:text-signal">Editorial</Link>
-            <span>·</span>
-            <Link href="/admin/blog" className="hover:text-signal">CMS</Link>
           </div>
         </div>
       </div>

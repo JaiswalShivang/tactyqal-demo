@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import AdminStudioClient from "./AdminStudioClient";
+import AdminStudio from "@/components/admin/AdminStudio";
 
 export const metadata: Metadata = {
-  title: "Admin Studio — Blog CMS",
-  description: "Tactyqal Labs blog content management studio and API architecture inspector.",
+  title: "Admin Studio — Tactyqal Labs Blog CMS",
+  description: "Internal content management system and REST API architecture inspector for Tactyqal Labs.",
 };
 
 export default function AdminBlogPage() {
-  return <AdminStudioClient />;
+  return <AdminStudio />;
 }

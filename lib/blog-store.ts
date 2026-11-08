@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 import type {
   BlogDriver,
   Post,
@@ -29,7 +31,7 @@ function dedupeSlug(baseSlug: string, existingSlugs: string[]): string {
 
 function generateId(): string {
   return (
-    "mem_" +
+    "post_" +
     Math.random().toString(36).slice(2) +
     Date.now().toString(36)
   );
@@ -45,22 +47,77 @@ function matchesSearch(post: Post, q: string): boolean {
   );
 }
 
-const memoryDriver: BlogDriver = {
-  dataSource: "memory",
+const DATA_DIR = path.join(process.cwd(), "data");
+const POSTS_FILE = path.join(DATA_DIR, "posts.json");
 
-  async list({ q, category, published, page = 1, limit = 10 }: ListOptions): Promise<ListResult> {
-    let posts = [...getMemoryPosts()];
+function ensureFileExists(): Post[] {
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    if (fs.existsSync(POSTS_FILE)) {
+      const raw = fs.readFileSync(POSTS_FILE, "utf8");
+      if (raw.trim()) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((p) => ({
+            ...p,
+            createdAt: new Date(p.createdAt),
+            updatedAt: new Date(p.updatedAt),
+          }));
+        }
+      }
+    }
+    const initialPosts = getMemoryPosts().map((p, idx) => ({
+      ...p,
+      author: p.author === "Tactyqal" ? "Partha Chakraborty" : p.author,
+      authorRole: p.authorRole || "Founder, Tactyqal Labs",
+      featured: p.featured ?? idx === 0,
+      createdAt: new Date(p.createdAt),
+      updatedAt: new Date(p.updatedAt),
+    }));
+    fs.writeFileSync(POSTS_FILE, JSON.stringify(initialPosts, null, 2), "utf8");
+    return initialPosts;
+  } catch (err) {
+    console.error("Failed to read/write posts.json:", err);
+    return getMemoryPosts();
+  }
+}
 
-    if (published !== undefined) {
+function writePostsToFile(posts: Post[]): void {
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    fs.writeFileSync(POSTS_FILE, JSON.stringify(posts, null, 2), "utf8");
+  } catch (err) {
+    console.error("Failed to write to posts.json:", err);
+  }
+}
+
+const fileDriver: BlogDriver = {
+  dataSource: "file",
+
+  async list({ q, search, category, published, status, page = 1, limit = 10 }: ListOptions): Promise<ListResult> {
+    let posts = ensureFileExists();
+
+    if (status === "published") {
+      posts = posts.filter((p) => p.published === true);
+    } else if (status === "draft") {
+      posts = posts.filter((p) => p.published === false);
+    } else if (status !== "all" && published !== undefined) {
       posts = posts.filter((p) => p.published === published);
     }
-    if (category) {
+
+    if (category && category !== "All") {
       posts = posts.filter(
         (p) => p.category.toLowerCase() === category.toLowerCase()
       );
     }
-    if (q) {
-      posts = posts.filter((p) => matchesSearch(p, q));
+
+    const query = q || search;
+    if (query) {
+      posts = posts.filter((p) => matchesSearch(p, query));
     }
 
     posts.sort(
@@ -76,42 +133,47 @@ const memoryDriver: BlogDriver = {
   },
 
   async getByIdOrSlug(idOrSlug: string): Promise<Post | null> {
-    const posts = getMemoryPosts();
+    const posts = ensureFileExists();
     return (
       posts.find((p) => p.id === idOrSlug || p.slug === idOrSlug) ?? null
     );
   },
 
   async create(input: PostInput): Promise<Post> {
-    const posts = getMemoryPosts();
+    const posts = ensureFileExists();
     const existingSlugs = posts.map((p) => p.slug);
     const baseSlug = generateSlug(input.title);
     const slug = input.slug || dedupeSlug(baseSlug, existingSlugs);
     const readTime = input.readTime || computeReadTime(input.content);
+    const excerpt = input.excerpt || input.content.slice(0, 150) + "...";
 
     const now = new Date();
     const post: Post = {
       id: generateId(),
       title: input.title,
       slug,
-      excerpt: input.excerpt,
+      excerpt,
       content: input.content,
-      coverImage: input.coverImage ?? null,
+      coverImage: input.coverImage ?? "/extracted/blog-ele.webp",
       category: input.category,
-      tags: input.tags,
-      author: input.author || "Tactyqal",
+      tags: Array.isArray(input.tags) ? input.tags : [],
+      author: input.author || "Partha Chakraborty",
+      authorRole: input.authorRole || "Founder, Tactyqal Labs",
       readTime,
       published: input.published ?? true,
+      featured: input.featured ?? false,
       createdAt: now,
       updatedAt: now,
     };
 
-    setMemoryPosts([...posts, post]);
+    const nextPosts = [post, ...posts];
+    writePostsToFile(nextPosts);
+    setMemoryPosts(nextPosts);
     return post;
   },
 
   async update(id: string, data: PostUpdate): Promise<Post | null> {
-    const posts = getMemoryPosts();
+    const posts = ensureFileExists();
     const idx = posts.findIndex((p) => p.id === id || p.slug === id);
     if (idx === -1) return null;
 
@@ -143,15 +205,18 @@ const memoryDriver: BlogDriver = {
 
     const newPosts = [...posts];
     newPosts[idx] = updated;
+    writePostsToFile(newPosts);
     setMemoryPosts(newPosts);
     return updated;
   },
 
   async remove(id: string): Promise<boolean> {
-    const posts = getMemoryPosts();
-    const idx = posts.findIndex((p) => p.id === id);
+    const posts = ensureFileExists();
+    const idx = posts.findIndex((p) => p.id === id || p.slug === id);
     if (idx === -1) return false;
-    setMemoryPosts(posts.filter((_, i) => i !== idx));
+    const nextPosts = posts.filter((_, i) => i !== idx);
+    writePostsToFile(nextPosts);
+    setMemoryPosts(nextPosts);
     return true;
   },
 };
@@ -174,16 +239,27 @@ async function getPrismaDriver(): Promise<BlogDriver> {
   return {
     dataSource: "prisma",
 
-    async list({ q, category, published, page = 1, limit = 10 }: ListOptions): Promise<ListResult> {
+    async list({ q, search, category, published, status, page = 1, limit = 10 }: ListOptions): Promise<ListResult> {
       const where: Record<string, unknown> = {};
-      if (published !== undefined) where["published"] = published;
-      if (category) where["category"] = { equals: category, mode: "insensitive" };
-      if (q) {
+      if (status === "published") {
+        where["published"] = true;
+      } else if (status === "draft") {
+        where["published"] = false;
+      } else if (status !== "all" && published !== undefined) {
+        where["published"] = published;
+      }
+
+      if (category && category !== "All") {
+        where["category"] = { equals: category, mode: "insensitive" };
+      }
+
+      const query = q || search;
+      if (query) {
         where["OR"] = [
-          { title: { contains: q, mode: "insensitive" } },
-          { excerpt: { contains: q, mode: "insensitive" } },
-          { content: { contains: q, mode: "insensitive" } },
-          { tags: { has: q } },
+          { title: { contains: query, mode: "insensitive" } },
+          { excerpt: { contains: query, mode: "insensitive" } },
+          { content: { contains: query, mode: "insensitive" } },
+          { tags: { has: query } },
         ];
       }
 
@@ -216,21 +292,37 @@ async function getPrismaDriver(): Promise<BlogDriver> {
     async create(input: PostInput): Promise<Post> {
       const baseSlug = generateSlug(input.title);
       const slug = await dedupeSlug(input.slug || baseSlug);
-      const readTime = computeReadTime(input.content);
+      const readTime = input.readTime || computeReadTime(input.content);
+      const excerpt = input.excerpt || input.content.slice(0, 150) + "...";
       const post = await prisma.post.create({
-        data: { ...input, slug, readTime },
+        data: {
+          title: input.title,
+          slug,
+          excerpt,
+          content: input.content,
+          coverImage: input.coverImage ?? "/extracted/blog-ele.webp",
+          category: input.category,
+          tags: Array.isArray(input.tags) ? input.tags : [],
+          author: input.author || "Partha Chakraborty",
+          authorRole: input.authorRole || "Founder, Tactyqal Labs",
+          readTime,
+          published: input.published ?? true,
+          featured: input.featured ?? false,
+        },
       });
       return post as Post;
     },
 
     async update(id: string, data: PostUpdate): Promise<Post | null> {
-      const existing = await prisma.post.findUnique({ where: { id } });
+      const existing = await prisma.post.findFirst({
+        where: { OR: [{ id }, { slug: id }] },
+      });
       if (!existing) return null;
 
       let slug = existing.slug;
       if (data.title && data.title !== existing.title && !data.slug) {
         const baseSlug = generateSlug(data.title);
-        slug = await dedupeSlug(baseSlug, id);
+        slug = await dedupeSlug(baseSlug, existing.id);
       } else if (data.slug) {
         slug = data.slug;
       }
@@ -240,7 +332,7 @@ async function getPrismaDriver(): Promise<BlogDriver> {
         : existing.readTime;
 
       const post = await prisma.post.update({
-        where: { id },
+        where: { id: existing.id },
         data: { ...data, slug, readTime },
       });
       return post as Post;
@@ -248,7 +340,12 @@ async function getPrismaDriver(): Promise<BlogDriver> {
 
     async remove(id: string): Promise<boolean> {
       try {
-        await prisma.post.delete({ where: { id } });
+        const existing = await prisma.post.findFirst({
+          where: { OR: [{ id }, { slug: id }] },
+          select: { id: true },
+        });
+        if (!existing) return false;
+        await prisma.post.delete({ where: { id: existing.id } });
         return true;
       } catch {
         return false;
@@ -266,7 +363,7 @@ export async function getDriver(): Promise<BlogDriver> {
     }
     return _driver;
   }
-  return memoryDriver;
+  return fileDriver;
 }
 
 export async function listPosts(options: ListOptions): Promise<ListResult> {
@@ -293,4 +390,3 @@ export async function removePost(id: string): Promise<boolean> {
   const driver = await getDriver();
   return driver.remove(id);
 }
-

@@ -105,15 +105,6 @@ export default function Header() {
 
           <div className="flex items-center gap-3">
             <Link
-              href="/admin/blog"
-              className="hidden sm:inline-flex items-center gap-2 font-mono text-xs border border-ink px-2.5 py-1.5 bg-ivory hover:bg-sand transition-colors whitespace-nowrap shadow-tactile-sm"
-              title="Admin CMS Studio"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald inline-block animate-pulse" />
-              <span className="text-ink font-semibold">CMS Studio</span>
-            </Link>
-
-            <Link
               href="#contact"
               className="hidden sm:inline-flex tactile-btn-signal px-4 py-2.5 text-xs font-semibold tracking-wide whitespace-nowrap"
             >
@@ -180,13 +171,6 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                href="/admin/blog"
-                onClick={() => setMenuOpen(false)}
-                className="font-mono text-sm text-signal font-semibold pt-2"
-              >
-                ⌘ Admin Blog Studio (/admin/blog) →
-              </Link>
             </nav>
 
             <div className="pt-8 border-t border-ink space-y-3">

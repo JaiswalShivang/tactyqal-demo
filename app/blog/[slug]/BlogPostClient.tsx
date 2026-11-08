@@ -111,13 +111,6 @@ export default function BlogPostClient({
               >
                 ← ALL ARTICLES
               </Link>
-              <Link
-                href="/admin/blog"
-                className="font-mono text-xs px-3 py-1.5 border border-ink bg-ivory hover:bg-sand transition-colors inline-flex items-center gap-1.5 font-medium shadow-tactile-sm"
-              >
-                <span className="text-signal">⌘</span>
-                <span>Edit in CMS (/admin/blog)</span>
-              </Link>
             </div>
 
             <div className="flex flex-wrap items-center gap-3 mb-4">

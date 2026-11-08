@@ -11,13 +11,16 @@ import { revalidatePath } from "next/cache";
 const PostUpdateSchema = z.object({
   title: z.string().min(1).max(300).optional(),
   slug: z.string().optional(),
-  excerpt: z.string().min(1).max(500).optional(),
+  excerpt: z.string().max(500).optional(),
   content: z.string().min(1).optional(),
   category: z.string().min(1).optional(),
   tags: z.array(z.string()).optional(),
+  coverImage: z.string().nullable().optional(),
   author: z.string().optional(),
+  authorRole: z.string().optional(),
   readTime: z.number().int().positive().optional(),
   published: z.boolean().optional(),
+  featured: z.boolean().optional(),
 });
 
 function checkAuth(req: NextRequest): NextResponse | null {
@@ -26,7 +29,7 @@ function checkAuth(req: NextRequest): NextResponse | null {
   const auth = req.headers.get("authorization");
   if (!auth || auth !== `Bearer ${token}`) {
     return NextResponse.json(
-      { data: null, error: "Unauthorized", meta: {} },
+      { success: false, data: null, error: "Unauthorized", meta: {} },
       { status: 401 }
     );
   }
@@ -43,19 +46,19 @@ export async function GET(_req: NextRequest, { params }: Params) {
 
     if (!post) {
       return NextResponse.json(
-        { data: null, error: `Post not found: ${id}`, meta: {} },
+        { success: false, data: null, error: `Post not found: ${id}`, meta: {} },
         { status: 404, headers: { "X-Data-Source": driver.dataSource } }
       );
     }
 
     return NextResponse.json(
-      { data: post, error: null, meta: {} },
+      { success: true, data: post, error: null, meta: {} },
       { headers: { "X-Data-Source": driver.dataSource } }
     );
   } catch (err) {
     console.error("GET /api/posts/[id] error:", err);
     return NextResponse.json(
-      { data: null, error: "Internal server error", meta: {} },
+      { success: false, data: null, error: "Internal server error", meta: {} },
       { status: 500 }
     );
   }
@@ -73,6 +76,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
     if (!parsed.success) {
       return NextResponse.json(
         {
+          success: false,
           data: null,
           error: "Validation failed",
           meta: { fields: parsed.error.flatten().fieldErrors },
@@ -86,7 +90,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
 
     if (!post) {
       return NextResponse.json(
-        { data: null, error: `Post not found: ${id}`, meta: {} },
+        { success: false, data: null, error: `Post not found: ${id}`, meta: {} },
         { status: 404, headers: { "X-Data-Source": driver.dataSource } }
       );
     }
@@ -96,16 +100,20 @@ export async function PUT(req: NextRequest, { params }: Params) {
     revalidatePath(`/blog/${post.slug}`);
 
     return NextResponse.json(
-      { data: post, error: null, meta: {} },
+      { success: true, data: post, error: null, meta: {} },
       { headers: { "X-Data-Source": driver.dataSource } }
     );
   } catch (err) {
     console.error("PUT /api/posts/[id] error:", err);
     return NextResponse.json(
-      { data: null, error: "Internal server error", meta: {} },
+      { success: false, data: null, error: "Internal server error", meta: {} },
       { status: 500 }
     );
   }
+}
+
+export async function PATCH(req: NextRequest, { params }: Params) {
+  return PUT(req, { params });
 }
 
 export async function DELETE(req: NextRequest, { params }: Params) {
@@ -119,7 +127,7 @@ export async function DELETE(req: NextRequest, { params }: Params) {
 
     if (!success) {
       return NextResponse.json(
-        { data: null, error: `Post not found: ${id}`, meta: {} },
+        { success: false, data: null, error: `Post not found: ${id}`, meta: {} },
         { status: 404, headers: { "X-Data-Source": driver.dataSource } }
       );
     }
@@ -128,15 +136,21 @@ export async function DELETE(req: NextRequest, { params }: Params) {
     revalidatePath("/blog");
 
     return NextResponse.json(
-      { data: { id, deleted: true }, error: null, meta: {} },
+      {
+        success: true,
+        message: "Post deleted successfully",
+        deletedId: id,
+        data: { id, deleted: true },
+        error: null,
+        meta: {},
+      },
       { headers: { "X-Data-Source": driver.dataSource } }
     );
   } catch (err) {
     console.error("DELETE /api/posts/[id] error:", err);
     return NextResponse.json(
-      { data: null, error: "Internal server error", meta: {} },
+      { success: false, data: null, error: "Internal server error", meta: {} },
       { status: 500 }
     );
   }
 }
-
