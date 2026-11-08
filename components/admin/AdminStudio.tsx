@@ -348,11 +348,10 @@ export default function AdminStudio() {
 
             <button
               onClick={() => setInspectorOpen(!inspectorOpen)}
-              className={`font-mono text-xs px-3 py-1.5 border transition-all ${
-                inspectorOpen
+              className={`font-mono text-xs px-3 py-1.5 border transition-all ${inspectorOpen
                   ? "bg-[#D2FF28] text-[#121316] border-[#D2FF28] font-bold"
                   : "border-white/30 text-white hover:border-[#D2FF28] hover:text-[#D2FF28]"
-              }`}
+                }`}
             >
               {inspectorOpen ? "✕ CLOSE INSPECTOR" : "⚙ API & SCHEMA INSPECTOR"}
             </button>
@@ -441,17 +440,16 @@ export default function AdminStudio() {
                   <button
                     key={st}
                     onClick={() => setInspectorTab(st)}
-                    className={`font-mono text-xs px-4 py-1.5 uppercase transition-colors ${
-                      inspectorTab === st
+                    className={`font-mono text-xs px-4 py-1.5 uppercase transition-colors ${inspectorTab === st
                         ? "bg-[#D2FF28] text-[#121316] font-bold"
                         : "text-white/70 hover:text-white hover:bg-white/10"
-                    }`}
+                      }`}
                   >
                     {st === "tester"
                       ? "REST API Tester"
                       : st === "schema"
-                      ? "Prisma Schema"
-                      : "Architecture vs WordPress"}
+                        ? "Prisma Schema"
+                        : "Architecture vs WordPress"}
                   </button>
                 ))}
               </div>
@@ -563,11 +561,10 @@ export default function AdminStudio() {
                       <div className="flex items-center justify-between mb-2 pb-2 border-b border-white/10">
                         <div className="flex items-center gap-3">
                           <span
-                            className={`font-mono text-xs font-bold px-2 py-0.5 ${
-                              testerResponse.status < 300
+                            className={`font-mono text-xs font-bold px-2 py-0.5 ${testerResponse.status < 300
                                 ? "bg-[#10B981] text-white"
                                 : "bg-[#FF4F18] text-white"
-                            }`}
+                              }`}
                           >
                             HTTP {testerResponse.status}
                           </span>
@@ -772,11 +769,10 @@ export default function AdminStudio() {
                         key={cov.url}
                         type="button"
                         onClick={() => setFormCoverImage(cov.url)}
-                        className={`font-mono text-[10px] px-2 py-1 border border-[#121316] transition-colors ${
-                          formCoverImage === cov.url
+                        className={`font-mono text-[10px] px-2 py-1 border border-[#121316] transition-colors ${formCoverImage === cov.url
                             ? "bg-[#D2FF28] font-bold"
                             : "bg-white hover:bg-[#F6F4EE]"
-                        }`}
+                          }`}
                       >
                         {cov.label}
                       </button>
@@ -930,11 +926,10 @@ export default function AdminStudio() {
                 <button
                   key={st}
                   onClick={() => setStatusFilter(st)}
-                  className={`font-mono text-xs uppercase px-3 py-1.5 transition-colors ${
-                    statusFilter === st
+                  className={`font-mono text-xs uppercase px-3 py-1.5 transition-colors ${statusFilter === st
                       ? "bg-[#121316] text-[#F6F4EE] font-bold"
                       : "text-black/60 hover:text-black"
-                  }`}
+                    }`}
                 >
                   {st === "all" ? "All" : st === "published" ? "Live Only" : "Drafts"}
                 </button>
@@ -1025,11 +1020,10 @@ export default function AdminStudio() {
                     <td className="p-3 whitespace-nowrap">
                       <button
                         onClick={() => handleTogglePublished(post)}
-                        className={`font-mono text-xs px-3 py-1 border-2 border-[#121316] shadow-[2px_2px_0px_#121316] font-bold transition-all ${
-                          post.published
+                        className={`font-mono text-xs px-3 py-1 border-2 border-[#121316] shadow-[2px_2px_0px_#121316] font-bold transition-all ${post.published
                             ? "bg-[#10B981] text-white hover:bg-[#059669]"
                             : "bg-[#E5E7EB] text-black/70 hover:bg-[#D1D5DB]"
-                        }`}
+                          }`}
                         title="Click to toggle live publish state"
                       >
                         {post.published ? "● LIVE (CLICK TO DRAFT)" : "○ DRAFT (CLICK TO PUBLISH)"}

@@ -68,7 +68,7 @@ export default function HomepageBlogSection() {
   return (
     <section
       id="blog-preview"
-      className="py-16 md:py-22 px-4 bg-paper border-y border-ink"
+      className="py-16 md:py-20 px-4 bg-paper border-y border-ink"
       aria-label="Latest insights from our founders"
     >
       <div className="max-w-7xl mx-auto">
@@ -91,17 +91,21 @@ export default function HomepageBlogSection() {
             <div className="lg:col-span-7 h-full flex flex-col justify-between">
               <Link
                 href={`/blog/${lead.slug}`}
-                className="ticket-card h-full flex flex-col justify-between hover:shadow-tactile-signal transition-all group p-6 sm:p-7"
+                className="ticket-card h-full flex flex-col justify-between hover:shadow-tactile-signal transition-all group p-6"
               >
                 <div>
-                  <div className="border border-ink mb-5 overflow-hidden bg-white shadow-tactile-sm">
-                    <div className="relative aspect-[16/10] overflow-hidden bg-sand">
-                      <PostThumbnail src={lead.coverImage} title={lead.title} />
+                  <div className="border border-ink mb-4 overflow-hidden bg-sand shadow-tactile-sm">
+                    <div className="relative h-64 w-full overflow-hidden">
+                      <PostThumbnail
+                        src={lead.coverImage}
+                        title={lead.title}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2.5 mb-3">
-                    <span className="pill pill-volt text-xs font-medium">
+                  <div className="flex items-center gap-2.5 mb-2.5">
+                    <span className="pill pill-volt text-xs font-semibold">
                       {lead.category}
                     </span>
                     <span className="font-mono text-xs text-ink/50">
@@ -117,16 +121,32 @@ export default function HomepageBlogSection() {
                     </span>
                   </div>
 
-                  <h3 className="font-display font-bold text-2xl sm:text-3xl leading-snug tracking-tight mb-3 group-hover:text-signal transition-colors">
+                  <h3 className="font-display font-extrabold text-2xl sm:text-[26px] leading-snug tracking-tight mb-2.5 group-hover:text-signal transition-colors">
                     {lead.title}
                   </h3>
 
-                  <p className="text-sm text-ink/75 leading-relaxed line-clamp-3 mb-6">
+                  <p className="text-sm text-ink/75 leading-relaxed line-clamp-3 mb-4">
                     {lead.excerpt}
                   </p>
+
+                  <div className="flex flex-wrap gap-1.5 mb-2">
+                    {(lead.tags && lead.tags.length > 0
+                      ? lead.tags
+                      : ["no-code", "startup", "tools", "mvp"]
+                    )
+                      .slice(0, 4)
+                      .map((tag) => (
+                        <span
+                          key={tag}
+                          className="font-mono text-[10px] text-ink/60 bg-sand px-2 py-0.5 border border-ink/20"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                  </div>
                 </div>
 
-                <div className="pt-4 border-t border-ink/15 flex items-center justify-between font-mono text-xs">
+                <div className="pt-3 border-t border-ink/15 flex items-center justify-between font-mono text-xs">
                   <span className="text-ink/50">By {lead.author}</span>
                   <span className="text-signal font-bold group-hover:translate-x-1 transition-transform">
                     READ FULL STORY →
@@ -136,42 +156,48 @@ export default function HomepageBlogSection() {
             </div>
           )}
 
-          <div className="lg:col-span-5 grid grid-rows-2 gap-6 h-full">
+          <div className="lg:col-span-5 flex flex-col justify-between gap-5 h-full">
             {sidePosts.map((post) => (
               <Link
                 key={post.id}
                 href={`/blog/${post.slug}`}
-                className="ticket-card p-5 h-full flex flex-col justify-between hover:shadow-tactile transition-all group"
+                className="ticket-card p-4 h-full flex flex-row items-center gap-4 hover:shadow-tactile transition-all group"
               >
-                <div>
-                  <div className="h-44 sm:h-48 w-full border border-ink mb-3 overflow-hidden bg-sand shadow-tactile-sm">
-                    <PostThumbnail src={post.coverImage} title={post.title} className="w-full h-full object-cover" />
-                  </div>
-
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="pill text-[10px] px-2 py-0.5 bg-sand font-medium">
-                      {post.category}
-                    </span>
-                    <span className="font-mono text-[11px] text-ink/50">
-                      {post.readTime} min read
-                    </span>
-                  </div>
-
-                  <h4 className="font-display font-bold text-base sm:text-lg leading-snug tracking-tight line-clamp-2 group-hover:text-signal transition-colors mb-2">
-                    {post.title}
-                  </h4>
-
-                  <p className="text-xs text-ink/70 leading-relaxed line-clamp-2 mb-3">
-                    {post.excerpt}
-                  </p>
+                <div className="w-36 h-32 shrink-0 border border-[#121316] overflow-hidden bg-sand shadow-tactile-sm">
+                  <PostThumbnail
+                    src={post.coverImage}
+                    title={post.title}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
 
-                <div className="pt-2.5 border-t border-ink/15 flex items-center justify-between font-mono text-xs">
-                  <span className="text-ink/50">By {post.author}</span>
-                  <span className="text-signal font-bold group-hover:translate-x-1 transition-transform flex items-center gap-1">
-                    <span>Read Guide</span>
-                    <span>→</span>
-                  </span>
+                <div className="flex-1 min-w-0 flex flex-col justify-between h-full py-0.5">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="pill text-[10px] px-2 py-0.5 bg-sand font-semibold">
+                        {post.category}
+                      </span>
+                      <span className="font-mono text-[11px] text-ink/50">
+                        {post.readTime} min read
+                      </span>
+                    </div>
+
+                    <h4 className="font-display font-bold text-base leading-snug tracking-tight line-clamp-2 group-hover:text-signal transition-colors mb-1.5">
+                      {post.title}
+                    </h4>
+
+                    <p className="text-xs text-ink/70 leading-relaxed line-clamp-2 mb-2">
+                      {post.excerpt}
+                    </p>
+                  </div>
+
+                  <div className="pt-1.5 border-t border-ink/15 flex items-center justify-between font-mono text-[11px]">
+                    <span className="text-ink/50 line-clamp-1">{post.author}</span>
+                    <span className="text-signal font-bold group-hover:translate-x-1 transition-transform shrink-0 flex items-center gap-1">
+                      <span>Read Guide</span>
+                      <span>→</span>
+                    </span>
+                  </div>
                 </div>
               </Link>
             ))}
@@ -186,16 +212,20 @@ export default function HomepageBlogSection() {
                 className="ticket-card h-full p-5 hover:shadow-tactile transition-all group flex flex-col justify-between"
               >
                 <div>
-                  <div className="aspect-[16/10] border border-ink mb-4 overflow-hidden bg-sand shadow-tactile-sm">
-                    <PostThumbnail src={post.coverImage} title={post.title} />
+                  <div className="h-44 w-full border border-ink mb-3.5 overflow-hidden bg-sand shadow-tactile-sm">
+                    <PostThumbnail
+                      src={post.coverImage}
+                      title={post.title}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
 
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="pill text-[10px] px-2 py-0.5 bg-sand">
+                    <span className="pill text-[10px] px-2 py-0.5 bg-sand font-semibold">
                       {post.category}
                     </span>
                     <span className="font-mono text-[11px] text-ink/50">
-                      {post.readTime}m read
+                      {post.readTime} min read
                     </span>
                   </div>
 
@@ -216,7 +246,7 @@ export default function HomepageBlogSection() {
                     })}
                   </span>
                   <span className="text-signal font-bold group-hover:translate-x-1 transition-transform">
-                    READ →
+                    READ GUIDE →
                   </span>
                 </div>
               </Link>

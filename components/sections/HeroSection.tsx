@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 
@@ -31,7 +31,20 @@ export default function HeroSection() {
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [highlight, setHighlight] = useState({ x: 50, y: 50 });
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
   const prefersReduced = useReducedMotion();
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setVideoModalOpen(false);
+      }
+    };
+    if (videoModalOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [videoModalOpen]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (prefersReduced || !cardRef.current) return;
@@ -64,7 +77,7 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-[calc(100vh-3.5rem)] pt-8 pb-14 lg:pt-10 lg:pb-16 px-4 bg-[#0B0C0E] text-[#F6F4EE] overflow-hidden flex flex-col justify-center border-b border-[#2E3138]"
+      className="relative min-h-[calc(100vh-3.5rem)] pt-8 lg:pt-10 bg-[#0B0C0E] text-[#F6F4EE] overflow-hidden flex flex-col justify-between"
       aria-label="Hero section"
     >
       <video
@@ -87,12 +100,12 @@ export default function HeroSection() {
       <div className="absolute inset-0 pointer-events-none select-none z-0" aria-hidden="true">
         <div className="absolute top-6 left-6 font-mono text-[12px] text-white/30 font-bold">+</div>
         <div className="absolute top-6 right-6 font-mono text-[12px] text-white/30 font-bold">+</div>
-        <div className="absolute bottom-6 left-6 font-mono text-[12px] text-white/30 font-bold">+</div>
-        <div className="absolute bottom-6 right-6 font-mono text-[12px] text-white/30 font-bold">+</div>
+        <div className="absolute bottom-16 left-6 font-mono text-[12px] text-white/30 font-bold">+</div>
+        <div className="absolute bottom-16 right-6 font-mono text-[12px] text-white/30 font-bold">+</div>
         <div className="hidden lg:block absolute top-0 bottom-0 left-[58.333%] border-r border-dashed border-white/10" />
       </div>
 
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch relative z-10">
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch relative z-10 flex-1 my-auto">
         <div className="lg:col-span-7 flex flex-col justify-between h-full">
           <div>
             <h1 className="font-display font-extrabold text-[clamp(2.4rem,4.2vw,3.9rem)] tracking-[-0.025em] leading-[1.04] text-[#F6F4EE] mb-4">
@@ -143,16 +156,16 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md pt-1">
+          <div className="flex flex-col sm:flex-row gap-4 w-full pt-1">
             <Link
               href="#contact"
-              className="px-7 py-3 text-sm font-bold text-center tracking-wide bg-signal text-white border-2 border-white shadow-[4px_4px_0px_0px_#F6F4EE] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#F6F4EE] transition-all cursor-pointer"
+              className="whitespace-nowrap px-6 py-3.5 text-sm font-bold text-center tracking-wide bg-signal text-white border-2 border-white shadow-[4px_4px_0px_0px_#F6F4EE] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#F6F4EE] transition-all cursor-pointer"
             >
               Book Free Consultation
             </Link>
             <Link
               href="#student-projects"
-              className="px-7 py-3 text-sm font-bold text-center tracking-wide bg-white text-ink border-2 border-ink shadow-[4px_4px_0px_0px_#FF4F18] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#FF4F18] transition-all cursor-pointer"
+              className="whitespace-nowrap px-6 py-3.5 text-sm font-bold text-center tracking-wide bg-white text-ink border-2 border-ink shadow-[4px_4px_0px_0px_#FF4F18] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#FF4F18] transition-all cursor-pointer"
             >
               Explore Student Apps
             </Link>
@@ -282,7 +295,62 @@ export default function HeroSection() {
         </div>
       </div>
 
-      <div className="perforated-edge mt-8" />
+      <div className="w-full border-t border-white/15 bg-[#0B0C0E]/90 backdrop-blur-md px-6 py-2.5 flex items-center justify-between text-[11px] font-mono text-[#F6F4EE]/70 relative z-10 mt-10">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
+          <span>LIVE COHORT FEED // 8-WEEK MENTORSHIP</span>
+        </div>
+        <a
+          href="#student-projects"
+          className="hidden sm:inline-block hover:text-[#D2FF28] transition-colors cursor-pointer"
+        >
+          SCROLL TO EXPLORE STUDENT APPS ↓
+        </a>
+        <button
+          type="button"
+          onClick={() => setVideoModalOpen(true)}
+          className="flex items-center gap-1.5 text-[#F6F4EE] hover:text-[#FF4F18] transition-colors cursor-pointer font-bold"
+        >
+          <span>Expand Video Reel</span>
+          <span>↗</span>
+        </button>
+      </div>
+
+      {videoModalOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+          onClick={() => setVideoModalOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-4xl bg-[#121316] border-2 border-white/20 shadow-[8px_8px_0px_#FF4F18] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="px-4 py-3 bg-[#0B0C0E] border-b border-white/15 flex items-center justify-between text-xs font-mono text-[#F6F4EE]">
+              <span className="font-bold text-[#D2FF28]">
+                TACTYQAL LABS // LIVE BUILDER REEL (1:1 MENTORING)
+              </span>
+              <button
+                type="button"
+                onClick={() => setVideoModalOpen(false)}
+                className="hover:text-[#FF4F18] transition-colors px-2 py-0.5 border border-white/20"
+              >
+                ✕ CLOSE
+              </button>
+            </div>
+            <div className="aspect-video w-full bg-black relative">
+              <video
+                controls
+                autoPlay
+                playsInline
+                className="w-full h-full object-contain"
+              >
+                <source src="/videos/kid_impact.mp4" type="video/mp4" />
+                <source src="https://www.tactyqal.com/application/assets/videos/kid_impact.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
