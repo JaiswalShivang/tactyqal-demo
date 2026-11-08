@@ -53,6 +53,7 @@ export default function ContactSection() {
     >
       <div className="max-w-7xl mx-auto">
         <SectionHeader
+          eyebrow="DIRECT CONSULTATION & ADMISSIONS"
           title="Book Your Free Founder Consultation"
           accent="Founder Consultation"
           description="Schedule a 1:1 strategy session with our founder Partha Chakraborty or reach our admissions desk directly."

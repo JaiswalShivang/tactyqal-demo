@@ -101,7 +101,7 @@ function QuizModal({ tool, onClose }: { tool: ToolData; onClose: () => void }) {
       aria-label={`${tool.name} assessment modal`}
     >
       <motion.div
-        className="bg-paper border-2 border-ink w-full max-w-lg p-6 sm:p-8 relative shadow-tactile text-ink"
+        className="bg-white border-2 border-[#0F1B3D] w-full max-w-2xl p-6 sm:p-8 relative shadow-[8px_8px_0px_#FF3D88] text-[#0F1B3D] max-h-[90vh] overflow-y-auto"
         initial={prefersReduced ? {} : { scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={prefersReduced ? {} : { scale: 0.95, opacity: 0 }}
@@ -110,7 +110,7 @@ function QuizModal({ tool, onClose }: { tool: ToolData; onClose: () => void }) {
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 border border-ink flex items-center justify-center hover:bg-ink hover:text-paper transition-colors font-mono"
+          className="absolute top-4 right-4 w-8 h-8 border border-[#0F1B3D] bg-white text-[#0F1B3D] hover:bg-[#FF3D88] hover:text-white flex items-center justify-center transition-colors font-mono font-bold cursor-pointer"
           aria-label="Close modal"
         >
           ✕
@@ -272,6 +272,7 @@ export default function FreeToolsSection() {
       <div className="absolute inset-0 bg-gradient-to-b from-[#0F1B3D] via-[#0F1B3D]/85 to-[#0F1B3D] pointer-events-none" />
       <div className="max-w-7xl mx-auto relative z-20">
         <SectionHeader
+          eyebrow="05 / 09 · FREE RESOURCES"
           title="Used by 1,000+ Entrepreneurs"
           accent="1,000+"
           accentColor="volt"

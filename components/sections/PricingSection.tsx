@@ -33,6 +33,7 @@ export default function PricingSection() {
       <div className="absolute inset-0 bg-gradient-to-b from-[#0F1B3D] via-[#0F1B3D]/85 to-[#0F1B3D] pointer-events-none" />
       <div className="max-w-7xl mx-auto relative z-10">
         <SectionHeader
+          eyebrow="08 / 09 · PRICING & GUARANTEE"
           title="The Builder's Vault"
           accent="Vault"
           accentColor="volt"
@@ -118,7 +119,7 @@ export default function PricingSection() {
           </motion.div>
 
           <div className="lg:col-span-5 flex flex-col justify-between gap-5 h-full">
-            <div className="flex-1 flex flex-col justify-between border border-[#263B73] bg-[#162654] p-6 text-white">
+            <div className="flex-1 flex flex-col justify-between border border-[#263B73] bg-[#162654] p-6 text-white shadow-tactile-sm">
               <div>
                 <div className="font-mono text-xs text-signal uppercase tracking-wider font-bold mb-3 flex items-center gap-2">
                   <span className="w-2.5 h-2.5 bg-signal rounded-full" />
@@ -136,7 +137,7 @@ export default function PricingSection() {
               </div>
             </div>
 
-            <div className="flex-1 flex flex-col justify-between border border-[#263B73] bg-[#162654] p-6 text-white">
+            <div className="flex-1 flex flex-col justify-between border border-[#263B73] bg-[#162654] p-6 text-white shadow-tactile-sm">
               <div>
                 <div className="font-mono text-xs text-white/50 uppercase tracking-wider font-bold mb-3">
                   AFTER APPLICATION
@@ -165,16 +166,16 @@ export default function PricingSection() {
               </div>
             </div>
 
-            <div className="flex-1 flex flex-col justify-between border border-[#0F1B3D] bg-white text-[#0F1B3D] p-6 shadow-tactile-sm">
+            <div className="flex-1 flex flex-col justify-between border border-[#263B73] bg-[#162654] p-6 text-white shadow-tactile-sm">
               <div>
-                <div className="font-mono text-xs text-[#0F1B3D]/50 uppercase tracking-wider mb-2 font-bold">
+                <div className="font-mono text-xs text-[#00F5D4] uppercase tracking-wider mb-2 font-bold">
                   PAYMENT FLEXIBILITY
                 </div>
-                <p className="text-sm text-[#0F1B3D]/80 leading-relaxed tracking-normal">
+                <p className="text-sm text-white/80 leading-relaxed tracking-normal">
                   We accept UPI, Net Banking, and all major Indian &amp; International credit cards via secure payment gateway.
                 </p>
               </div>
-              <div className="pt-3 mt-3 border-t border-[#0F1B3D]/15 font-mono text-[11px] text-[#0F1B3D]/60 font-semibold uppercase">
+              <div className="pt-3 mt-3 border-t border-white/10 font-mono text-[11px] text-[#00F5D4] font-semibold uppercase">
                 INSTANT ENROLMENT CONFIRMATION
               </div>
             </div>

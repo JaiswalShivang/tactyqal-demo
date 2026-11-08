@@ -329,95 +329,133 @@ function ProjectModal({
     >
       <motion.div
         ref={modalRef}
-        className="bg-white border-2 border-ink w-full max-w-xl p-6 sm:p-8 relative z-10 shadow-tactile max-h-[90vh] overflow-y-auto"
+        className="bg-white border-2 border-[#0F1B3D] w-full max-w-4xl relative z-10 shadow-[10px_10px_0px_0px_#FF3D88] overflow-hidden max-h-[92vh] flex flex-col my-auto"
         initial={prefersReduced ? {} : { y: 25, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={prefersReduced ? {} : { y: 25, opacity: 0 }}
         transition={{ type: "spring", stiffness: 350, damping: 30 }}
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 border border-ink flex items-center justify-center hover:bg-ink hover:text-paper transition-colors font-mono"
-          aria-label="Close modal"
-        >
-          ✕
-        </button>
-
-        <div className="flex items-start gap-3 mb-5 pr-8">
-          {project.icon}
-          <div>
-            <div className="font-display text-2xl font-bold tracking-tight">{project.name}</div>
-            <div className="flex flex-wrap items-center gap-2 mt-1">
-              <span className="pill text-xs bg-sand">{project.category}</span>
-              <span className="pill pill-volt text-xs font-semibold">Founder: Age {project.founderAge}</span>
-              <span className="pill text-xs bg-paper border border-ink font-mono">{project.badge}</span>
+        <div className="bg-[#0F1B3D] text-white px-5 sm:px-6 py-3.5 flex items-center justify-between border-b-2 border-[#0F1B3D] shrink-0">
+          <div className="flex items-center gap-3 overflow-hidden">
+            <div className="w-9 h-9 border border-white/20 bg-white/10 flex items-center justify-center shrink-0">
+              {project.icon}
             </div>
-          </div>
-        </div>
-
-        <div className="border border-ink bg-paper mb-5 overflow-hidden shadow-tactile-sm">
-          <div className="bg-sand border-b border-ink px-3 py-1.5 flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-signal inline-block" />
-              <span className="w-2.5 h-2.5 rounded-full bg-volt inline-block" />
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald inline-block" />
-            </div>
-            <span className="font-mono text-xs text-ink/60 uppercase tracking-wider">{project.id}.tactyqal.app</span>
-          </div>
-          <div className="relative aspect-[16/10] bg-white overflow-hidden max-h-60">
-            <img
-              src={project.screenshot}
-              alt={`${project.name} full preview`}
-              className="w-full h-full object-cover object-top"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
-          <div className="bg-ivory border border-ink p-3.5">
-            <div className="font-mono text-[11px] text-ink/50 uppercase tracking-wider mb-1">
-              {project.metric.toUpperCase()}
-            </div>
-            <div className="font-display text-2xl font-extrabold text-signal tracking-tight">
-              {project.metricPrefix}
-              {project.metricValue.toLocaleString("en-IN")}
-              {project.metricSuffix}
-            </div>
-          </div>
-          <div className="bg-ivory border border-ink p-3.5">
-            <div className="font-mono text-[11px] text-ink/50 uppercase tracking-wider mb-1">
-              REVENUE & IMPACT
-            </div>
-            <div className="font-mono text-xs font-bold text-ink leading-snug">
-              {project.revenueOrImpact}
-            </div>
-          </div>
-        </div>
-
-        <div className="mb-5 bg-sand/60 border border-ink p-3.5">
-          <div className="font-mono text-[11px] text-ink/60 uppercase tracking-wider mb-2 font-bold">
-            TECH STACK BUILT IN 8 WEEKS (NO-CODE + AI)
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {project.techStack.map((tech) => (
-              <span key={tech} className="font-mono text-xs bg-ivory border border-ink/30 px-2 py-0.5 text-ink font-medium">
-                {tech}
+            <div className="flex flex-wrap items-center gap-2 truncate">
+              <span className="font-display font-extrabold text-lg sm:text-xl tracking-tight text-white">
+                {project.name}
               </span>
-            ))}
+              <span className="font-mono text-[11px] px-2.5 py-0.5 rounded-full bg-white/10 border border-white/20 text-white/90">
+                {project.category}
+              </span>
+              <span className="font-mono text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#FFE4EF] text-[#FF3D88] border border-[#FF3D88]">
+                Founder: Age {project.founderAge}
+              </span>
+              <span className="font-mono text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#00F5D4]/15 text-[#00F5D4] border border-[#00F5D4] hidden sm:inline-block">
+                {project.badge}
+              </span>
+            </div>
           </div>
+
+          <button
+            onClick={onClose}
+            className="w-8 h-8 bg-white text-[#0F1B3D] hover:bg-[#FF3D88] hover:text-white flex items-center justify-center font-bold border border-[#0F1B3D] transition-colors cursor-pointer shrink-0 ml-3"
+            aria-label="Close modal"
+          >
+            ✕
+          </button>
         </div>
 
-        <p className="text-sm leading-relaxed mb-6 text-ink/80">{project.story}</p>
+        <div className="grid grid-cols-1 md:grid-cols-12 p-5 sm:p-6 gap-6 items-stretch overflow-y-auto">
+          <div className="md:col-span-6 flex flex-col justify-between">
+            <div>
+              <div className="border border-[#0F1B3D] bg-white overflow-hidden shadow-[3px_3px_0px_#0F1B3D] mb-4">
+                <div className="bg-[#F4F6FB] border-b border-[#0F1B3D] px-3 py-1.5 flex items-center justify-between text-[11px] font-mono text-[#0F1B3D]/70">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-[#FF3D88] inline-block" />
+                    <span className="w-2 h-2 rounded-full bg-[#FFE4EF] border border-[#0F1B3D] inline-block" />
+                    <span className="w-2 h-2 rounded-full bg-[#00D2B4] inline-block" />
+                  </div>
+                  <span className="truncate max-w-[200px]">https://{project.id}.tactyqal.app</span>
+                </div>
+                <div className="relative w-full aspect-[4/3] bg-[#0F1B3D] overflow-hidden">
+                  <img
+                    src={project.screenshot}
+                    alt={`${project.name} full preview`}
+                    className="w-full h-full object-cover object-top block"
+                  />
+                </div>
+              </div>
 
-        <div className="pt-4 border-t border-ink/20 flex flex-col sm:flex-row gap-3">
-          <Link
-            href="#pricing"
-            onClick={onClose}
-            className="tactile-btn-signal w-full py-3 text-center font-semibold block text-sm tracking-wide"
-          >
-            Build an App Like This in Cohort #04 →
-          </Link>
+              <div className="grid grid-cols-3 gap-2 text-center font-mono border border-[#0F1B3D] p-2.5 bg-[#F4F6FB] shadow-[2px_2px_0px_#0F1B3D]">
+                <div>
+                  <div className="text-[10px] text-[#0F1B3D]/50 uppercase">Time to MVP</div>
+                  <div className="text-xs font-bold text-[#0F1B3D] mt-0.5">6 Weeks</div>
+                </div>
+                <div className="border-x border-[#0F1B3D]/20 px-1">
+                  <div className="text-[10px] text-[#0F1B3D]/50 uppercase">Code Written</div>
+                  <div className="text-xs font-bold text-[#0F1B3D] mt-0.5">0 Lines</div>
+                </div>
+                <div>
+                  <div className="text-[10px] text-[#0F1B3D]/50 uppercase">Status</div>
+                  <div className="text-xs font-bold text-[#FF3D88] mt-0.5">Monetized</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="md:col-span-6 flex flex-col justify-between">
+            <div>
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="bg-[#F4F6FB] border border-[#0F1B3D] p-3 shadow-[2px_2px_0px_#0F1B3D]">
+                  <div className="font-mono text-[10px] text-[#0F1B3D]/60 uppercase tracking-wider mb-0.5">
+                    {project.metric.toUpperCase()}
+                  </div>
+                  <div className="font-display text-xl sm:text-2xl font-extrabold text-[#FF3D88] tracking-tight">
+                    {project.metricPrefix}
+                    {project.metricValue.toLocaleString("en-IN")}
+                    {project.metricSuffix}
+                  </div>
+                </div>
+                <div className="bg-[#F4F6FB] border border-[#0F1B3D] p-3 shadow-[2px_2px_0px_#0F1B3D]">
+                  <div className="font-mono text-[10px] text-[#0F1B3D]/60 uppercase tracking-wider mb-0.5">
+                    OUTCOME &amp; IMPACT
+                  </div>
+                  <div className="font-mono text-xs font-bold text-[#0F1B3D] leading-snug line-clamp-3">
+                    {project.revenueOrImpact}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mb-4 bg-white border border-[#0F1B3D] p-3 shadow-[2px_2px_0px_#0F1B3D]">
+                <div className="font-mono text-[10px] text-[#0F1B3D]/70 uppercase tracking-wider font-bold mb-2">
+                  TECH STACK BUILT IN 8 WEEKS (NO-CODE + AI)
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {project.techStack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="font-mono text-xs bg-[#F4F6FB] border border-[#0F1B3D]/30 px-2.5 py-1 text-[#0F1B3D] font-medium"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <p className="text-sm leading-relaxed mb-4 text-[#0F1B3D]/85">{project.story}</p>
+            </div>
+
+            <div className="pt-2">
+              <Link
+                href="#contact"
+                onClick={onClose}
+                className="w-full py-3.5 text-center font-bold block text-sm tracking-wide bg-[#FF3D88] text-white hover:bg-[#E62E76] border-2 border-[#0F1B3D] shadow-[4px_4px_0px_0px_#0F1B3D] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[5px_5px_0px_0px_#0F1B3D] transition-all cursor-pointer"
+              >
+                Build an App Like This in Cohort #04 →
+              </Link>
+            </div>
+          </div>
         </div>
       </motion.div>
     </div>
@@ -440,6 +478,7 @@ export default function StudentProjectsSection() {
     >
       <div className="max-w-7xl mx-auto">
         <SectionHeader
+          eyebrow="02 / 09 · PROOF OF WORK"
           title="Real Students. Real Apps. Real Success."
           accent="Success."
           description="Every project below was built by a teenager in an 8-week cohort—with real users, real revenue, and a real impact."

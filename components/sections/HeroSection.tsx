@@ -95,6 +95,11 @@ export default function HeroSection() {
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch relative z-10">
         <div className="lg:col-span-7 flex flex-col justify-between h-full">
           <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 bg-[#162654] border border-[#FF3D88] text-[11px] font-mono font-bold uppercase tracking-wider text-white shadow-[2px_2px_0px_#0F1B3D]">
+              <span className="w-2 h-2 rounded-full bg-[#FF3D88]" />
+              <span>01 / 09 · THE PROGRAM</span>
+            </div>
+
             <h1 className="font-display font-extrabold text-[clamp(2.4rem,4.2vw,3.9rem)] tracking-[-0.025em] leading-[1.04] text-[#FFFFFF] mb-4">
               Empower Your Kid To{" "}
               <span className="text-[#FF3D88] font-extrabold">Build</span>{" "}

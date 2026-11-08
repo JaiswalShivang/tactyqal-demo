@@ -84,11 +84,14 @@ export function SectionHeader({
         <div>
           {eyebrow && (
             <div
-              className={`font-mono text-xs uppercase tracking-[0.08em] mb-3 ${
-                dark ? "text-paper/50" : "text-ink/50"
+              className={`inline-flex items-center gap-2 px-3 py-1 mb-3 text-[11px] font-mono font-bold uppercase tracking-wider ${
+                dark
+                  ? "bg-[#162654] border border-[#FF3D88] text-white shadow-[2px_2px_0px_#0F1B3D]"
+                  : "bg-[#FFE4EF] border border-[#0F1B3D] text-[#0F1B3D] shadow-[2px_2px_0px_#0F1B3D]"
               }`}
             >
-              {eyebrow}
+              <span className="w-2 h-2 rounded-full bg-[#FF3D88]" />
+              <span>{eyebrow}</span>
             </div>
           )}
           <Heading
