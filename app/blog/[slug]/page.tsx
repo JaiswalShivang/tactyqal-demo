@@ -37,19 +37,39 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  const { posts } = await listPosts({ published: true, limit: 100 });
-  return posts.map((p) => ({ slug: p.slug }));
+  try {
+    const { posts } = await listPosts({ published: true, limit: 100 });
+    if (posts && posts.length > 0) {
+      return posts.map((p) => ({ slug: p.slug }));
+    }
+  } catch {}
+  const { getMemoryPosts } = await import("@/lib/memory-store");
+  return getMemoryPosts()
+    .filter((p) => p.published)
+    .map((p) => ({ slug: p.slug }));
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = await getPostByIdOrSlug(slug);
+  let post = await getPostByIdOrSlug(slug);
+
+  if (!post) {
+    const { getMemoryPosts } = await import("@/lib/memory-store");
+    post = getMemoryPosts().find((p) => p.slug === slug || p.id === slug) || null;
+  }
 
   if (!post || !post.published) {
     notFound();
   }
 
-  const { posts: allPosts } = await listPosts({ published: true, limit: 50 });
+  let allPosts: typeof post[] = [];
+  try {
+    const res = await listPosts({ published: true, limit: 50 });
+    allPosts = res.posts;
+  } catch {
+    const { getMemoryPosts } = await import("@/lib/memory-store");
+    allPosts = getMemoryPosts().filter((p) => p.published);
+  }
   const related = allPosts
     .filter(
       (p) =>

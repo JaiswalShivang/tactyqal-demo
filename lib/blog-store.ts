@@ -221,121 +221,153 @@ const fileDriver: BlogDriver = {
   },
 };
 
+function isValidDatabaseUrl(url: string | undefined): boolean {
+  if (!url) return false;
+  const trimmed = url.trim();
+  if (trimmed.length < 15) return false;
+  return (
+    (trimmed.startsWith("postgresql://") || trimmed.startsWith("postgres://")) &&
+    !trimmed.includes("USER:PASSWORD") &&
+    !trimmed.includes("your_database_url")
+  );
+}
+
 async function getPrismaDriver(): Promise<BlogDriver> {
   const { default: prisma } = await import("./prisma");
 
   async function dedupeSlug(baseSlug: string, excludeId?: string): Promise<string> {
-    const existing = await prisma.post.findMany({
-      where: excludeId ? { NOT: { id: excludeId } } : {},
-      select: { slug: true },
-    });
-    const slugs = existing.map((p: { slug: string }) => p.slug);
-    if (!slugs.includes(baseSlug)) return baseSlug;
-    let n = 2;
-    while (slugs.includes(`${baseSlug}-${n}`)) n++;
-    return `${baseSlug}-${n}`;
+    try {
+      const existing = await prisma.post.findMany({
+        where: excludeId ? { NOT: { id: excludeId } } : {},
+        select: { slug: true },
+      });
+      const slugs = existing.map((p: { slug: string }) => p.slug);
+      if (!slugs.includes(baseSlug)) return baseSlug;
+      let n = 2;
+      while (slugs.includes(`${baseSlug}-${n}`)) n++;
+      return `${baseSlug}-${n}`;
+    } catch {
+      return baseSlug;
+    }
   }
 
   return {
     dataSource: "prisma",
 
-    async list({ q, search, category, published, status, page = 1, limit = 10 }: ListOptions): Promise<ListResult> {
-      const where: Record<string, unknown> = {};
-      if (status === "published") {
-        where["published"] = true;
-      } else if (status === "draft") {
-        where["published"] = false;
-      } else if (status !== "all" && published !== undefined) {
-        where["published"] = published;
+    async list(options: ListOptions): Promise<ListResult> {
+      try {
+        const { q, search, category, published, status, page = 1, limit = 10 } = options;
+        const where: Record<string, unknown> = {};
+        if (status === "published") {
+          where["published"] = true;
+        } else if (status === "draft") {
+          where["published"] = false;
+        } else if (status !== "all" && published !== undefined) {
+          where["published"] = published;
+        }
+
+        if (category && category !== "All") {
+          where["category"] = { equals: category, mode: "insensitive" };
+        }
+
+        const query = q || search;
+        if (query) {
+          where["OR"] = [
+            { title: { contains: query, mode: "insensitive" } },
+            { excerpt: { contains: query, mode: "insensitive" } },
+            { content: { contains: query, mode: "insensitive" } },
+            { tags: { has: query } },
+          ];
+        }
+
+        const [posts, total] = await Promise.all([
+          prisma.post.findMany({
+            where,
+            orderBy: { createdAt: "desc" },
+            skip: (page - 1) * limit,
+            take: limit,
+          }),
+          prisma.post.count({ where }),
+        ]);
+
+        return {
+          posts: posts as Post[],
+          total,
+          page,
+          limit,
+          pages: Math.ceil(total / limit),
+        };
+      } catch {
+        return fileDriver.list(options);
       }
-
-      if (category && category !== "All") {
-        where["category"] = { equals: category, mode: "insensitive" };
-      }
-
-      const query = q || search;
-      if (query) {
-        where["OR"] = [
-          { title: { contains: query, mode: "insensitive" } },
-          { excerpt: { contains: query, mode: "insensitive" } },
-          { content: { contains: query, mode: "insensitive" } },
-          { tags: { has: query } },
-        ];
-      }
-
-      const [posts, total] = await Promise.all([
-        prisma.post.findMany({
-          where,
-          orderBy: { createdAt: "desc" },
-          skip: (page - 1) * limit,
-          take: limit,
-        }),
-        prisma.post.count({ where }),
-      ]);
-
-      return {
-        posts: posts as Post[],
-        total,
-        page,
-        limit,
-        pages: Math.ceil(total / limit),
-      };
     },
 
     async getByIdOrSlug(idOrSlug: string): Promise<Post | null> {
-      const post = await prisma.post.findFirst({
-        where: { OR: [{ id: idOrSlug }, { slug: idOrSlug }] },
-      });
-      return post as Post | null;
+      try {
+        const post = await prisma.post.findFirst({
+          where: { OR: [{ id: idOrSlug }, { slug: idOrSlug }] },
+        });
+        return (post as Post | null) ?? fileDriver.getByIdOrSlug(idOrSlug);
+      } catch {
+        return fileDriver.getByIdOrSlug(idOrSlug);
+      }
     },
 
     async create(input: PostInput): Promise<Post> {
-      const baseSlug = generateSlug(input.title);
-      const slug = await dedupeSlug(input.slug || baseSlug);
-      const readTime = input.readTime || computeReadTime(input.content);
-      const excerpt = input.excerpt || input.content.slice(0, 150) + "...";
-      const post = await prisma.post.create({
-        data: {
-          title: input.title,
-          slug,
-          excerpt,
-          content: input.content,
-          coverImage: input.coverImage ?? "/extracted/blog-ele.webp",
-          category: input.category,
-          tags: Array.isArray(input.tags) ? input.tags : [],
-          author: input.author || "Partha Chakraborty",
-          authorRole: input.authorRole || "Founder, Tactyqal Labs",
-          readTime,
-          published: input.published ?? true,
-          featured: input.featured ?? false,
-        },
-      });
-      return post as Post;
+      try {
+        const baseSlug = generateSlug(input.title);
+        const slug = await dedupeSlug(input.slug || baseSlug);
+        const readTime = input.readTime || computeReadTime(input.content);
+        const excerpt = input.excerpt || input.content.slice(0, 150) + "...";
+        const post = await prisma.post.create({
+          data: {
+            title: input.title,
+            slug,
+            excerpt,
+            content: input.content,
+            coverImage: input.coverImage ?? "/extracted/blog-ele.webp",
+            category: input.category,
+            tags: Array.isArray(input.tags) ? input.tags : [],
+            author: input.author || "Partha Chakraborty",
+            authorRole: input.authorRole || "Founder, Tactyqal Labs",
+            readTime,
+            published: input.published ?? true,
+            featured: input.featured ?? false,
+          },
+        });
+        return post as Post;
+      } catch {
+        return fileDriver.create(input);
+      }
     },
 
     async update(id: string, data: PostUpdate): Promise<Post | null> {
-      const existing = await prisma.post.findFirst({
-        where: { OR: [{ id }, { slug: id }] },
-      });
-      if (!existing) return null;
+      try {
+        const existing = await prisma.post.findFirst({
+          where: { OR: [{ id }, { slug: id }] },
+        });
+        if (!existing) return fileDriver.update(id, data);
 
-      let slug = existing.slug;
-      if (data.title && data.title !== existing.title && !data.slug) {
-        const baseSlug = generateSlug(data.title);
-        slug = await dedupeSlug(baseSlug, existing.id);
-      } else if (data.slug) {
-        slug = data.slug;
+        let slug = existing.slug;
+        if (data.title && data.title !== existing.title && !data.slug) {
+          const baseSlug = generateSlug(data.title);
+          slug = await dedupeSlug(baseSlug, existing.id);
+        } else if (data.slug) {
+          slug = data.slug;
+        }
+
+        const readTime = data.content
+          ? computeReadTime(data.content)
+          : existing.readTime;
+
+        const post = await prisma.post.update({
+          where: { id: existing.id },
+          data: { ...data, slug, readTime },
+        });
+        return post as Post;
+      } catch {
+        return fileDriver.update(id, data);
       }
-
-      const readTime = data.content
-        ? computeReadTime(data.content)
-        : existing.readTime;
-
-      const post = await prisma.post.update({
-        where: { id: existing.id },
-        data: { ...data, slug, readTime },
-      });
-      return post as Post;
     },
 
     async remove(id: string): Promise<boolean> {
@@ -344,11 +376,11 @@ async function getPrismaDriver(): Promise<BlogDriver> {
           where: { OR: [{ id }, { slug: id }] },
           select: { id: true },
         });
-        if (!existing) return false;
+        if (!existing) return fileDriver.remove(id);
         await prisma.post.delete({ where: { id: existing.id } });
         return true;
       } catch {
-        return false;
+        return fileDriver.remove(id);
       }
     },
   };
@@ -357,11 +389,15 @@ async function getPrismaDriver(): Promise<BlogDriver> {
 let _driver: BlogDriver | null = null;
 
 export async function getDriver(): Promise<BlogDriver> {
-  if (process.env.DATABASE_URL) {
-    if (!_driver || _driver.dataSource !== "prisma") {
-      _driver = await getPrismaDriver();
+  if (isValidDatabaseUrl(process.env.DATABASE_URL)) {
+    try {
+      if (!_driver || _driver.dataSource !== "prisma") {
+        _driver = await getPrismaDriver();
+      }
+      return _driver;
+    } catch {
+      return fileDriver;
     }
-    return _driver;
   }
   return fileDriver;
 }

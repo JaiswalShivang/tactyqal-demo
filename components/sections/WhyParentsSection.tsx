@@ -81,7 +81,6 @@ export default function WhyParentsSection() {
     >
       <div className="max-w-7xl mx-auto">
         <SectionHeader
-          eyebrow="04 / 09 · WHY CHOOSE US"
           title="Why Parents Choose Tactyqal Labs"
           accent="Tactyqal Labs"
           description="We replace passive screen time with high-agency software entrepreneurship under 1:1 executive mentorship."

@@ -272,7 +272,6 @@ export default function FreeToolsSection() {
       <div className="absolute inset-0 bg-gradient-to-b from-[#0F1B3D] via-[#0F1B3D]/85 to-[#0F1B3D] pointer-events-none" />
       <div className="max-w-7xl mx-auto relative z-20">
         <SectionHeader
-          eyebrow="05 / 09 · FREE RESOURCES"
           title="Used by 1,000+ Entrepreneurs"
           accent="1,000+"
           accentColor="volt"

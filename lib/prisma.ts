@@ -4,8 +4,21 @@ declare global {
   var __prismaClient: PrismaClient | undefined;
 }
 
+function getSafePostgresUrl(): string {
+  const url = process.env.DATABASE_URL?.trim();
+  if (url && (url.startsWith("postgresql://") || url.startsWith("postgres://"))) {
+    return url;
+  }
+  return "postgresql://postgres:postgres@localhost:5432/tactyqal?schema=public";
+}
+
 function createPrismaClient(): PrismaClient {
   return new PrismaClient({
+    datasources: {
+      db: {
+        url: getSafePostgresUrl(),
+      },
+    },
     log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
   });
 }
