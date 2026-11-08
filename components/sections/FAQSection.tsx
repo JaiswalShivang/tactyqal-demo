@@ -94,7 +94,7 @@ export default function FAQSection() {
                       transition={{ duration: 0.25, ease: "easeInOut" }}
                       className="overflow-hidden"
                     >
-                      <div className="pt-3 pb-5 px-6 border-t border-[#121316]/15 bg-[#F6F4EE]/60">
+                      <div className="pt-3 pb-5 px-6 border-t border-[#0F1B3D]/15 bg-[#F4F6FB]/80">
                         <div className="border-l-[3px] border-signal pl-4 py-1 text-sm leading-relaxed text-ink/85">
                           {faq.a}
                         </div>

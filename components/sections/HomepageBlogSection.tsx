@@ -163,7 +163,7 @@ export default function HomepageBlogSection() {
                 href={`/blog/${post.slug}`}
                 className="ticket-card p-4 h-full flex flex-row items-center gap-4 hover:shadow-tactile transition-all group"
               >
-                <div className="w-36 h-32 shrink-0 border border-[#121316] overflow-hidden bg-sand shadow-tactile-sm">
+                <div className="w-36 h-32 shrink-0 border border-[#0F1B3D] overflow-hidden bg-sand shadow-tactile-sm">
                   <PostThumbnail
                     src={post.coverImage}
                     title={post.title}

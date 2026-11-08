@@ -322,13 +322,13 @@ export default function AdminStudio() {
   const currentRt = computeReadTime(formContent);
 
   return (
-    <div className="min-h-screen bg-[#F6F4EE] text-[#121316] selection:bg-[#D2FF28] selection:text-[#121316]">
-      <header className="bg-[#121316] text-[#F6F4EE] border-b-2 border-[#121316] sticky top-0 z-50">
+    <div className="min-h-screen bg-[#F4F6FB] text-[#0F1B3D] selection:bg-[#FF3D88] selection:text-white">
+      <header className="bg-[#0F1B3D] text-white border-b-2 border-[#0F1B3D] sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="font-extrabold text-sm tracking-tight text-[#F6F4EE] hover:text-[#D2FF28] transition-colors"
+              className="font-extrabold text-sm tracking-tight text-white hover:text-[#00F5D4] transition-colors"
             >
               TACTYQAL LABS
             </Link>
@@ -341,7 +341,7 @@ export default function AdminStudio() {
           <div className="flex items-center gap-3">
             <div className="hidden lg:flex items-center gap-2 bg-white/10 px-3 py-1.5 border border-white/20">
               <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-              <span className="font-mono text-[11px] text-[#F6F4EE]">
+              <span className="font-mono text-[11px] text-white">
                 {dataSource === "prisma" ? "PRISMA + POSTGRESQL" : "FILE STORE (data/posts.json)"} · {latency}ms
               </span>
             </div>
@@ -349,8 +349,8 @@ export default function AdminStudio() {
             <button
               onClick={() => setInspectorOpen(!inspectorOpen)}
               className={`font-mono text-xs px-3 py-1.5 border transition-all ${inspectorOpen
-                  ? "bg-[#D2FF28] text-[#121316] border-[#D2FF28] font-bold"
-                  : "border-white/30 text-white hover:border-[#D2FF28] hover:text-[#D2FF28]"
+                  ? "bg-[#00F5D4] text-[#0F1B3D] border-[#00F5D4] font-bold"
+                  : "border-white/30 text-white hover:border-[#00F5D4] hover:text-[#00F5D4]"
                 }`}
             >
               {inspectorOpen ? "✕ CLOSE INSPECTOR" : "⚙ API & SCHEMA INSPECTOR"}
@@ -366,7 +366,7 @@ export default function AdminStudio() {
 
             <button
               onClick={handleOpenCreate}
-              className="bg-[#FF4F18] hover:bg-[#E04415] text-white font-bold text-xs uppercase font-mono px-4 py-2 border-2 border-[#121316] shadow-[2px_2px_0px_#121316] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
+              className="bg-[#FF3D88] hover:bg-[#E62E76] text-white font-bold text-xs uppercase font-mono px-4 py-2 border-2 border-white shadow-[2px_2px_0px_#0F1B3D] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
             >
               + NEW ARTICLE
             </button>
@@ -376,59 +376,59 @@ export default function AdminStudio() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div className="bg-[#FAF9F5] border-2 border-[#121316] p-4 shadow-[3px_3px_0px_#121316]">
-            <div className="font-mono text-[11px] uppercase tracking-wider text-black/50 mb-1">
+          <div className="bg-white border-2 border-[#0F1B3D] p-4 shadow-[3px_3px_0px_#0F1B3D]">
+            <div className="font-mono text-[11px] uppercase tracking-wider text-[#0F1B3D]/60 mb-1">
               TOTAL ARTICLES
             </div>
             <div className="font-extrabold text-3xl font-display">{stats.total}</div>
-            <div className="font-mono text-[11px] text-black/40 mt-1">
+            <div className="font-mono text-[11px] text-[#0F1B3D]/50 mt-1">
               Pre-seeded multi-paragraph guides
             </div>
           </div>
 
-          <div className="bg-[#FAF9F5] border-2 border-[#121316] p-4 shadow-[3px_3px_0px_#121316]">
-            <div className="font-mono text-[11px] uppercase tracking-wider text-black/50 mb-1">
+          <div className="bg-white border-2 border-[#0F1B3D] p-4 shadow-[3px_3px_0px_#0F1B3D]">
+            <div className="font-mono text-[11px] uppercase tracking-wider text-[#0F1B3D]/60 mb-1">
               PUBLISHED LIVE
             </div>
             <div className="font-extrabold text-3xl font-display text-[#10B981]">
               {stats.publishedCount}
             </div>
-            <div className="font-mono text-[11px] text-black/40 mt-1">
+            <div className="font-mono text-[11px] text-[#0F1B3D]/50 mt-1">
               Serving /blog &amp; homepage feed
             </div>
           </div>
 
-          <div className="bg-[#FAF9F5] border-2 border-[#121316] p-4 shadow-[3px_3px_0px_#121316]">
-            <div className="font-mono text-[11px] uppercase tracking-wider text-black/50 mb-1">
+          <div className="bg-white border-2 border-[#0F1B3D] p-4 shadow-[3px_3px_0px_#0F1B3D]">
+            <div className="font-mono text-[11px] uppercase tracking-wider text-[#0F1B3D]/60 mb-1">
               DRAFTS / HIDDEN
             </div>
-            <div className="font-extrabold text-3xl font-display text-[#FF4F18]">
+            <div className="font-extrabold text-3xl font-display text-[#FF3D88]">
               {stats.draftCount}
             </div>
-            <div className="font-mono text-[11px] text-black/40 mt-1">
+            <div className="font-mono text-[11px] text-[#0F1B3D]/50 mt-1">
               Visible only in Admin Studio
             </div>
           </div>
 
-          <div className="bg-[#FAF9F5] border-2 border-[#121316] p-4 shadow-[3px_3px_0px_#121316]">
-            <div className="font-mono text-[11px] uppercase tracking-wider text-black/50 mb-1">
+          <div className="bg-white border-2 border-[#0F1B3D] p-4 shadow-[3px_3px_0px_#0F1B3D]">
+            <div className="font-mono text-[11px] uppercase tracking-wider text-[#0F1B3D]/60 mb-1">
               REST API STATUS
             </div>
             <div className="font-extrabold text-xl font-display flex items-center gap-2 text-[#10B981]">
               <span className="w-3 h-3 rounded-full bg-[#10B981] animate-pulse" />
               ONLINE
             </div>
-            <div className="font-mono text-[11px] text-black/50 mt-1">
+            <div className="font-mono text-[11px] text-[#0F1B3D]/60 mt-1">
               GET · POST · PUT · DELETE · PATCH
             </div>
           </div>
         </div>
 
         {inspectorOpen && (
-          <div className="bg-[#121316] text-[#F6F4EE] border-2 border-[#121316] shadow-[5px_5px_0px_#121316] mb-8 overflow-hidden">
-            <div className="border-b border-white/10 px-5 py-3 flex flex-wrap items-center justify-between gap-3 bg-[#0B0C0E]">
+          <div className="bg-[#0F1B3D] text-white border-2 border-[#0F1B3D] shadow-[5px_5px_0px_#0F1B3D] mb-8 overflow-hidden">
+            <div className="border-b border-white/10 px-5 py-3 flex flex-wrap items-center justify-between gap-3 bg-[#0A1229]">
               <div className="flex items-center gap-3">
-                <span className="font-mono text-xs uppercase text-[#D2FF28] font-bold">
+                <span className="font-mono text-xs uppercase text-[#00F5D4] font-bold">
                   INTERACTIVE REST API &amp; DATABASE INSPECTOR
                 </span>
                 <span className="font-mono text-[11px] text-white/50">
@@ -441,7 +441,7 @@ export default function AdminStudio() {
                     key={st}
                     onClick={() => setInspectorTab(st)}
                     className={`font-mono text-xs px-4 py-1.5 uppercase transition-colors ${inspectorTab === st
-                        ? "bg-[#D2FF28] text-[#121316] font-bold"
+                        ? "bg-[#00F5D4] text-[#0F1B3D] font-bold"
                         : "text-white/70 hover:text-white hover:bg-white/10"
                       }`}
                   >
@@ -506,7 +506,7 @@ export default function AdminStudio() {
                             );
                           }
                         }}
-                        className="font-mono text-xs px-3 py-1.5 border border-white/30 bg-white/5 hover:bg-[#D2FF28] hover:text-[#121316] hover:border-[#D2FF28] transition-colors"
+                        className="font-mono text-xs px-3 py-1.5 border border-white/30 bg-white/5 hover:bg-[#00F5D4] hover:text-[#0F1B3D] hover:border-[#00F5D4] transition-colors"
                       >
                         {preset.label}
                       </button>
@@ -517,7 +517,7 @@ export default function AdminStudio() {
                     <select
                       value={testerMethod}
                       onChange={(e) => setTesterMethod(e.target.value)}
-                      className="font-mono text-xs bg-[#1F2024] text-white border border-white/20 px-3 py-2.5 font-bold"
+                      className="font-mono text-xs bg-[#162654] text-white border border-[#263B73] px-3 py-2.5 font-bold"
                     >
                       {["GET", "POST", "PUT", "PATCH", "DELETE"].map((m) => (
                         <option key={m} value={m}>
@@ -530,13 +530,13 @@ export default function AdminStudio() {
                       type="text"
                       value={testerUrl}
                       onChange={(e) => setTesterUrl(e.target.value)}
-                      className="flex-1 font-mono text-xs bg-[#1F2024] text-white border border-white/20 px-3 py-2.5 focus:outline-none focus:border-[#D2FF28]"
+                      className="flex-1 font-mono text-xs bg-[#162654] text-white border border-[#263B73] px-3 py-2.5 focus:outline-none focus:border-[#00F5D4]"
                     />
 
                     <button
                       onClick={runTesterRequest}
                       disabled={testerLoading}
-                      className="bg-[#FF4F18] hover:bg-[#E04415] text-white font-mono font-bold text-xs px-6 py-2.5 border border-[#FF4F18]"
+                      className="bg-[#FF3D88] hover:bg-[#E62E76] text-white font-mono font-bold text-xs px-6 py-2.5 border border-white"
                     >
                       {testerLoading ? "SENDING..." : "SEND REQUEST"}
                     </button>
@@ -551,19 +551,19 @@ export default function AdminStudio() {
                         value={testerBody}
                         onChange={(e) => setTesterBody(e.target.value)}
                         rows={6}
-                        className="w-full font-mono text-xs bg-[#1F2024] text-white border border-white/20 p-3 resize-y focus:outline-none focus:border-[#D2FF28]"
+                        className="w-full font-mono text-xs bg-[#162654] text-white border border-[#263B73] p-3 resize-y focus:outline-none focus:border-[#00F5D4]"
                       />
                     </div>
                   )}
 
                   {testerResponse && (
-                    <div className="border border-white/20 bg-[#0B0C0E] p-4">
+                    <div className="border border-white/20 bg-[#0A1229] p-4">
                       <div className="flex items-center justify-between mb-2 pb-2 border-b border-white/10">
                         <div className="flex items-center gap-3">
                           <span
                             className={`font-mono text-xs font-bold px-2 py-0.5 ${testerResponse.status < 300
                                 ? "bg-[#10B981] text-white"
-                                : "bg-[#FF4F18] text-white"
+                                : "bg-[#FF3D88] text-white"
                               }`}
                           >
                             HTTP {testerResponse.status}
@@ -572,7 +572,7 @@ export default function AdminStudio() {
                             Latency: {testerResponse.time}ms
                           </span>
                           {testerResponse.headers["x-data-source"] && (
-                            <span className="font-mono text-xs text-[#D2FF28]">
+                            <span className="font-mono text-xs text-[#00F5D4]">
                               Driver: {testerResponse.headers["x-data-source"]}
                             </span>
                           )}
@@ -584,13 +584,13 @@ export default function AdminStudio() {
                             setCopiedCurl(true);
                             setTimeout(() => setCopiedCurl(false), 2000);
                           }}
-                          className="font-mono text-xs px-3 py-1 border border-white/30 text-white/80 hover:text-white hover:border-[#D2FF28]"
+                          className="font-mono text-xs px-3 py-1 border border-white/30 text-white/80 hover:text-white hover:border-[#00F5D4]"
                         >
                           {copiedCurl ? "COPIED cURL ✓" : "COPY AS cURL"}
                         </button>
                       </div>
 
-                      <pre className="font-mono text-xs text-[#D2FF28] overflow-auto max-h-72 p-2 bg-[#121316]">
+                      <pre className="font-mono text-xs text-[#00F5D4] overflow-auto max-h-72 p-2 bg-[#0F1B3D]">
                         {JSON.stringify(testerResponse.body, null, 2)}
                       </pre>
                     </div>
@@ -610,12 +610,12 @@ export default function AdminStudio() {
                         setCopiedSchema(true);
                         setTimeout(() => setCopiedSchema(false), 2000);
                       }}
-                      className="font-mono text-xs px-3 py-1 border border-white/30 hover:border-[#D2FF28] text-white"
+                      className="font-mono text-xs px-3 py-1 border border-white/30 hover:border-[#00F5D4] text-white"
                     >
                       {copiedSchema ? "COPIED ✓" : "COPY SCHEMA"}
                     </button>
                   </div>
-                  <pre className="font-mono text-xs text-[#D2FF28] bg-[#0B0C0E] p-4 border border-white/10 overflow-x-auto leading-relaxed">
+                  <pre className="font-mono text-xs text-[#00F5D4] bg-[#0A1229] p-4 border border-white/10 overflow-x-auto leading-relaxed">
                     {PRISMA_SCHEMA}
                   </pre>
                   <p className="font-mono text-xs text-white/60 mt-3 leading-relaxed">
@@ -631,34 +631,34 @@ export default function AdminStudio() {
                       <thead className="bg-white/10 border-b border-white/20">
                         <tr>
                           <th className="p-3 text-white">ARCHITECTURAL METRIC</th>
-                          <th className="p-3 text-[#FF4F18]">LEGACY STACK (PHP CodeIgniter + WordPress)</th>
+                          <th className="p-3 text-[#FF3D88]">LEGACY STACK (PHP CodeIgniter + WordPress)</th>
                           <th className="p-3 text-[#10B981]">NEW TACTYQAL STACK (Next.js 15 + Prisma)</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-white/10 text-white/80">
                         <tr>
                           <td className="p-3 font-bold text-white">Runtime &amp; Deployment</td>
-                          <td className="p-3 text-[#FF4F18]">2 split servers: PHP Apache/Nginx + WordPress DB</td>
+                          <td className="p-3 text-[#FF3D88]">2 split servers: PHP Apache/Nginx + WordPress DB</td>
                           <td className="p-3 text-[#10B981]">Unified TypeScript full-stack in 1 container / Vercel</td>
                         </tr>
                         <tr>
                           <td className="p-3 font-bold text-white">Security &amp; Vulnerabilities</td>
-                          <td className="p-3 text-[#FF4F18]">60,000+ WordPress plugins with weekly CVE exploits</td>
+                          <td className="p-3 text-[#FF3D88]">60,000+ WordPress plugins with weekly CVE exploits</td>
                           <td className="p-3 text-[#10B981]">Zero plugin surface; Zod schema runtime validation</td>
                         </tr>
                         <tr>
                           <td className="p-3 font-bold text-white">Type Safety</td>
-                          <td className="p-3 text-[#FF4F18]">Zero type safety between PHP REST API and React UI</td>
+                          <td className="p-3 text-[#FF3D88]">Zero type safety between PHP REST API and React UI</td>
                           <td className="p-3 text-[#10B981]">End-to-end TypeScript Post type from Prisma to UI</td>
                         </tr>
                         <tr>
                           <td className="p-3 font-bold text-white">Cache Invalidation</td>
-                          <td className="p-3 text-[#FF4F18]">Fragile WP Super Cache plugins with purge race bugs</td>
+                          <td className="p-3 text-[#FF3D88]">Fragile WP Super Cache plugins with purge race bugs</td>
                           <td className="p-3 text-[#10B981]">Deterministic revalidatePath() on every mutation</td>
                         </tr>
                         <tr>
                           <td className="p-3 font-bold text-white">Design &amp; Token Drift</td>
-                          <td className="p-3 text-[#FF4F18]">Mismatched WP themes vs React custom app CSS</td>
+                          <td className="p-3 text-[#FF3D88]">Mismatched WP themes vs React custom app CSS</td>
                           <td className="p-3 text-[#10B981]">Exact same Neo-Brutalist design tokens everywhere</td>
                         </tr>
                       </tbody>
@@ -671,10 +671,10 @@ export default function AdminStudio() {
         )}
 
         {(tab === "new" || tab === "edit") && (
-          <div className="bg-[#FAF9F5] border-2 border-[#121316] shadow-[5px_5px_0px_#121316] mb-8 overflow-hidden">
-            <div className="bg-[#121316] text-[#F6F4EE] px-6 py-4 flex items-center justify-between">
+          <div className="bg-white border-2 border-[#0F1B3D] shadow-[5px_5px_0px_#0F1B3D] mb-8 overflow-hidden">
+            <div className="bg-[#0F1B3D] text-white px-6 py-4 flex items-center justify-between">
               <div>
-                <span className="font-mono text-xs uppercase tracking-wider text-[#D2FF28]">
+                <span className="font-mono text-xs uppercase tracking-wider text-[#00F5D4]">
                   ARTICLE EDITOR
                 </span>
                 <h2 className="font-display font-extrabold text-xl">
@@ -697,7 +697,7 @@ export default function AdminStudio() {
                 <button
                   onClick={handleSaveArticle}
                   disabled={saving}
-                  className="bg-[#FF4F18] hover:bg-[#E04415] text-white font-mono font-bold text-xs uppercase px-5 py-2 border border-[#121316] shadow-[2px_2px_0px_#121316]"
+                  className="bg-[#FF3D88] hover:bg-[#E62E76] text-white font-mono font-bold text-xs uppercase px-5 py-2 border border-white shadow-[2px_2px_0px_#0F1B3D]"
                 >
                   {saving ? "SAVING..." : "SAVE ARTICLE →"}
                 </button>
@@ -715,7 +715,7 @@ export default function AdminStudio() {
                     value={formTitle}
                     onChange={(e) => setFormTitle(e.target.value)}
                     placeholder="e.g. 10 Mistakes Founders Make When Pitching Angels"
-                    className="w-full border-2 border-[#121316] px-3 py-2.5 font-bold font-sans bg-white focus:outline-none focus:ring-2 focus:ring-[#D2FF28]"
+                    className="w-full border-2 border-[#0F1B3D] px-3 py-2.5 font-bold font-sans bg-white focus:outline-none focus:ring-2 focus:ring-[#FF3D88]"
                   />
                 </div>
 
@@ -731,7 +731,7 @@ export default function AdminStudio() {
                         setFormSlug(e.target.value);
                         setFormSlugManual(true);
                       }}
-                      className="w-full border-2 border-[#121316] px-3 py-2 font-mono text-xs bg-white focus:outline-none focus:ring-2 focus:ring-[#D2FF28]"
+                      className="w-full border-2 border-[#0F1B3D] px-3 py-2 font-mono text-xs bg-white focus:outline-none focus:ring-2 focus:ring-[#FF3D88]"
                     />
                   </div>
 
@@ -742,7 +742,7 @@ export default function AdminStudio() {
                     <select
                       value={formCategory}
                       onChange={(e) => setFormCategory(e.target.value)}
-                      className="w-full border-2 border-[#121316] px-3 py-2 font-mono text-xs bg-white focus:outline-none focus:ring-2 focus:ring-[#D2FF28]"
+                      className="w-full border-2 border-[#0F1B3D] px-3 py-2 font-mono text-xs bg-white focus:outline-none focus:ring-2 focus:ring-[#FF3D88]"
                     >
                       {CATEGORIES.map((c) => (
                         <option key={c} value={c}>
@@ -761,7 +761,7 @@ export default function AdminStudio() {
                     type="text"
                     value={formCoverImage}
                     onChange={(e) => setFormCoverImage(e.target.value)}
-                    className="w-full border-2 border-[#121316] px-3 py-2 font-mono text-xs bg-white mb-2"
+                    className="w-full border-2 border-[#0F1B3D] px-3 py-2 font-mono text-xs bg-white mb-2"
                   />
                   <div className="flex flex-wrap gap-2">
                     {COVERS.map((cov) => (
@@ -769,9 +769,9 @@ export default function AdminStudio() {
                         key={cov.url}
                         type="button"
                         onClick={() => setFormCoverImage(cov.url)}
-                        className={`font-mono text-[10px] px-2 py-1 border border-[#121316] transition-colors ${formCoverImage === cov.url
-                            ? "bg-[#D2FF28] font-bold"
-                            : "bg-white hover:bg-[#F6F4EE]"
+                        className={`font-mono text-[10px] px-2 py-1 border border-[#0F1B3D] transition-colors ${formCoverImage === cov.url
+                            ? "bg-[#FFE4EF] text-[#FF3D88] font-bold border-[#FF3D88]"
+                            : "bg-white hover:bg-[#F4F6FB]"
                           }`}
                       >
                         {cov.label}
@@ -788,7 +788,7 @@ export default function AdminStudio() {
                     rows={2}
                     value={formExcerpt}
                     onChange={(e) => setFormExcerpt(e.target.value)}
-                    className="w-full border-2 border-[#121316] px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#D2FF28]"
+                    className="w-full border-2 border-[#0F1B3D] px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#FF3D88]"
                     placeholder="Brief 1-2 sentence hook describing the guide..."
                   />
                 </div>
@@ -801,19 +801,19 @@ export default function AdminStudio() {
                     rows={12}
                     value={formContent}
                     onChange={(e) => setFormContent(e.target.value)}
-                    className="w-full border-2 border-[#121316] p-3 font-mono text-xs leading-relaxed bg-white focus:outline-none focus:ring-2 focus:ring-[#D2FF28]"
+                    className="w-full border-2 border-[#0F1B3D] p-3 font-mono text-xs leading-relaxed bg-white focus:outline-none focus:ring-2 focus:ring-[#FF3D88]"
                     placeholder="## Introduction\n\nWrite your multi-paragraph content with Markdown..."
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <div className="flex items-center gap-3 bg-white border-2 border-[#121316] p-3">
+                  <div className="flex items-center gap-3 bg-white border-2 border-[#0F1B3D] p-3">
                     <input
                       type="checkbox"
                       id="formPublished"
                       checked={formPublished}
                       onChange={(e) => setFormPublished(e.target.checked)}
-                      className="w-4 h-4 accent-[#FF4F18]"
+                      className="w-4 h-4 accent-[#FF3D88]"
                     />
                     <label
                       htmlFor="formPublished"
@@ -823,13 +823,13 @@ export default function AdminStudio() {
                     </label>
                   </div>
 
-                  <div className="flex items-center gap-3 bg-white border-2 border-[#121316] p-3">
+                  <div className="flex items-center gap-3 bg-white border-2 border-[#0F1B3D] p-3">
                     <input
                       type="checkbox"
                       id="formFeatured"
                       checked={formFeatured}
                       onChange={(e) => setFormFeatured(e.target.checked)}
-                      className="w-4 h-4 accent-[#FF4F18]"
+                      className="w-4 h-4 accent-[#FF3D88]"
                     />
                     <label
                       htmlFor="formFeatured"
@@ -841,17 +841,17 @@ export default function AdminStudio() {
                 </div>
               </div>
 
-              <div className="border-2 border-[#121316] bg-white p-5 flex flex-col shadow-[3px_3px_0px_#121316]">
-                <div className="font-mono text-xs uppercase tracking-wider text-black/50 mb-3 pb-2 border-b border-[#121316]/20 flex items-center justify-between">
+              <div className="border-2 border-[#0F1B3D] bg-white p-5 flex flex-col shadow-[3px_3px_0px_#0F1B3D]">
+                <div className="font-mono text-xs uppercase tracking-wider text-[#0F1B3D]/60 mb-3 pb-2 border-b border-[#0F1B3D]/20 flex items-center justify-between">
                   <span>LIVE EDITORIAL PREVIEW</span>
-                  <span className="text-[#FF4F18] font-bold">
+                  <span className="text-[#FF3D88] font-bold">
                     {formPublished ? "● LIVE" : "○ DRAFT"}
                   </span>
                 </div>
 
                 <div className="overflow-y-auto max-h-[640px] pr-2 space-y-4">
-                  <div className="border-2 border-[#121316] bg-[#FAF9F5] p-4 shadow-[2px_2px_0px_#121316]">
-                    <div className="aspect-[16/9] border-2 border-[#121316] overflow-hidden mb-3 bg-[#121316]">
+                  <div className="border-2 border-[#0F1B3D] bg-[#F4F6FB] p-4 shadow-[2px_2px_0px_#0F1B3D]">
+                    <div className="aspect-[16/9] border-2 border-[#0F1B3D] overflow-hidden mb-3 bg-[#0F1B3D]">
                       <img
                         src={formCoverImage}
                         alt="Preview"
@@ -862,7 +862,7 @@ export default function AdminStudio() {
                       />
                     </div>
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="font-mono text-[10px] uppercase px-2 py-0.5 border border-[#121316] bg-[#D2FF28] font-bold">
+                      <span className="font-mono text-[10px] uppercase px-2 py-0.5 border border-[#FF3D88] bg-[#FFE4EF] text-[#FF3D88] font-bold">
                         {formCategory}
                       </span>
                       <span className="font-mono text-[11px] text-black/50">
@@ -880,11 +880,11 @@ export default function AdminStudio() {
                     </div>
                   </div>
 
-                  <div className="border-t-2 border-[#121316] pt-4">
-                    <div className="font-mono text-[10px] uppercase text-black/40 mb-2 font-bold">
+                  <div className="border-t-2 border-[#0F1B3D] pt-4">
+                    <div className="font-mono text-[10px] uppercase text-[#0F1B3D]/50 mb-2 font-bold">
                       FULL ARTICLE READER PREVIEW
                     </div>
-                    <div className="prose prose-sm max-w-none font-sans leading-relaxed text-[#121316]">
+                    <div className="prose prose-sm max-w-none font-sans leading-relaxed text-[#0F1B3D]">
                       <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>
                         {formContent}
                       </ReactMarkdown>
@@ -896,7 +896,7 @@ export default function AdminStudio() {
           </div>
         )}
 
-        <div className="bg-[#FAF9F5] border-2 border-[#121316] shadow-[4px_4px_0px_#121316] p-4 mb-6">
+        <div className="bg-white border-2 border-[#0F1B3D] shadow-[4px_4px_0px_#0F1B3D] p-4 mb-6">
           <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
             <div className="flex flex-1 gap-3 items-center">
               <input
@@ -904,13 +904,13 @@ export default function AdminStudio() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search articles by title, slug, or content..."
-                className="w-full md:max-w-md border-2 border-[#121316] px-3 py-2 font-mono text-xs bg-white focus:outline-none focus:ring-2 focus:ring-[#D2FF28]"
+                className="w-full md:max-w-md border-2 border-[#0F1B3D] px-3 py-2 font-mono text-xs bg-white focus:outline-none focus:ring-2 focus:ring-[#FF3D88]"
               />
 
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="border-2 border-[#121316] px-3 py-2 font-mono text-xs bg-white font-bold"
+                className="border-2 border-[#0F1B3D] px-3 py-2 font-mono text-xs bg-white font-bold"
               >
                 <option value="All">All Categories</option>
                 {CATEGORIES.map((cat) => (
@@ -921,13 +921,13 @@ export default function AdminStudio() {
               </select>
             </div>
 
-            <div className="flex items-center gap-1 border-2 border-[#121316] bg-white p-0.5">
+            <div className="flex items-center gap-1 border-2 border-[#0F1B3D] bg-white p-0.5">
               {(["all", "published", "draft"] as const).map((st) => (
                 <button
                   key={st}
                   onClick={() => setStatusFilter(st)}
                   className={`font-mono text-xs uppercase px-3 py-1.5 transition-colors ${statusFilter === st
-                      ? "bg-[#121316] text-[#F6F4EE] font-bold"
+                      ? "bg-[#0F1B3D] text-white font-bold"
                       : "text-black/60 hover:text-black"
                     }`}
                 >
@@ -938,15 +938,15 @@ export default function AdminStudio() {
           </div>
         </div>
 
-        <div className="border-2 border-[#121316] bg-[#FAF9F5] shadow-[4px_4px_0px_#121316] overflow-x-auto">
+        <div className="border-2 border-[#0F1B3D] bg-white shadow-[4px_4px_0px_#0F1B3D] overflow-x-auto">
           {loading ? (
-            <div className="p-12 text-center font-mono text-xs uppercase text-black/50">
+            <div className="p-12 text-center font-mono text-xs uppercase text-[#0F1B3D]/50">
               LOADING PERSISTENT BLOG POSTS...
             </div>
           ) : filteredPosts.length === 0 ? (
             <div className="p-12 text-center space-y-3">
-              <div className="font-display font-extrabold text-2xl">No articles match your filter</div>
-              <p className="text-sm text-black/60 font-mono">
+              <div className="font-display font-extrabold text-2xl text-[#0F1B3D]">No articles match your filter</div>
+              <p className="text-sm text-[#0F1B3D]/60 font-mono">
                 Try searching for another keyword or clear the category filters.
               </p>
               <button
@@ -955,7 +955,7 @@ export default function AdminStudio() {
                   setCategoryFilter("All");
                   setStatusFilter("all");
                 }}
-                className="font-mono text-xs px-4 py-2 border-2 border-[#121316] bg-[#D2FF28] font-bold"
+                className="font-mono text-xs px-4 py-2 border-2 border-[#0F1B3D] bg-[#FFE4EF] text-[#FF3D88] font-bold"
               >
                 RESET FILTERS
               </button>
@@ -963,7 +963,7 @@ export default function AdminStudio() {
           ) : (
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-[#121316] text-[#F6F4EE] font-mono text-xs uppercase tracking-wider">
+                <tr className="bg-[#0F1B3D] text-white font-mono text-xs uppercase tracking-wider">
                   <th className="p-3 w-16 text-center">COVER</th>
                   <th className="p-3">ARTICLE TITLE &amp; SLUG</th>
                   <th className="p-3">CATEGORY</th>
@@ -973,14 +973,14 @@ export default function AdminStudio() {
                   <th className="p-3 text-right">ACTIONS</th>
                 </tr>
               </thead>
-              <tbody className="divide-y-2 divide-[#121316]">
+              <tbody className="divide-y-2 divide-[#0F1B3D]">
                 {filteredPosts.map((post) => (
                   <tr
                     key={post.id}
-                    className="hover:bg-[#FFF9D2]/40 transition-colors bg-white font-sans text-sm"
+                    className="hover:bg-[#FFE4EF]/40 transition-colors bg-white font-sans text-sm"
                   >
                     <td className="p-3 text-center">
-                      <div className="w-12 h-12 border-2 border-[#121316] overflow-hidden bg-[#121316] mx-auto">
+                      <div className="w-12 h-12 border-2 border-[#0F1B3D] overflow-hidden bg-[#0F1B3D] mx-auto">
                         <img
                           src={post.coverImage || "/extracted/blog-ele.webp"}
                           alt={post.title}
@@ -993,23 +993,23 @@ export default function AdminStudio() {
                     </td>
 
                     <td className="p-3">
-                      <div className="font-bold text-sm leading-snug line-clamp-1">{post.title}</div>
-                      <div className="font-mono text-[11px] text-black/50 mt-0.5">
+                      <div className="font-bold text-sm leading-snug line-clamp-1 text-[#0F1B3D]">{post.title}</div>
+                      <div className="font-mono text-[11px] text-[#0F1B3D]/50 mt-0.5">
                         /{post.slug}
                       </div>
                     </td>
 
                     <td className="p-3">
-                      <span className="font-mono text-[10px] uppercase font-bold px-2 py-0.5 border border-[#121316] bg-[#F6F4EE]">
+                      <span className="font-mono text-[10px] uppercase font-bold px-2 py-0.5 border border-[#FF3D88] bg-[#FFE4EF] text-[#FF3D88]">
                         {post.category}
                       </span>
                     </td>
 
-                    <td className="p-3 font-mono text-xs text-black/60">
+                    <td className="p-3 font-mono text-xs text-[#0F1B3D]/60">
                       {post.readTime} min
                     </td>
 
-                    <td className="p-3 font-mono text-xs text-black/60 whitespace-nowrap">
+                    <td className="p-3 font-mono text-xs text-[#0F1B3D]/60 whitespace-nowrap">
                       {new Date(post.createdAt).toLocaleDateString("en-IN", {
                         year: "numeric",
                         month: "short",
@@ -1020,7 +1020,7 @@ export default function AdminStudio() {
                     <td className="p-3 whitespace-nowrap">
                       <button
                         onClick={() => handleTogglePublished(post)}
-                        className={`font-mono text-xs px-3 py-1 border-2 border-[#121316] shadow-[2px_2px_0px_#121316] font-bold transition-all ${post.published
+                        className={`font-mono text-xs px-3 py-1 border-2 border-[#0F1B3D] shadow-[2px_2px_0px_#0F1B3D] font-bold transition-all ${post.published
                             ? "bg-[#10B981] text-white hover:bg-[#059669]"
                             : "bg-[#E5E7EB] text-black/70 hover:bg-[#D1D5DB]"
                           }`}
@@ -1035,13 +1035,13 @@ export default function AdminStudio() {
                         <Link
                           href={`/blog/${post.slug}`}
                           target="_blank"
-                          className="font-mono text-xs px-2.5 py-1 border border-[#121316] hover:bg-[#D2FF28] transition-colors"
+                          className="font-mono text-xs px-2.5 py-1 border border-[#0F1B3D] hover:bg-[#FFE4EF] hover:text-[#FF3D88] transition-colors"
                         >
                           VIEW ↗
                         </Link>
                         <button
                           onClick={() => handleOpenEdit(post)}
-                          className="font-mono text-xs px-2.5 py-1 border border-[#121316] bg-[#FAF9F5] hover:bg-[#121316] hover:text-white transition-colors"
+                          className="font-mono text-xs px-2.5 py-1 border border-[#0F1B3D] bg-white hover:bg-[#0F1B3D] hover:text-white transition-colors"
                         >
                           EDIT
                         </button>
@@ -1049,13 +1049,13 @@ export default function AdminStudio() {
                           <div className="inline-flex items-center gap-1">
                             <button
                               onClick={() => handleDeletePost(post.id)}
-                              className="font-mono text-xs px-2 py-1 bg-[#FF4F18] text-white font-bold"
+                              className="font-mono text-xs px-2 py-1 bg-[#FF3D88] text-white font-bold"
                             >
                               CONFIRM
                             </button>
                             <button
                               onClick={() => setDeleteConfirmId(null)}
-                              className="font-mono text-xs px-2 py-1 border border-black/40"
+                              className="font-mono text-xs px-2 py-1 border border-[#0F1B3D]/40"
                             >
                               ✕
                             </button>
@@ -1063,7 +1063,7 @@ export default function AdminStudio() {
                         ) : (
                           <button
                             onClick={() => setDeleteConfirmId(post.id)}
-                            className="font-mono text-xs px-2.5 py-1 border border-[#FF4F18] text-[#FF4F18] hover:bg-[#FF4F18] hover:text-white transition-colors"
+                            className="font-mono text-xs px-2.5 py-1 border border-[#FF3D88] text-[#FF3D88] hover:bg-[#FF3D88] hover:text-white transition-colors"
                           >
                             DELETE
                           </button>

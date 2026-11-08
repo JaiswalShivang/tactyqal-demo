@@ -30,17 +30,17 @@ function AppIcon({ type }: { type: string }) {
   const configs: Record<string, React.ReactNode> = {
     agri: (
       <svg viewBox="0 0 48 48" fill="none" className="w-full h-full">
-        <rect width="48" height="48" fill="#0D5C46" />
-        <circle cx="24" cy="20" r="10" stroke="#D2FF28" strokeWidth="2" fill="none" />
-        <path d="M24 10 L24 38" stroke="#D2FF28" strokeWidth="1.5" />
-        <path d="M14 20 L34 20" stroke="#D2FF28" strokeWidth="1.5" />
-        <path d="M17 14 L31 26" stroke="#D2FF28" strokeWidth="1" opacity="0.6" />
-        <path d="M31 14 L17 26" stroke="#D2FF28" strokeWidth="1" opacity="0.6" />
+        <rect width="48" height="48" fill="#0F1B3D" />
+        <circle cx="24" cy="20" r="10" stroke="#00F5D4" strokeWidth="2" fill="none" />
+        <path d="M24 10 L24 38" stroke="#00F5D4" strokeWidth="1.5" />
+        <path d="M14 20 L34 20" stroke="#00F5D4" strokeWidth="1.5" />
+        <path d="M17 14 L31 26" stroke="#00F5D4" strokeWidth="1" opacity="0.6" />
+        <path d="M31 14 L17 26" stroke="#00F5D4" strokeWidth="1" opacity="0.6" />
       </svg>
     ),
     book: (
       <svg viewBox="0 0 48 48" fill="none" className="w-full h-full">
-        <rect width="48" height="48" fill="#FF4F18" />
+        <rect width="48" height="48" fill="#FF3D88" />
         <rect x="10" y="10" width="20" height="28" stroke="white" strokeWidth="2" fill="none" />
         <rect x="13" y="10" width="20" height="28" stroke="white" strokeWidth="1.5" fill="none" opacity="0.5" />
         <path d="M14 18 L26 18 M14 22 L26 22 M14 26 L20 26" stroke="white" strokeWidth="1.5" />
@@ -48,37 +48,37 @@ function AppIcon({ type }: { type: string }) {
     ),
     bag: (
       <svg viewBox="0 0 48 48" fill="none" className="w-full h-full">
-        <rect width="48" height="48" fill="#121316" />
-        <path d="M16 20 L18 12 L30 12 L32 20 L32 36 L16 36 Z" stroke="#D2FF28" strokeWidth="2" fill="none" />
-        <path d="M20 12 Q20 8 24 8 Q28 8 28 12" stroke="#D2FF28" strokeWidth="2" fill="none" />
-        <path d="M20 24 L28 24" stroke="#D2FF28" strokeWidth="1.5" />
+        <rect width="48" height="48" fill="#0F1B3D" />
+        <path d="M16 20 L18 12 L30 12 L32 20 L32 36 L16 36 Z" stroke="#FF3D88" strokeWidth="2" fill="none" />
+        <path d="M20 12 Q20 8 24 8 Q28 8 28 12" stroke="#FF3D88" strokeWidth="2" fill="none" />
+        <path d="M20 24 L28 24" stroke="#FF3D88" strokeWidth="1.5" />
       </svg>
     ),
     paws: (
       <svg viewBox="0 0 48 48" fill="none" className="w-full h-full">
-        <rect width="48" height="48" fill="#F6F4EE" />
-        <ellipse cx="24" cy="28" rx="8" ry="6" stroke="#121316" strokeWidth="2" fill="none" />
-        <circle cx="16" cy="20" r="3" stroke="#121316" strokeWidth="1.5" fill="none" />
-        <circle cx="32" cy="20" r="3" stroke="#121316" strokeWidth="1.5" fill="none" />
-        <circle cx="24" cy="17" r="3" stroke="#121316" strokeWidth="1.5" fill="none" />
+        <rect width="48" height="48" fill="#F4F6FB" />
+        <ellipse cx="24" cy="28" rx="8" ry="6" stroke="#0F1B3D" strokeWidth="2" fill="none" />
+        <circle cx="16" cy="20" r="3" stroke="#0F1B3D" strokeWidth="1.5" fill="none" />
+        <circle cx="32" cy="20" r="3" stroke="#0F1B3D" strokeWidth="1.5" fill="none" />
+        <circle cx="24" cy="17" r="3" stroke="#0F1B3D" strokeWidth="1.5" fill="none" />
       </svg>
     ),
     audio: (
       <svg viewBox="0 0 48 48" fill="none" className="w-full h-full">
-        <rect width="48" height="48" fill="#121316" />
-        <circle cx="24" cy="24" r="12" stroke="#FF4F18" strokeWidth="2" fill="none" />
-        <circle cx="24" cy="24" r="4" fill="#FF4F18" />
-        <path d="M12 24 Q12 14 24 14" stroke="#FF4F18" strokeWidth="1.5" opacity="0.4" />
-        <path d="M36 24 Q36 14 24 14" stroke="#FF4F18" strokeWidth="1.5" opacity="0.4" />
+        <rect width="48" height="48" fill="#0F1B3D" />
+        <circle cx="24" cy="24" r="12" stroke="#FF3D88" strokeWidth="2" fill="none" />
+        <circle cx="24" cy="24" r="4" fill="#FF3D88" />
+        <path d="M12 24 Q12 14 24 14" stroke="#FF3D88" strokeWidth="1.5" opacity="0.4" />
+        <path d="M36 24 Q36 14 24 14" stroke="#FF3D88" strokeWidth="1.5" opacity="0.4" />
       </svg>
     ),
     converza: (
       <svg viewBox="0 0 48 48" fill="none" className="w-full h-full">
-        <rect width="48" height="48" fill="#D2FF28" />
-        <rect x="10" y="12" width="20" height="14" rx="2" stroke="#121316" strokeWidth="2" fill="none" />
-        <path d="M14 30 L10 36 L20 32" stroke="#121316" strokeWidth="1.5" fill="none" />
-        <circle cx="32" cy="30" r="6" stroke="#121316" strokeWidth="2" fill="none" />
-        <path d="M30 30 L31 31 L34 28" stroke="#121316" strokeWidth="1.5" />
+        <rect width="48" height="48" fill="#FFE4EF" />
+        <rect x="10" y="12" width="20" height="14" rx="2" stroke="#FF3D88" strokeWidth="2" fill="none" />
+        <path d="M14 30 L10 36 L20 32" stroke="#FF3D88" strokeWidth="1.5" fill="none" />
+        <circle cx="32" cy="30" r="6" stroke="#FF3D88" strokeWidth="2" fill="none" />
+        <path d="M30 30 L31 31 L34 28" stroke="#FF3D88" strokeWidth="1.5" />
       </svg>
     ),
   };
@@ -329,7 +329,7 @@ function ProjectModal({
     >
       <motion.div
         ref={modalRef}
-        className="bg-[#F6F4EE] border-2 border-ink w-full max-w-xl p-6 sm:p-8 relative z-10 shadow-tactile max-h-[90vh] overflow-y-auto"
+        className="bg-white border-2 border-ink w-full max-w-xl p-6 sm:p-8 relative z-10 shadow-tactile max-h-[90vh] overflow-y-auto"
         initial={prefersReduced ? {} : { y: 25, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={prefersReduced ? {} : { y: 25, opacity: 0 }}

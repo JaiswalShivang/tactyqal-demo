@@ -81,7 +81,7 @@ export default function StudentVoicesSection() {
                   ? {}
                   : {
                       transform: "rotate(0deg) translateY(-3px)",
-                      boxShadow: "4px 4px 0 #FF4F18",
+                      boxShadow: "4px 4px 0 #FF3D88",
                     }
               }
             >

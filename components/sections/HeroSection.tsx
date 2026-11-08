@@ -64,7 +64,7 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-[calc(100vh-3.5rem)] py-12 lg:py-16 px-4 sm:px-6 bg-[#0B0C0E] text-[#F6F4EE] overflow-hidden flex flex-col justify-center border-b border-[#2E3138]"
+      className="relative min-h-[calc(100vh-3.5rem)] py-12 lg:py-16 px-4 sm:px-6 bg-[#0F1B3D] text-[#FFFFFF] overflow-hidden flex flex-col justify-center border-b border-[#263B73]"
       aria-label="Hero section"
     >
       <video
@@ -80,9 +80,9 @@ export default function HeroSection() {
         <source src="https://www.tactyqal.com/application/assets/videos/kid_impact.mp4" type="video/mp4" />
       </video>
 
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0B0C0E]/90 via-[#0B0C0E]/60 to-[#0B0C0E]/25 z-0 pointer-events-none" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:64px_64px] z-0 pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0B0C0E]/40 via-transparent to-[#0B0C0E]/80 z-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0F1B3D]/95 via-[#0F1B3D]/70 to-[#0F1B3D]/35 z-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:64px_64px] z-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0F1B3D]/40 via-transparent to-[#0F1B3D]/80 z-0 pointer-events-none" />
 
       <div className="absolute inset-0 pointer-events-none select-none z-0" aria-hidden="true">
         <div className="absolute top-6 left-6 font-mono text-[12px] text-white/30 font-bold">+</div>
@@ -95,11 +95,11 @@ export default function HeroSection() {
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch relative z-10">
         <div className="lg:col-span-7 flex flex-col justify-between h-full">
           <div>
-            <h1 className="font-display font-extrabold text-[clamp(2.4rem,4.2vw,3.9rem)] tracking-[-0.025em] leading-[1.04] text-[#F6F4EE] mb-4">
+            <h1 className="font-display font-extrabold text-[clamp(2.4rem,4.2vw,3.9rem)] tracking-[-0.025em] leading-[1.04] text-[#FFFFFF] mb-4">
               Empower Your Kid To{" "}
-              <span className="text-signal font-extrabold">Build</span>{" "}
+              <span className="text-[#FF3D88] font-extrabold">Build</span>{" "}
               The Next App That Impacts Millions,{" "}
-              <span className="whitespace-nowrap text-signal font-extrabold">
+              <span className="whitespace-nowrap text-[#FF3D88] font-extrabold">
                 in 8 Weeks.
               </span>
             </h1>
@@ -108,35 +108,35 @@ export default function HeroSection() {
               {PILLS.map((pill) => (
                 <span
                   key={pill}
-                  className="text-xs px-3 py-1 rounded-full bg-[#121316]/85 backdrop-blur-sm border border-[#F6F4EE]/25 text-[#F6F4EE] hover:border-[#FF4F18] transition-colors font-sans"
+                  className="text-xs px-3 py-1 rounded-full bg-[#162654]/85 backdrop-blur-sm border border-[#263B73] text-[#FFFFFF] hover:border-[#FF3D88] transition-colors font-sans"
                 >
                   {pill}
                 </span>
               ))}
             </div>
 
-            <div className="grid grid-cols-3 gap-3 mb-5 border-[1.5px] border-[#121316] p-3.5 bg-[#F6F4EE] text-[#121316] max-w-xl shadow-[4px_4px_0px_0px_#FF4F18]">
-              <div className="text-center border-r border-ink/20 pr-2">
-                <div className="font-display text-2xl sm:text-3xl font-extrabold text-signal tracking-tight">
+            <div className="grid grid-cols-3 gap-3 mb-5 border-[1.5px] border-[#0F1B3D] p-3.5 bg-white text-[#0F1B3D] max-w-xl shadow-[4px_4px_0px_0px_#FF3D88]">
+              <div className="text-center border-r border-[#0F1B3D]/20 pr-2">
+                <div className="font-display text-2xl sm:text-3xl font-extrabold text-[#FF3D88] tracking-tight">
                   100+
                 </div>
-                <div className="text-[10px] sm:text-[11px] text-ink/70 font-mono mt-0.5 stamp-text">
+                <div className="text-[10px] sm:text-[11px] text-[#0F1B3D]/70 font-mono mt-0.5 stamp-text">
                   STUDENTS MENTORED
                 </div>
               </div>
-              <div className="text-center border-r border-ink/20 px-2">
-                <div className="font-display text-xl sm:text-2xl font-bold tracking-tight text-ink">
+              <div className="text-center border-r border-[#0F1B3D]/20 px-2">
+                <div className="font-display text-xl sm:text-2xl font-bold tracking-tight text-[#0F1B3D]">
                   TOP
                 </div>
-                <div className="text-[10px] sm:text-[11px] text-ink/70 font-mono mt-0.5 stamp-text">
+                <div className="text-[10px] sm:text-[11px] text-[#0F1B3D]/70 font-mono mt-0.5 stamp-text">
                   UNIVERSITY ADMITS
                 </div>
               </div>
               <div className="text-center pl-2">
-                <div className="font-display text-lg sm:text-xl font-bold tracking-tight text-ink">
+                <div className="font-display text-lg sm:text-xl font-bold tracking-tight text-[#0F1B3D]">
                   ₹ THOUSANDS
                 </div>
-                <div className="text-[10px] sm:text-[11px] text-ink/70 font-mono mt-0.5 stamp-text">
+                <div className="text-[10px] sm:text-[11px] text-[#0F1B3D]/70 font-mono mt-0.5 stamp-text">
                   REAL REVENUE
                 </div>
               </div>
@@ -146,13 +146,13 @@ export default function HeroSection() {
           <div className="flex flex-col sm:flex-row gap-4 w-full pt-1">
             <Link
               href="#contact"
-              className="whitespace-nowrap px-6 py-3.5 text-sm font-bold text-center tracking-wide bg-signal text-white border-2 border-white shadow-[4px_4px_0px_0px_#F6F4EE] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#F6F4EE] transition-all cursor-pointer"
+              className="whitespace-nowrap px-6 py-3.5 text-sm font-bold text-center tracking-wide bg-[#FF3D88] text-white border-2 border-white shadow-[4px_4px_0px_0px_#FFFFFF] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#FFFFFF] hover:bg-[#E62E76] transition-all cursor-pointer"
             >
               Book Free Consultation
             </Link>
             <Link
               href="#student-projects"
-              className="whitespace-nowrap px-6 py-3.5 text-sm font-bold text-center tracking-wide bg-white text-ink border-2 border-ink shadow-[4px_4px_0px_0px_#FF4F18] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#FF4F18] transition-all cursor-pointer"
+              className="whitespace-nowrap px-6 py-3.5 text-sm font-bold text-center tracking-wide bg-white text-[#0F1B3D] border-2 border-[#0F1B3D] shadow-[4px_4px_0px_0px_#FF3D88] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#FF3D88] transition-all cursor-pointer"
             >
               Explore Student Apps
             </Link>
@@ -162,7 +162,7 @@ export default function HeroSection() {
         <div className="lg:col-span-5 flex justify-center lg:justify-end h-full">
           <motion.div
             ref={cardRef}
-            className="ticket-card w-full max-w-md cursor-pointer bg-white text-ink border-2 border-[#121316] shadow-[8px_8px_0px_0px_#FF4F18] flex flex-col justify-between h-full"
+            className="ticket-card w-full max-w-md cursor-pointer bg-white text-[#0F1B3D] border-2 border-[#0F1B3D] shadow-[8px_8px_0px_0px_#FF3D88] flex flex-col justify-between h-full"
             style={
               prefersReduced
                 ? {}
@@ -191,9 +191,9 @@ export default function HeroSection() {
 
             <div className="p-6 flex flex-col justify-between h-full">
               <div>
-                <div className="flex items-start justify-between mb-3 border-b border-ink/15 pb-3">
+                <div className="flex items-start justify-between mb-3 border-b border-[#0F1B3D]/15 pb-3">
                   <div>
-                    <div className="font-mono text-xs text-ink/50 stamp-text mb-0.5">
+                    <div className="font-mono text-xs text-[#0F1B3D]/50 stamp-text mb-0.5">
                       ADMISSION TICKET
                     </div>
                     <div className="font-display text-2xl font-bold tracking-tight">
@@ -201,10 +201,10 @@ export default function HeroSection() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-mono text-xs text-ink/50 stamp-text">
+                    <div className="font-mono text-xs text-[#0F1B3D]/50 stamp-text">
                       SEAT NO.
                     </div>
-                    <div className="font-mono font-bold text-lg text-signal">
+                    <div className="font-mono font-bold text-lg text-[#FF3D88]">
                       #04
                     </div>
                   </div>
@@ -212,44 +212,44 @@ export default function HeroSection() {
 
                 <div className="mb-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="pill pill-volt text-xs font-semibold">
+                    <span className="pill bg-[#FFE4EF] text-[#FF3D88] border-[#FF3D88] text-xs font-semibold">
                       Limited Time Offer
                     </span>
-                    <span className="pill text-xs font-mono bg-paper text-ink">
+                    <span className="pill text-xs font-mono bg-[#F4F6FB] text-[#0F1B3D] border-[#0F1B3D]">
                       Only 15 spots
                     </span>
                   </div>
 
                   <div className="flex items-baseline gap-4 mb-1">
-                    <span className="font-mono text-2xl line-through text-ink/40">
+                    <span className="font-mono text-2xl line-through text-[#0F1B3D]/40">
                       ₹25,000
                     </span>
-                    <span className="font-display text-[clamp(2.5rem,4vw,3.75rem)] font-extrabold text-signal leading-none tracking-tight">
+                    <span className="font-display text-[clamp(2.5rem,4vw,3.75rem)] font-extrabold text-[#FF3D88] leading-none tracking-tight">
                       ₹16,000
                     </span>
                   </div>
-                  <div className="font-mono text-[11px] text-ink/50 stamp-text">
+                  <div className="font-mono text-[11px] text-[#0F1B3D]/50 stamp-text">
                     ONE-TIME · FULL PROGRAM ACCESS · TAX INCLUDED
                   </div>
                 </div>
 
-                <div className="border-t border-dashed border-ink/30 my-3.5" />
+                <div className="border-t border-dashed border-[#0F1B3D]/30 my-3.5" />
 
                 <div className="mb-4">
-                  <div className="font-mono text-xs text-ink/60 uppercase tracking-wider mb-2 font-bold">
+                  <div className="font-mono text-xs text-[#0F1B3D]/70 uppercase tracking-wider mb-2 font-bold">
                     Cohort Inclusions:
                   </div>
                   <ul className="space-y-2 text-xs sm:text-sm">
                     <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald text-white flex items-center justify-center text-[10px] font-bold">✓</span>
+                      <span className="w-4 h-4 rounded-full bg-[#00D2B4] text-[#0F1B3D] flex items-center justify-center text-[10px] font-bold">✓</span>
                       <span className="font-medium">8 Weeks 1:1 Live Mentoring</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald text-white flex items-center justify-center text-[10px] font-bold">✓</span>
+                      <span className="w-4 h-4 rounded-full bg-[#00D2B4] text-[#0F1B3D] flex items-center justify-center text-[10px] font-bold">✓</span>
                       <span className="font-medium">Full-Stack App Production Launch</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald text-white flex items-center justify-center text-[10px] font-bold">✓</span>
+                      <span className="w-4 h-4 rounded-full bg-[#00D2B4] text-[#0F1B3D] flex items-center justify-center text-[10px] font-bold">✓</span>
                       <span className="font-medium">100% Money-Back Guarantee</span>
                     </li>
                   </ul>
@@ -257,7 +257,7 @@ export default function HeroSection() {
 
                 <div className="mb-4">
                   <Barcode digits="160002500008" />
-                  <div className="font-mono text-[10px] text-ink/40 mt-1 tracking-wider">
+                  <div className="font-mono text-[10px] text-[#0F1B3D]/40 mt-1 tracking-wider">
                     160002500008-TQLAB-VERIFIED
                   </div>
                 </div>
@@ -266,13 +266,13 @@ export default function HeroSection() {
               <div className="space-y-2 pt-2">
                 <Link
                   href="#contact"
-                  className="tactile-btn-signal w-full py-2.5 text-center font-semibold block text-sm tracking-wide"
+                  className="tactile-btn-signal w-full py-2.5 text-center font-semibold block text-sm tracking-wide bg-[#FF3D88] text-white hover:bg-[#E62E76]"
                 >
                   Enrol In 8-Week Cohort →
                 </Link>
                 <Link
                   href="#contact"
-                  className="tactile-btn w-full py-2 text-center font-medium block text-xs bg-ivory tracking-wide"
+                  className="tactile-btn w-full py-2 text-center font-medium block text-xs bg-[#F4F6FB] tracking-wide text-[#0F1B3D]"
                 >
                   Schedule Founder Call ↗
                 </Link>

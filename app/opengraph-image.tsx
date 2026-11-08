@@ -9,7 +9,7 @@ export default function OGImage() {
     (
       <div
         style={{
-          background: "#F6F4EE",
+          background: "#F4F6FB",
           width: "100%",
           height: "100%",
           display: "flex",
@@ -25,7 +25,7 @@ export default function OGImage() {
           style={{
             position: "absolute",
             top: 0, left: 0, right: 0, bottom: 0,
-            backgroundImage: "repeating-linear-gradient(90deg, rgba(18,19,22,0.06) 0px, rgba(18,19,22,0.06) 1px, transparent 1px, transparent 100px)",
+            backgroundImage: "repeating-linear-gradient(90deg, rgba(15,27,61,0.06) 0px, rgba(15,27,61,0.06) 1px, transparent 1px, transparent 100px)",
           }}
         />
 
@@ -35,13 +35,14 @@ export default function OGImage() {
             alignItems: "center",
             gap: "12px",
             marginBottom: "24px",
-            background: "#D2FF28",
-            border: "1.5px solid #121316",
+            background: "#FFE4EF",
+            border: "1.5px solid #FF3D88",
             padding: "6px 16px",
             borderRadius: "999px",
+            color: "#FF3D88",
           }}
         >
-          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#121316" }} />
+          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#FF3D88" }} />
           <span style={{ fontFamily: "monospace", fontSize: 14, fontWeight: 700, letterSpacing: "0.15em" }}>
             COHORT OPEN · 15 SPOTS
           </span>
@@ -53,7 +54,7 @@ export default function OGImage() {
             fontWeight: 900,
             lineHeight: 0.9,
             letterSpacing: "-0.03em",
-            color: "#121316",
+            color: "#0F1B3D",
             marginBottom: "24px",
             maxWidth: 900,
           }}
@@ -62,19 +63,19 @@ export default function OGImage() {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-          <div style={{ fontFamily: "monospace", fontSize: 20, fontWeight: 700, color: "#121316", letterSpacing: "0.1em" }}>
+          <div style={{ fontFamily: "monospace", fontSize: 20, fontWeight: 700, color: "#0F1B3D", letterSpacing: "0.1em" }}>
             TACTYQAL LABS · tactyqal.com
           </div>
           <div
             style={{
-              background: "#FF4F18",
+              background: "#FF3D88",
               color: "white",
               fontFamily: "monospace",
               fontSize: 16,
               fontWeight: 700,
               padding: "10px 24px",
-              border: "1.5px solid #121316",
-              boxShadow: "4px 4px 0 #121316",
+              border: "1.5px solid #0F1B3D",
+              boxShadow: "4px 4px 0 #0F1B3D",
               letterSpacing: "0.1em",
             }}
           >

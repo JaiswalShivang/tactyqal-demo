@@ -198,7 +198,7 @@ function QuizModal({ tool, onClose }: { tool: ToolData; onClose: () => void }) {
                       cy="18"
                       r="15.9"
                       fill="none"
-                      stroke="#EAE6DF"
+                      stroke="#F4F6FB"
                       strokeWidth="3"
                     />
                     <circle
@@ -206,7 +206,7 @@ function QuizModal({ tool, onClose }: { tool: ToolData; onClose: () => void }) {
                       cy="18"
                       r="15.9"
                       fill="none"
-                      stroke="#FF4F18"
+                      stroke="#FF3D88"
                       strokeWidth="3"
                       strokeDasharray={`${pct} 100`}
                       strokeLinecap="round"
@@ -258,7 +258,7 @@ export default function FreeToolsSection() {
   return (
     <section
       id="free-tools"
-      className="py-16 md:py-22 px-4 bg-[#121316] text-[#F6F4EE] free-tools-dots border-y border-[#2E3138] relative overflow-hidden perforated-tear-top perforated-tear-bottom"
+      className="py-16 md:py-22 px-4 bg-[#0F1B3D] text-[#FFFFFF] free-tools-dots border-y border-[#263B73] relative overflow-hidden perforated-tear-top perforated-tear-bottom"
       aria-label="Free startup diagnostic tools"
     >
       <video
@@ -269,7 +269,7 @@ export default function FreeToolsSection() {
         className="absolute inset-0 w-full h-full object-cover opacity-[0.14] mix-blend-luminosity pointer-events-none"
         src="https://www.tactyqal.com/application/assets/videos/continuous-support.mp4"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#121316] via-[#121316]/85 to-[#121316] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0F1B3D] via-[#0F1B3D]/85 to-[#0F1B3D] pointer-events-none" />
       <div className="max-w-7xl mx-auto relative z-20">
         <SectionHeader
           title="Used by 1,000+ Entrepreneurs"
@@ -283,7 +283,7 @@ export default function FreeToolsSection() {
           {TOOLS_DATA.map((tool, i) => (
             <motion.button
               key={tool.id}
-              className="text-left p-6 bg-[#1C1E22] border-[1.5px] border-[#2E3138] hover:border-[#FF4F18] transition-all group flex flex-col justify-between cursor-pointer"
+              className="text-left p-6 bg-[#162654] border-[1.5px] border-[#263B73] hover:border-[#FF3D88] transition-all group flex flex-col justify-between cursor-pointer"
               style={{
                 boxShadow: "0 0 0 transparent",
               }}
@@ -292,7 +292,7 @@ export default function FreeToolsSection() {
                   ? {}
                   : {
                       transform: "translate(-2px, -2px)",
-                      boxShadow: "4px 4px 0 #FF4F18",
+                      boxShadow: "4px 4px 0 #FF3D88",
                     }
               }
               initial={prefersReduced ? {} : { opacity: 0, y: 15 }}
@@ -304,7 +304,7 @@ export default function FreeToolsSection() {
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-10 h-10 border border-[#2E3138] bg-[#121316] flex items-center justify-center text-paper/80 group-hover:text-signal group-hover:border-signal transition-colors">
+                  <div className="w-10 h-10 border border-[#263B73] bg-[#0F1B3D] flex items-center justify-center text-paper/80 group-hover:text-signal group-hover:border-signal transition-colors">
                     <ToolIcon type={tool.icon} />
                   </div>
                   <span className="font-mono text-xs text-paper/40 group-hover:text-signal transition-colors font-bold">
@@ -320,7 +320,7 @@ export default function FreeToolsSection() {
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-[#2E3138] flex items-center justify-between font-mono text-xs text-signal">
+              <div className="pt-3 border-t border-[#263B73] flex items-center justify-between font-mono text-xs text-signal">
                 <span className="tracking-wider uppercase font-semibold">LAUNCH TEST</span>
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </div>

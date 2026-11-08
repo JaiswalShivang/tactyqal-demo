@@ -10,13 +10,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        paper: "#F6F4EE",
+        paper: "#FFFFFF",
+        ice: "#F4F6FB",
         ivory: "#FFFFFF",
-        sand: "#EAE6DF",
-        ink: "#121316",
-        signal: "#FF4F18",
-        volt: "#D2FF28",
-        emerald: "#0D5C46",
+        sand: "#F4F6FB",
+        ink: "#0F1B3D",
+        navy: "#0F1B3D",
+        navyCard: "#162654",
+        navyBorder: "#263B73",
+        signal: "#FF3D88",
+        pink: "#FF3D88",
+        volt: "#FFE4EF",
+        cyan: "#00F5D4",
+        emerald: "#00D2B4",
       },
       fontFamily: {
         display: ["var(--font-display)", "sans-serif"],
@@ -31,10 +37,12 @@ const config: Config = {
         "4": "4px",
       },
       boxShadow: {
-        tactile: "4px 4px 0 #121316",
-        "tactile-sm": "2px 2px 0 #121316",
-        "tactile-none": "0px 0px 0 #121316",
-        "tactile-signal": "4px 4px 0 #FF4F18",
+        tactile: "4px 4px 0 #0F1B3D",
+        "tactile-sm": "2px 2px 0 #0F1B3D",
+        "tactile-none": "0px 0px 0 #0F1B3D",
+        "tactile-signal": "4px 4px 0 #FF3D88",
+        "tactile-pink": "4px 4px 0 #FF3D88",
+        "tactile-white": "4px 4px 0 #FFFFFF",
       },
       animation: {
         "stamp-in": "stampIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",

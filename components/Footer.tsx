@@ -87,7 +87,7 @@ export default function Footer() {
             className="font-display font-extrabold text-center select-none leading-[0.8] tracking-[-0.05em] cursor-default text-transparent transition-colors duration-200 group-hover:text-ink group-focus-within:text-ink"
             style={{
               fontSize: "clamp(4rem, 17vw, 16rem)",
-              WebkitTextStroke: "1.5px #121316",
+              WebkitTextStroke: "1.5px #0F1B3D",
             }}
             aria-hidden="true"
           >

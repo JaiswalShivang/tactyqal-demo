@@ -53,8 +53,8 @@ const PILLARS_ROW2 = [
     num: "07",
     title: "Pitch & Presentation Skills",
     desc: "Master storytelling, build an investor pitch deck, and launch to thousands on Product Hunt.",
-    cardStyle: "bg-ink text-white border-ink shadow-tactile-sm",
-    badgeStyle: "text-volt font-bold",
+    cardStyle: "bg-[#0F1B3D] text-white border-ink shadow-tactile-sm",
+    badgeStyle: "text-[#00F5D4] font-bold",
   },
 ];
 
@@ -87,40 +87,40 @@ export default function WhyParentsSection() {
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch mb-6">
-          <div className="lg:col-span-6 border-[1.5px] border-[#121316] bg-[#121316] text-[#F6F4EE] shadow-[6px_6px_0px_0px_#FF4F18] p-5 sm:p-6 flex flex-col justify-between h-full">
+          <div className="lg:col-span-6 border-[1.5px] border-[#0F1B3D] bg-[#0F1B3D] text-[#FFFFFF] shadow-[6px_6px_0px_0px_#FF3D88] p-5 sm:p-6 flex flex-col justify-between h-full">
             <div>
-              <div className="flex items-center justify-between border-b border-[#2E3138] pb-3 mb-4 font-mono text-xs">
+              <div className="flex items-center justify-between border-b border-[#263B73] pb-3 mb-4 font-mono text-xs">
                 <span className="text-signal font-bold tracking-wider flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-signal animate-pulse" />
                   FOUNDER MASTERCLASS // PARTHA CHAKRABORTY
                 </span>
-                <span className="text-paper/60 uppercase text-[11px] border border-[#2E3138] px-2 py-0.5">
+                <span className="text-paper/60 uppercase text-[11px] border border-[#263B73] px-2 py-0.5">
                   YOUTUBE LIVE EVENT
                 </span>
               </div>
 
-              <div className="relative aspect-video border-y-[1.5px] border-[#2E3138] bg-[#0A0B0E] mb-4 overflow-hidden">
+              <div className="relative aspect-video border-y-[1.5px] border-[#263B73] bg-[#0A1229] mb-4 overflow-hidden">
                 {!isPlaying ? (
                   <div
                     onClick={() => setIsPlaying(true)}
-                    className="absolute inset-0 cursor-pointer group flex flex-col justify-between p-4 bg-gradient-to-br from-[#12161A] via-[#0B0F14] to-[#0A0B0E] select-none"
+                    className="absolute inset-0 cursor-pointer group flex flex-col justify-between p-4 bg-gradient-to-br from-[#162654] via-[#0F1B3D] to-[#0A1229] select-none"
                   >
                     <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
                     <div className="relative z-10 flex items-center justify-between">
-                      <div className="flex items-center gap-2 bg-[#121316]/90 border border-white/20 px-2.5 py-1 rounded-sm">
+                      <div className="flex items-center gap-2 bg-[#0F1B3D]/90 border border-white/20 px-2.5 py-1 rounded-sm">
                         <span className="w-2 h-2 rounded-full bg-signal animate-pulse" />
                         <span className="font-mono text-[10px] text-white font-bold tracking-wider">
                           A CH TRIBE EVENT · RECORDED MASTERCLASS
                         </span>
                       </div>
-                      <span className="font-mono text-[10px] text-volt bg-black/80 px-2 py-0.5 border border-volt/30 font-bold">
+                      <span className="font-mono text-[10px] text-[#00F5D4] bg-[#0F1B3D] px-2 py-0.5 border border-[#00F5D4]/30 font-bold">
                         12 MINS
                       </span>
                     </div>
 
                     <div className="relative z-10 my-auto text-center px-4">
-                      <div className="inline-block border border-volt/40 bg-volt/10 text-volt font-mono text-[11px] font-bold px-3 py-1 mb-2">
+                      <div className="inline-block border border-[#00F5D4]/40 bg-[#00F5D4]/10 text-[#00F5D4] font-mono text-[11px] font-bold px-3 py-1 mb-2">
                         SLIDE 09 // INVERSION TECHNIQUE
                       </div>
                       <h4 className="font-display font-extrabold text-lg sm:text-xl text-white tracking-normal mb-3">
@@ -171,7 +171,7 @@ export default function WhyParentsSection() {
               </p>
             </div>
 
-            <div className="pt-3 border-t border-[#2E3138] flex flex-wrap items-center justify-between gap-2">
+            <div className="pt-3 border-t border-[#263B73] flex flex-wrap items-center justify-between gap-2">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-mono text-[10px] text-paper/50 uppercase tracking-wider mr-1">
                   Chapters:
@@ -183,7 +183,7 @@ export default function WhyParentsSection() {
                     className={`font-mono text-[10px] px-2.5 py-1 border transition-colors cursor-pointer ${
                       selectedTimestamp === ch.time && isPlaying
                         ? "bg-signal text-white border-signal font-bold"
-                        : "border-[#2E3138] text-paper/70 hover:border-paper bg-[#1C1E22]"
+                        : "border-[#263B73] text-paper/70 hover:border-paper bg-[#162654]"
                     }`}
                   >
                     {ch.label}
@@ -195,7 +195,7 @@ export default function WhyParentsSection() {
                 <button
                   type="button"
                   onClick={() => setIsPlaying(false)}
-                  className="font-mono text-[10px] text-paper/60 hover:text-white border border-[#2E3138] px-2 py-0.5"
+                  className="font-mono text-[10px] text-paper/60 hover:text-white border border-[#263B73] px-2 py-0.5"
                 >
                   Reset Poster
                 </button>

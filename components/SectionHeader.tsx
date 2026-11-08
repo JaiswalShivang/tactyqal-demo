@@ -29,7 +29,7 @@ export function Heading({
 
   const accentColorClass =
     accentColor === "volt"
-      ? "text-volt"
+      ? "text-[#00F5D4]"
       : accentColor === "signal"
         ? "text-signal"
         : accentColor === "white"

@@ -3,14 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --paper: #F6F4EE;
+  --paper: #FFFFFF;
+  --ice: #F4F6FB;
   --ivory: #FFFFFF;
-  --sand: #EAE6DF;
-  --ink: #121316;
-  --signal: #FF4F18;
-  --volt: #D2FF28;
-  --emerald: #0D5C46;
-  --grid-line: rgba(18, 19, 22, 0.08);
+  --sand: #F4F6FB;
+  --ink: #0F1B3D;
+  --signal: #FF3D88;
+  --volt: #FFE4EF;
+  --cyan: #00F5D4;
+  --emerald: #00D2B4;
+  --grid-line: rgba(15, 27, 61, 0.08);
 }
 
 * {
@@ -20,6 +22,11 @@
 html {
   scroll-behavior: smooth;
   font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background-color: #FF3D88;
+  color: #FFFFFF;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -62,7 +69,7 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 9999;
   opacity: 1;
@@ -81,7 +88,7 @@ body::before {
 }
 
 .free-tools-dots {
-  background-image: radial-gradient(#2E3138 1px, transparent 1px);
+  background-image: radial-gradient(#263B73 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
@@ -135,7 +142,7 @@ body::before {
   right: 0;
   top: -1px;
   height: 16px;
-  background-image: radial-gradient(circle at 50% 100%, #121316 8px, transparent 8px);
+  background-image: radial-gradient(circle at 50% 100%, #0F1B3D 8px, transparent 8px);
   background-size: 24px 16px;
   background-repeat: repeat-x;
   pointer-events: none;
@@ -153,7 +160,7 @@ body::before {
   right: 0;
   bottom: -1px;
   height: 16px;
-  background-image: radial-gradient(circle at 50% 0%, #121316 8px, transparent 8px);
+  background-image: radial-gradient(circle at 50% 0%, #0F1B3D 8px, transparent 8px);
   background-size: 24px 16px;
   background-repeat: repeat-x;
   pointer-events: none;
@@ -181,7 +188,7 @@ body::before {
 .tactile-btn-signal {
   box-shadow: 4px 4px 0 var(--ink);
   transform: translate(0, 0);
-  transition: box-shadow 90ms ease, transform 90ms ease;
+  transition: box-shadow 90ms ease, transform 90ms ease, background-color 90ms ease;
   cursor: pointer;
   border: 1.5px solid var(--ink);
   background-color: var(--signal);
@@ -189,6 +196,7 @@ body::before {
 }
 
 .tactile-btn-signal:hover {
+  background-color: #E62E76;
   box-shadow: 2px 2px 0 var(--ink);
   transform: translate(2px, 2px);
 }
@@ -216,7 +224,7 @@ body::before {
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(18, 19, 22, 0.5);
+  color: rgba(15, 27, 61, 0.5);
 }
 
 .headline-display {
@@ -237,13 +245,14 @@ body::before {
 
 .volt-highlight {
   background-color: var(--volt);
-  color: var(--ink);
+  color: var(--signal);
   padding: 0.08em 0.28em;
   display: inline-block;
   vertical-align: baseline;
   line-height: 1;
   border-radius: 2px;
   font-weight: 600;
+  border: 1px solid var(--signal);
 }
 
 .signal-underline {
@@ -289,7 +298,7 @@ body::before {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background-color: var(--paper);
+  background-color: var(--sand);
   border: 1.5px solid var(--ink);
 }
 
@@ -310,13 +319,14 @@ body::before {
   align-items: center;
   gap: 0.25rem;
   background-color: var(--emerald);
-  color: white;
+  color: #0F1B3D;
   font-size: 0.65rem;
   font-family: var(--font-mono), monospace;
   letter-spacing: 0.08em;
   padding: 0.15rem 0.5rem;
   border-radius: 999px;
   text-transform: uppercase;
+  font-weight: 700;
 }
 
 .pill {
@@ -332,9 +342,9 @@ body::before {
 }
 
 .pill-volt {
-  background-color: var(--volt);
-  color: var(--ink);
-  border-color: var(--ink);
+  background-color: #FFE4EF;
+  color: #FF3D88;
+  border-color: #FF3D88;
 }
 
 .pill-signal {
@@ -403,7 +413,7 @@ body::before {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(18, 19, 22, 0.75);
+  background: rgba(15, 27, 61, 0.82);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 99999;
@@ -420,7 +430,7 @@ body::before {
   height: 100%;
   width: 100%;
   max-width: 640px;
-  background: var(--paper);
+  background: var(--ivory);
   border-left: 1.5px solid var(--ink);
   z-index: 1000;
   overflow-y: auto;
@@ -460,7 +470,7 @@ body::before {
   font-style: italic;
   font-family: var(--font-serif), serif;
   font-size: 1.15rem;
-  color: rgba(18, 19, 22, 0.85);
+  color: rgba(15, 27, 61, 0.85);
 }
 
 .prose-tactyqal code {
@@ -469,12 +479,12 @@ body::before {
   padding: 0.1em 0.4em;
   border-radius: 2px;
   font-size: 0.875em;
-  border: 1px solid rgba(18, 19, 22, 0.15);
+  border: 1px solid rgba(15, 27, 61, 0.15);
 }
 
 .prose-tactyqal pre {
   background: var(--ink);
-  color: var(--paper);
+  color: #FFFFFF;
   padding: 1.25rem;
   overflow-x: auto;
   margin: 1.5rem 0;
