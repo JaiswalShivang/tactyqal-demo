@@ -31,7 +31,6 @@ export default function HeroSection() {
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [highlight, setHighlight] = useState({ x: 50, y: 50 });
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const prefersReduced = useReducedMotion();
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -96,12 +95,7 @@ export default function HeroSection() {
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch relative z-10">
         <div className="lg:col-span-7 flex flex-col justify-between h-full">
           <div>
-            <div className="font-mono text-xs text-volt font-bold uppercase tracking-wider mb-2.5 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-volt animate-pulse" />
-              № 01 / 09 · THE PROGRAM
-            </div>
-
-            <h1 className="font-display font-extrabold text-[clamp(2.2rem,3.8vw,3.5rem)] tracking-[-0.025em] leading-[1.04] text-[#F6F4EE] mb-4">
+            <h1 className="font-display font-extrabold text-[clamp(2.4rem,4.2vw,3.9rem)] tracking-[-0.025em] leading-[1.04] text-[#F6F4EE] mb-4">
               Empower Your Kid To{" "}
               <span className="text-signal font-extrabold">Build</span>{" "}
               The Next App That Impacts Millions,{" "}
@@ -287,55 +281,6 @@ export default function HeroSection() {
           </motion.div>
         </div>
       </div>
-
-      <div className="absolute bottom-4 right-4 z-20 hidden sm:flex items-center gap-2">
-        <button
-          type="button"
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 bg-[#121316]/90 backdrop-blur-md border border-white/20 hover:border-signal px-3 py-1.5 text-white font-mono text-[11px] shadow-tactile-sm transition-colors cursor-pointer group"
-        >
-          <span className="w-2 h-2 rounded-full bg-signal animate-pulse" />
-          <span className="text-white/80 group-hover:text-white">LIVE COHORT FEED // SOUND OFF</span>
-          <span className="text-volt font-bold ml-1">Expand ↗</span>
-        </button>
-      </div>
-
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-          onClick={() => setIsModalOpen(false)}
-        >
-          <div
-            className="ticket-card bg-ivory max-w-2xl w-full p-5 border-2 border-ink shadow-tactile relative"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between pb-3 mb-3 border-b border-ink/20 font-mono text-xs">
-              <span className="font-bold text-signal flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald animate-pulse" />
-                TACTYQAL BUILDER COHORT REEL · 1:1 MENTORING
-              </span>
-              <button
-                type="button"
-                onClick={() => setIsModalOpen(false)}
-                className="border border-ink px-2.5 py-1 hover:bg-ink hover:text-white font-bold transition-colors cursor-pointer"
-              >
-                ✕ CLOSE
-              </button>
-            </div>
-            <div className="aspect-video w-full bg-ink border border-ink overflow-hidden">
-              <video
-                autoPlay
-                controls
-                playsInline
-                className="w-full h-full object-cover"
-              >
-                <source src="/videos/kid_impact.mp4" type="video/mp4" />
-                <source src="https://www.tactyqal.com/application/assets/videos/kid_impact.mp4" type="video/mp4" />
-              </video>
-            </div>
-          </div>
-        </div>
-      )}
 
       <div className="perforated-edge mt-8" />
     </section>

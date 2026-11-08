@@ -125,25 +125,7 @@ export default function ContactSection() {
             </div>
           </div>
 
-          <div className="lg:col-span-7 border-[1.5px] border-[#121316] bg-white shadow-[6px_6px_0px_0px_#121316] flex flex-col justify-between h-full">
-            <div className="bg-[#121316] text-white px-5 py-3 flex items-center justify-between font-mono text-xs border-b border-ink">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-signal animate-pulse" />
-                <span className="font-bold tracking-wider">
-                  PARTHA CHAKRABORTY // 15-MIN GOOGLE MEET
-                </span>
-              </div>
-              <a
-                href={OFFICIAL_GCAL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-volt hover:underline flex items-center gap-1 font-bold"
-              >
-                <span>Google Calendar</span>
-                <span>↗</span>
-              </a>
-            </div>
-
+          <div className="lg:col-span-7 border-[1.5px] border-[#121316] bg-white shadow-[6px_6px_0px_0px_#121316] flex flex-col justify-between h-full overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-12 flex-1">
               <div className="md:col-span-5 p-6 border-b md:border-b-0 md:border-r border-ink/15 bg-sand/30 flex flex-col justify-between">
                 <div>
