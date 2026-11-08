@@ -3,10 +3,6 @@
 @tailwind utilities;
 
 :root {
-  --font-display: "Bricolage Grotesque", system-ui, -apple-system, sans-serif;
-  --font-serif: "Instrument Serif", Georgia, serif;
-  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --paper: #FFFFFF;
   --ice: #F4F6FB;
   --ivory: #FFFFFF;
