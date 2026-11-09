@@ -117,10 +117,10 @@ export default function PricingSection() {
             </div>
           </motion.div>
 
-          <div className="lg:col-span-5 flex flex-col justify-between gap-5 h-full">
-            <div className="flex-1 flex flex-col justify-between border border-[#263B73] bg-[#162654] p-6 text-white shadow-tactile-sm">
+          <div className="lg:col-span-5 flex flex-col justify-between gap-4 h-full">
+            <div className="flex-1 flex flex-col justify-between border border-[#263B73] bg-[#162654] p-5 text-white shadow-tactile-sm">
               <div>
-                <div className="font-mono text-xs text-signal uppercase tracking-wider font-bold mb-3 flex items-center gap-2">
+                <div className="font-mono text-xs text-signal uppercase tracking-wider font-bold mb-2.5 flex items-center gap-2">
                   <span className="w-2.5 h-2.5 bg-signal rounded-full" />
                   OUR COMMITMENT
                 </div>
@@ -131,17 +131,17 @@ export default function PricingSection() {
                   If your child attends all sessions, completes the milestone sprints, and does not have a live, working application launched by Week 8, we refund 100% of your tuition without hesitation.
                 </p>
               </div>
-              <div className="pt-3 mt-4 border-t border-white/10 font-mono text-[11px] text-[#00F5D4] uppercase font-bold">
+              <div className="pt-3 mt-3 border-t border-white/10 font-mono text-[11px] text-[#00F5D4] uppercase font-bold">
                 ZERO RISK GUARANTEE
               </div>
             </div>
 
-            <div className="flex-1 flex flex-col justify-between border border-[#263B73] bg-[#162654] p-6 text-white shadow-tactile-sm">
+            <div className="flex-1 flex flex-col justify-between border border-[#263B73] bg-[#162654] p-5 text-white shadow-tactile-sm">
               <div>
-                <div className="font-mono text-xs text-white/50 uppercase tracking-wider font-bold mb-3">
+                <div className="font-mono text-xs text-white/50 uppercase tracking-wider font-bold mb-2.5">
                   AFTER APPLICATION
                 </div>
-                <ol className="space-y-2.5 text-xs text-white/80 font-mono">
+                <ol className="space-y-2 text-xs text-white/80 font-mono">
                   <li className="flex gap-2">
                     <span className="text-signal font-bold">01.</span>
                     <span>Founder fit consultation (20 minutes).</span>
@@ -160,12 +160,12 @@ export default function PricingSection() {
                   </li>
                 </ol>
               </div>
-              <div className="pt-3 mt-3 border-t border-white/10 font-mono text-[11px] text-white/50 uppercase">
+              <div className="pt-3 mt-2.5 border-t border-white/10 font-mono text-[11px] text-white/50 uppercase">
                 4-STEP ADMISSIONS PIPELINE
               </div>
             </div>
 
-            <div className="flex-1 flex flex-col justify-between border border-[#263B73] bg-[#162654] p-6 text-white shadow-tactile-sm">
+            <div className="flex-1 flex flex-col justify-between border border-[#263B73] bg-[#162654] p-5 text-white shadow-tactile-sm">
               <div>
                 <div className="font-mono text-xs text-[#00F5D4] uppercase tracking-wider mb-2 font-bold">
                   PAYMENT FLEXIBILITY
@@ -174,7 +174,7 @@ export default function PricingSection() {
                   We accept UPI, Net Banking, and all major Indian &amp; International credit cards via secure payment gateway.
                 </p>
               </div>
-              <div className="pt-3 mt-3 border-t border-white/10 font-mono text-[11px] text-[#00F5D4] font-semibold uppercase">
+              <div className="pt-3 mt-2.5 border-t border-white/10 font-mono text-[11px] text-[#00F5D4] font-semibold uppercase">
                 INSTANT ENROLMENT CONFIRMATION
               </div>
             </div>

@@ -58,8 +58,20 @@ const PILLARS_ROW2 = [
   },
 ];
 
+const CHAPTERS = [
+  { time: 0, label: "▶ 00:00 · The Thesis" },
+  { time: 340, label: "▶ 05:40 · Idea Matrix" },
+  { time: 730, label: "▶ 12:10 · First Customers" },
+];
+
 export default function WhyParentsSection() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [selectedTimestamp, setSelectedTimestamp] = useState(0);
+
+  const handlePlayChapter = (time: number) => {
+    setSelectedTimestamp(time);
+    setIsPlaying(true);
+  };
 
   return (
     <section
@@ -77,10 +89,30 @@ export default function WhyParentsSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch mb-6">
           <div className="lg:col-span-6 border-[1.5px] border-[#0F1B3D] bg-[#0F1B3D] text-[#FFFFFF] shadow-[6px_6px_0px_0px_#FF3D88] p-5 sm:p-6 flex flex-col justify-between h-full">
             <div className="flex flex-col h-full justify-between">
-              <div className="relative w-full flex-1 min-h-[250px] bg-[#0A1229] overflow-hidden border border-[#263B73] flex items-center justify-center my-3">
+              <div className="flex items-center justify-between border-b border-[#263B73] pb-3 mb-4 font-mono text-xs">
+                <span className="text-[#FF3D88] font-bold tracking-wider flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#FF3D88] animate-pulse" />
+                  FOUNDER MASTERCLASS // PARTHA CHAKRABORTY
+                </span>
+                {isPlaying ? (
+                  <button
+                    type="button"
+                    onClick={() => setIsPlaying(false)}
+                    className="text-white hover:bg-[#FF3D88] hover:border-[#FF3D88] font-mono text-[11px] border border-white/30 px-2.5 py-0.5 transition-colors cursor-pointer font-bold"
+                  >
+                    ✕ Close Video
+                  </button>
+                ) : (
+                  <span className="text-paper/60 uppercase text-[11px] border border-[#263B73] px-2 py-0.5 font-mono">
+                    YOUTUBE LIVE EVENT
+                  </span>
+                )}
+              </div>
+
+              <div className="relative w-full flex-1 min-h-[260px] bg-[#0A1229] overflow-hidden border border-[#263B73] flex items-center justify-center mb-4">
                 {!isPlaying ? (
                   <div
-                    onClick={() => setIsPlaying(true)}
+                    onClick={() => handlePlayChapter(selectedTimestamp)}
                     className="absolute inset-0 cursor-pointer group flex flex-col items-center justify-center p-6 select-none"
                   >
                     <img
@@ -108,7 +140,7 @@ export default function WhyParentsSection() {
                 ) : (
                   <div className="relative w-full h-full">
                     <iframe
-                      src="https://www.youtube-nocookie.com/embed/UyUH06CfLbk?autoplay=1&rel=0&modestbranding=1"
+                      src={`https://www.youtube-nocookie.com/embed/UyUH06CfLbk?autoplay=1&rel=0&modestbranding=1&start=${selectedTimestamp}`}
                       title="Startup Ideas 101 with Partha Chakraborty"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       allowFullScreen
@@ -125,14 +157,34 @@ export default function WhyParentsSection() {
                 )}
               </div>
 
-              <div className="mt-3">
+              <div>
                 <h3 className="font-display font-bold text-xl sm:text-2xl tracking-normal mb-2 text-white">
                   Startup Ideas 101 with Partha Chakraborty
                 </h3>
 
-                <p className="text-xs sm:text-sm text-paper/75 leading-relaxed tracking-normal">
+                <p className="text-xs sm:text-sm text-paper/75 leading-relaxed tracking-normal mb-4">
                   How teenagers spot real daily friction and turn it into scalable software before writing a single line of code.
                 </p>
+
+                <div className="pt-3 border-t border-[#263B73] flex flex-wrap items-center gap-2">
+                  <span className="font-mono text-[10px] text-paper/50 uppercase tracking-wider mr-1">
+                    Chapters:
+                  </span>
+                  {CHAPTERS.map((ch) => (
+                    <button
+                      key={ch.time}
+                      type="button"
+                      onClick={() => handlePlayChapter(ch.time)}
+                      className={`font-mono text-[10px] px-2.5 py-1 border transition-colors cursor-pointer ${
+                        selectedTimestamp === ch.time && isPlaying
+                          ? "bg-[#FF3D88] text-white border-[#FF3D88] font-bold"
+                          : "border-[#263B73] text-paper/80 hover:border-paper hover:text-white bg-[#162654]"
+                      }`}
+                    >
+                      {ch.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

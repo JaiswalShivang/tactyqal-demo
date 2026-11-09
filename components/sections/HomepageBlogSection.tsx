@@ -93,9 +93,9 @@ export default function HomepageBlogSection() {
                 href={`/blog/${lead.slug}`}
                 className="ticket-card h-full flex flex-col justify-between hover:shadow-tactile-signal transition-all group p-5 sm:p-6 bg-white border-2 border-[#0F1B3D] shadow-[4px_4px_0px_0px_#0F1B3D]"
               >
-                <div>
-                  <div className="border border-[#0F1B3D] mb-4 overflow-hidden bg-sand shadow-tactile-sm">
-                    <div className="relative h-60 w-full overflow-hidden">
+                <div className="flex-1 flex flex-col justify-between">
+                  <div className="border border-[#0F1B3D] mb-4 overflow-hidden bg-sand shadow-tactile-sm flex-1 min-h-[240px]">
+                    <div className="relative w-full h-full min-h-[240px] overflow-hidden">
                       <PostThumbnail
                         src={lead.coverImage}
                         title={lead.title}
@@ -104,40 +104,42 @@ export default function HomepageBlogSection() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2.5 mb-2.5">
-                    <span className="pill pill-volt text-xs font-semibold">
-                      {lead.category}
-                    </span>
-                    <span className="font-mono text-xs text-ink/50">
-                      {lead.readTime} min read
-                    </span>
-                    <span className="font-mono text-xs text-ink/40">·</span>
-                    <span className="font-mono text-xs text-ink/50">
-                      {new Date(lead.createdAt).toLocaleDateString("en-IN", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </span>
-                  </div>
-
-                  <h3 className="font-display font-extrabold text-2xl sm:text-[26px] leading-snug tracking-tight mb-2.5 group-hover:text-signal transition-colors">
-                    {lead.title}
-                  </h3>
-
-                  <p className="text-sm text-ink/80 leading-relaxed line-clamp-3 mb-4">
-                    {lead.excerpt}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {["#NoCodeMVP", "#AIWorkflows", "#TeenFounders"].map((tag) => (
-                      <span
-                        key={tag}
-                        className="font-mono text-[11px] font-bold text-[#FF3D88] bg-[#FFE4EF] px-2.5 py-0.5 border border-[#FF3D88]"
-                      >
-                        {tag}
+                  <div>
+                    <div className="flex items-center gap-2.5 mb-2.5">
+                      <span className="pill pill-volt text-xs font-semibold">
+                        {lead.category}
                       </span>
-                    ))}
+                      <span className="font-mono text-xs text-ink/50">
+                        {lead.readTime} min read
+                      </span>
+                      <span className="font-mono text-xs text-ink/40">·</span>
+                      <span className="font-mono text-xs text-ink/50">
+                        {new Date(lead.createdAt).toLocaleDateString("en-IN", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </span>
+                    </div>
+
+                    <h3 className="font-display font-extrabold text-2xl sm:text-[26px] leading-snug tracking-tight mb-2.5 group-hover:text-signal transition-colors">
+                      {lead.title}
+                    </h3>
+
+                    <p className="text-sm text-ink/80 leading-relaxed line-clamp-3 mb-4">
+                      {lead.excerpt}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {["#NoCodeMVP", "#AIWorkflows", "#TeenFounders"].map((tag) => (
+                        <span
+                          key={tag}
+                          className="font-mono text-[11px] font-bold text-[#FF3D88] bg-[#FFE4EF] px-2.5 py-0.5 border border-[#FF3D88]"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
