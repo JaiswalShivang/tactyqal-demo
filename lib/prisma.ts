@@ -8,6 +8,7 @@ function getSafePostgresUrl(): string {
   const url = process.env.DATABASE_URL?.trim();
   if (url && (url.startsWith("postgresql://") || url.startsWith("postgres://"))) {
     return url
+      .replace(/-pooler\./g, ".")
       .replace(/&channel_binding=require/g, "")
       .replace(/\?channel_binding=require&?/g, "?")
       .replace(/\?$/g, "");
@@ -22,7 +23,7 @@ function createPrismaClient(): PrismaClient {
         url: getSafePostgresUrl(),
       },
     },
-    log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
+    log: [],
   });
 }
 

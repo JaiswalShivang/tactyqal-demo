@@ -58,20 +58,8 @@ const PILLARS_ROW2 = [
   },
 ];
 
-const CHAPTERS = [
-  { time: 0, label: "▶ 00:00 · The Thesis" },
-  { time: 340, label: "▶ 05:40 · Idea Matrix" },
-  { time: 730, label: "▶ 12:10 · First Customers" },
-];
-
 export default function WhyParentsSection() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [selectedTimestamp, setSelectedTimestamp] = useState(0);
-
-  const handlePlayChapter = (time: number) => {
-    setSelectedTimestamp(time);
-    setIsPlaying(true);
-  };
 
   return (
     <section
@@ -89,136 +77,61 @@ export default function WhyParentsSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch mb-6">
           <div className="lg:col-span-6 border-[1.5px] border-[#0F1B3D] bg-[#0F1B3D] text-[#FFFFFF] shadow-[6px_6px_0px_0px_#FF3D88] p-5 sm:p-6 flex flex-col justify-between h-full">
             <div>
-              <div className="flex items-center justify-between border-b border-[#263B73] pb-3 mb-4 font-mono text-xs">
-                <span className="text-signal font-bold tracking-wider flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-signal animate-pulse" />
-                  FOUNDER MASTERCLASS // PARTHA CHAKRABORTY
-                </span>
-                {isPlaying ? (
-                  <button
-                    type="button"
-                    onClick={() => setIsPlaying(false)}
-                    className="text-white hover:bg-[#FF3D88] hover:border-[#FF3D88] font-mono text-[11px] border border-white/30 px-2.5 py-0.5 transition-colors cursor-pointer font-bold"
-                  >
-                    ✕ Close Video
-                  </button>
-                ) : (
-                  <span className="text-paper/60 uppercase text-[11px] border border-[#263B73] px-2 py-0.5">
-                    YOUTUBE LIVE EVENT
-                  </span>
-                )}
-              </div>
-
-              <div className="relative aspect-video border-[1.5px] border-[#263B73] bg-[#0A1229] mb-4 overflow-hidden">
+              <div className="relative aspect-video border-[1.5px] border-[#263B73] bg-[#0A1229] mb-5 overflow-hidden">
                 {!isPlaying ? (
                   <div
                     onClick={() => setIsPlaying(true)}
-                    className="absolute inset-0 cursor-pointer group flex flex-col justify-between p-4 select-none relative"
+                    className="absolute inset-0 cursor-pointer group flex flex-col items-center justify-center p-6 select-none relative"
                   >
                     <img
                       src="https://i.ytimg.com/vi/UyUH06CfLbk/hqdefault.jpg"
-                      alt="How to Come Up with Startup Ideas? | A CH Tribe Event with Partha Chakraborty"
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      alt="Startup Ideas 101 with Partha Chakraborty"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = "/extracted/blog-ele.webp";
                       }}
                     />
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0F1B3D] via-[#0F1B3D]/50 to-[#0F1B3D]/70 pointer-events-none" />
+                    <div className="absolute inset-0 bg-[#0F1B3D]/65 group-hover:bg-[#0F1B3D]/50 transition-colors pointer-events-none" />
 
-                    <div className="relative z-10 flex items-center justify-between">
-                      <div className="flex items-center gap-2 bg-[#0F1B3D]/95 border border-white/20 px-2.5 py-1 rounded-sm shadow-sm">
-                        <span className="w-2 h-2 rounded-full bg-signal animate-pulse" />
-                        <span className="font-mono text-[10px] text-white font-bold tracking-wider">
-                          PARTHA CHAKRABORTY // A CH TRIBE EVENT
-                        </span>
+                    <div className="relative z-10 flex flex-col items-center justify-center text-center">
+                      <div className="w-16 h-16 rounded-full bg-[#FF3D88] text-white flex items-center justify-center border-2 border-white shadow-[4px_4px_0px_0px_#FFFFFF] group-hover:scale-110 group-hover:shadow-[6px_6px_0px_0px_#FFFFFF] transition-all cursor-pointer mb-3">
+                        <svg className="w-6 h-6 translate-x-0.5 fill-current" viewBox="0 0 24 24">
+                          <polygon points="5 3 19 12 5 21 5 3" />
+                        </svg>
                       </div>
-                      <span className="font-mono text-[10px] text-[#00F5D4] bg-[#0F1B3D]/95 px-2.5 py-1 border border-[#00F5D4]/40 font-bold">
-                        12 MINS
+                      <span className="text-xs font-mono font-bold uppercase tracking-wider text-white bg-[#0F1B3D]/90 border border-white/20 px-3.5 py-1">
+                        Watch Founder Masterclass (12 Mins)
                       </span>
-                    </div>
-
-                    <div className="relative z-10 my-auto text-center px-4">
-                      <div className="inline-block border border-[#00F5D4]/40 bg-[#0F1B3D]/90 text-[#00F5D4] font-mono text-[11px] font-bold px-3 py-1 mb-3">
-                        SLIDE 09 // INVERSION TECHNIQUE
-                      </div>
-                      <h4 className="font-display font-extrabold text-lg sm:text-xl text-white tracking-normal mb-4 drop-shadow">
-                        How to Come Up with Startup Ideas?
-                      </h4>
-
-                      <div className="inline-flex items-center">
-                        <button
-                          type="button"
-                          className="px-6 py-3 text-xs font-bold font-mono tracking-wider bg-[#FF3D88] hover:bg-[#E62E76] text-white border-2 border-white shadow-[4px_4px_0px_0px_#FFFFFF] flex items-center gap-2.5 group-hover:scale-105 transition-all cursor-pointer"
-                        >
-                          <span className="w-0 h-0 border-y-[6px] border-y-transparent border-l-[10px] border-l-white ml-0.5" />
-                          <span>▶ Watch Masterclass with Sound</span>
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="relative z-10 flex items-center justify-between pt-2 border-t border-white/20 font-mono text-[10px] text-paper/80 bg-[#0F1B3D]/70 px-2 py-1 -mx-2 -mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-white font-bold">Partha Chakraborty</span>
-                        <span>· Founder, Tactyqal</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-[#00F5D4] font-bold">
-                        <span className="w-1.5 h-3 bg-[#00F5D4] animate-pulse" />
-                        <span className="w-1.5 h-4 bg-[#00F5D4] animate-pulse delay-75" />
-                        <span className="w-1.5 h-2 bg-[#00F5D4] animate-pulse delay-150" />
-                        <span className="ml-1 uppercase">CLICK TO PLAY</span>
-                      </div>
                     </div>
                   </div>
                 ) : (
-                  <iframe
-                    src={`https://www.youtube.com/embed/UyUH06CfLbk?start=${selectedTimestamp}&autoplay=1&rel=0&modestbranding=1`}
-                    title="How to Come Up with Startup Ideas? | A CH Tribe Event with Partha Chakraborty"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                    className="absolute inset-0 w-full h-full border-0"
-                  />
+                  <div className="relative w-full h-full">
+                    <iframe
+                      src="https://www.youtube-nocookie.com/embed/UyUH06CfLbk?autoplay=1&rel=0&modestbranding=1"
+                      title="Startup Ideas 101 with Partha Chakraborty"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      className="absolute inset-0 w-full h-full border-0"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setIsPlaying(false)}
+                      className="absolute top-2 right-2 z-20 bg-[#0F1B3D]/90 text-white hover:bg-[#FF3D88] border border-white/20 px-2.5 py-1 text-[11px] font-mono font-bold transition cursor-pointer"
+                    >
+                      ✕ Close
+                    </button>
+                  </div>
                 )}
               </div>
 
-              <h3 className="font-display font-bold text-xl sm:text-2xl tracking-normal mb-1 text-white">
+              <h3 className="font-display font-bold text-xl sm:text-2xl tracking-normal mb-2 text-white">
                 Startup Ideas 101 with Partha Chakraborty
               </h3>
 
-              <p className="text-xs sm:text-sm text-paper/75 leading-relaxed tracking-normal mb-4">
+              <p className="text-xs sm:text-sm text-paper/75 leading-relaxed tracking-normal">
                 How teenagers spot real daily friction and turn it into scalable software before writing a single line of code.
               </p>
-            </div>
-
-            <div className="pt-3 border-t border-[#263B73] flex flex-wrap items-center justify-between gap-2">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="font-mono text-[10px] text-paper/50 uppercase tracking-wider mr-1">
-                  Chapters:
-                </span>
-                {CHAPTERS.map((ch) => (
-                  <button
-                    key={ch.time}
-                    onClick={() => handlePlayChapter(ch.time)}
-                    className={`font-mono text-[10px] px-2.5 py-1 border transition-colors cursor-pointer ${
-                      selectedTimestamp === ch.time && isPlaying
-                        ? "bg-signal text-white border-signal font-bold shadow-tactile-sm"
-                        : "border-[#263B73] text-paper/70 hover:border-paper bg-[#162654]"
-                    }`}
-                  >
-                    {ch.label}
-                  </button>
-                ))}
-              </div>
-
-              {isPlaying && (
-                <button
-                  type="button"
-                  onClick={() => setIsPlaying(false)}
-                  className="font-mono text-[10px] text-paper/60 hover:text-white border border-[#263B73] px-2 py-0.5"
-                >
-                  Reset Poster
-                </button>
-              )}
             </div>
           </div>
 
