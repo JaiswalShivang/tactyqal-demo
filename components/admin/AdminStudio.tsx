@@ -27,28 +27,6 @@ const CATEGORIES = [
   "No-Code",
 ];
 
-const PRISMA_SCHEMA = `model Post {
-  id          String   @id @default(cuid())
-  title       String
-  slug        String   @unique
-  excerpt     String
-  content     String   @db.Text
-  coverImage  String?
-  category    String
-  tags        String[]
-  author      String   @default("Partha Chakraborty")
-  authorRole  String   @default("Founder, Tactyqal Labs")
-  readTime    Int
-  published   Boolean  @default(true)
-  featured    Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@index([published])
-  @@index([category])
-  @@index([createdAt])
-}`;
-
 function wordCount(text: string) {
   return text.trim().split(/\s+/).filter(Boolean).length;
 }
@@ -72,14 +50,9 @@ export default function AdminStudio() {
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All Categories");
   const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft">("all");
-  const [mainView, setMainView] = useState<"content" | "inspector">("content");
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"create" | "edit">("create");
   const [editingPost, setEditingPost] = useState<Post | null>(null);
-  const [dataSource, setDataSource] = useState("prisma");
-  const [latency, setLatency] = useState(14);
-  const [seeding, setSeeding] = useState(false);
-  const [seedSuccess, setSeedSuccess] = useState(false);
 
   const [formTitle, setFormTitle] = useState("");
   const [formSlug, setFormSlug] = useState("");
@@ -87,7 +60,7 @@ export default function AdminStudio() {
   const [formContent, setFormContent] = useState("");
   const [formCategory, setFormCategory] = useState("Ideas");
   const [formTags, setFormTags] = useState("");
-  const [formCoverImage, setFormCoverImage] = useState("/extracted/blog-ele.webp");
+  const [formCoverImage, setFormCoverImage] = useState("https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80");
   const [formAuthor, setFormAuthor] = useState("Partha Chakraborty");
   const [formAuthorRole, setFormAuthorRole] = useState("Founder, Tactyqal Labs");
   const [formPublished, setFormPublished] = useState(true);
@@ -95,33 +68,6 @@ export default function AdminStudio() {
   const [formSlugManual, setFormSlugManual] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
-
-  const [testerMethod, setTesterMethod] = useState("GET");
-  const [testerUrl, setTesterUrl] = useState("/api/posts?status=all&limit=6");
-  const [testerBody, setTesterBody] = useState(
-    JSON.stringify(
-      {
-        title: "How Indian Teen Founders Are Raising Pre-Seed Grants",
-        category: "Strategy",
-        excerpt: "A tactical breakdown of teenage entrepreneurs winning state and venture grants without writing code.",
-        content: "## The Shift in Youth Entrepreneurship\n\nIndian teenage founders are bypassing traditional gatekeepers by leveraging no-code and agentic AI tools to build working MVPs in weeks.\n\n## Key Takeaways\n\n- Focus on real customer problem discovery before tech stack selection\n- Deploy functional prototypes with Supabase and FlutterFlow\n- Pitch traction over theoretical metrics",
-        tags: ["grants", "teen founders", "funding"],
-        coverImage: "/extracted/blog-ele.webp",
-        published: true,
-      },
-      null,
-      2
-    )
-  );
-  const [testerResponse, setTesterResponse] = useState<{
-    status: number;
-    time: number;
-    headers: Record<string, string>;
-    body: unknown;
-  } | null>(null);
-  const [testerLoading, setTesterLoading] = useState(false);
-  const [copiedCurl, setCopiedCurl] = useState(false);
-  const [copiedSchema, setCopiedSchema] = useState(false);
 
   useEffect(() => {
     const session = sessionStorage.getItem("tactyqal_admin_session");
@@ -151,13 +97,8 @@ export default function AdminStudio() {
 
   const fetchPosts = useCallback(async () => {
     setLoading(true);
-    const start = Date.now();
     try {
       const res = await fetch("/api/posts?status=all&limit=100");
-      const elapsed = Date.now() - start;
-      setLatency(elapsed);
-      const ds = res.headers.get("x-data-source") ?? "prisma";
-      setDataSource(ds);
       const json = (await res.json()) as { data?: Post[]; count?: number };
       if (json.data && Array.isArray(json.data)) {
         setPosts(json.data);
@@ -306,44 +247,6 @@ export default function AdminStudio() {
     }
   };
 
-  const handleQuickSeed = async () => {
-    setSeeding(true);
-    try {
-      const randomId = Math.floor(Math.random() * 900 + 100);
-      const payload = {
-        title: `Teen Founder Playbook: 0 to ₹1 Lakh ARR in 60 Days #${randomId}`,
-        slug: `teen-founder-playbook-${Date.now().toString().slice(-4)}`,
-        category: "Ideas",
-        excerpt: "How high school builders are launching micro-SaaS and agency tooling using no-code, Next.js, and AI automation.",
-        content: "## The New Era of Teenage Software Founders\n\nHigh-schoolers today don't need years of theoretical computer science to launch viable commercial software. By pairing modern no-code workflows with AI tools and rigorous customer discovery, teenage founders are launching revenue-generating applications in 8 weeks.\n\n### The 3 Core Tenets\n\n1. **Obsess Over One Pain Point:** Avoid building massive platforms. Solve one painful friction for local businesses or peers.\n2. **Deploy Rapid Prototypes:** Use Supabase, Tailwind, and Next.js to reach production in under two weeks.\n3. **Charge From Day One:** Real validation is not email signups; it is revenue.\n\n> The best way to learn entrepreneurship is to ship software that people pay for.",
-        coverImage: "/extracted/blog-startup.webp",
-        tags: ["playbook", "teen founders", "revenue"],
-        author: "Partha Chakraborty",
-        authorRole: "Founder, Tactyqal Labs",
-        readTime: 4,
-        published: true,
-        featured: false,
-      };
-
-      await fetch("/api/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer admin123",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      await fetchPosts();
-      setSeedSuccess(true);
-      setTimeout(() => setSeedSuccess(false), 2500);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setSeeding(false);
-    }
-  };
-
   const filteredPosts = useMemo(() => {
     return posts.filter((p) => {
       const q = search.trim().toLowerCase();
@@ -370,58 +273,6 @@ export default function AdminStudio() {
     const draftCount = posts.filter((p) => !p.published).length;
     return { total, publishedCount, draftCount };
   }, [posts]);
-
-  const runTesterRequest = async (overrideMethod?: string, overrideUrl?: string, overrideBody?: string) => {
-    setTesterLoading(true);
-    const method = overrideMethod || testerMethod;
-    const url = overrideUrl || testerUrl;
-    const bodyPayload = overrideBody !== undefined ? overrideBody : testerBody;
-    const start = Date.now();
-    try {
-      const opts: RequestInit = {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer admin123",
-        },
-      };
-      if (["POST", "PUT", "PATCH"].includes(method) && bodyPayload) {
-        opts.body = bodyPayload;
-      }
-      const res = await fetch(url, opts);
-      const time = Date.now() - start;
-      const headers: Record<string, string> = {};
-      res.headers.forEach((v, k) => {
-        headers[k] = v;
-      });
-      const body = await res.json();
-      setTesterResponse({ status: res.status, time, headers, body });
-      if (["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
-        fetchPosts();
-      }
-    } catch (e) {
-      setTesterResponse({
-        status: 0,
-        time: Date.now() - start,
-        headers: {},
-        body: { error: String(e) },
-      });
-    } finally {
-      setTesterLoading(false);
-    }
-  };
-
-  const getCurlSnippet = () => {
-    const parts = [
-      `curl -X ${testerMethod} 'http://localhost:3000${testerUrl}'`,
-      `  -H 'Authorization: Bearer admin123'`,
-    ];
-    if (["POST", "PUT", "PATCH"].includes(testerMethod)) {
-      parts.push(`  -H 'Content-Type: application/json'`);
-      parts.push(`  -d '${testerBody.replace(/'/g, "'\\''")}'`);
-    }
-    return parts.join(" \\\n");
-  };
 
   const currentWc = wordCount(formContent);
   const currentRt = computeReadTime(formContent);
@@ -465,9 +316,6 @@ export default function AdminStudio() {
             <h1 className="font-display font-extrabold text-2xl text-[#0F1B3D] mb-1">
               Admin Authentication
             </h1>
-            <p className="text-xs font-sans text-[#0F1B3D]/70 leading-relaxed mb-6">
-              Enter the master admin password to unlock the CMS Studio, PostgreSQL write operations, and backend inspector.
-            </p>
 
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
@@ -505,20 +353,6 @@ export default function AdminStudio() {
               >
                 Unlock Admin Studio →
               </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setPasswordInput("admin123");
-                  sessionStorage.setItem("tactyqal_admin_session", "admin123");
-                  setIsAuthenticated(true);
-                  setAuthError("");
-                }}
-                className="w-full py-2 bg-[#F4F6FB] hover:bg-[#FFE4EF] text-[#0F1B3D] font-mono text-xs font-semibold border border-[#0F1B3D] transition flex items-center justify-center gap-1.5"
-              >
-                <span>⚡</span>
-                <span>Auto-Fill Demo Key (&quot;admin123&quot;)</span>
-              </button>
             </form>
 
             <div className="mt-6 pt-4 border-t border-[#0F1B3D]/10 text-center">
@@ -552,59 +386,15 @@ export default function AdminStudio() {
           <span className="px-2 py-0.5 bg-[#FF3D88] text-white font-mono text-[10px] font-bold uppercase tracking-wider whitespace-nowrap">
             CMS v2.0
           </span>
-          <span className="text-white/20 hidden xl:inline-block">/</span>
-          <span className="text-xs font-mono text-white/70 hidden xl:inline-block whitespace-nowrap">
-            Blog Backend &amp; Content Studio
-          </span>
-          <span className="px-2.5 py-1 bg-[#162654] border border-white/15 text-[11px] font-mono text-[#00F5D4] hidden md:flex items-center gap-1.5 whitespace-nowrap">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00F5D4] animate-pulse" />
-            DB Ready • {latency}ms
-          </span>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          <div className="flex border border-white/20 bg-[#162654]/80 p-0.5">
-            <button
-              onClick={() => setMainView("content")}
-              className={`px-3 py-1.5 text-xs font-mono font-bold whitespace-nowrap transition-colors ${
-                mainView === "content"
-                  ? "bg-[#00F5D4] text-[#0F1B3D]"
-                  : "text-white/80 hover:text-white"
-              }`}
-            >
-              Content Manager
-            </button>
-            <button
-              onClick={() => setMainView("inspector")}
-              className={`px-3 py-1.5 text-xs font-mono font-bold whitespace-nowrap flex items-center gap-1.5 transition-colors ${
-                mainView === "inspector"
-                  ? "bg-[#00F5D4] text-[#0F1B3D]"
-                  : "text-white/80 hover:text-white"
-              }`}
-            >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <polyline points="4 17 10 11 4 5" />
-                <line x1="12" y1="19" x2="20" y2="19" />
-              </svg>
-              <span>API &amp; Schema Inspector</span>
-            </button>
-          </div>
-
+        <div className="flex items-center gap-3 shrink-0">
           <Link
             href="/"
             target="_blank"
-            className="px-3 py-2 text-xs font-mono bg-[#162654] hover:bg-white hover:text-[#0F1B3D] border border-white/20 transition whitespace-nowrap hidden lg:inline-flex items-center gap-1"
+            className="px-3 py-2 text-xs font-mono bg-[#162654] hover:bg-white hover:text-[#0F1B3D] border border-white/20 transition whitespace-nowrap inline-flex items-center gap-1"
           >
             <span>Public Site</span>
-            <span>↗</span>
-          </Link>
-
-          <Link
-            href="/blog"
-            target="_blank"
-            className="px-3 py-2 text-xs font-mono bg-[#162654] hover:bg-white hover:text-[#0F1B3D] border border-white/20 transition whitespace-nowrap hidden md:inline-flex items-center gap-1"
-          >
-            <span>/blog</span>
             <span>↗</span>
           </Link>
 
@@ -614,28 +404,13 @@ export default function AdminStudio() {
           >
             + New Article
           </button>
-
-          <button
-            onClick={handleLogout}
-            title="Lock session and return to password screen"
-            className="px-2.5 py-1.5 text-xs font-mono bg-white/10 hover:bg-[#FF3D88] text-white border border-white/20 transition whitespace-nowrap flex items-center gap-1.5 cursor-pointer"
-          >
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            </svg>
-            <span className="hidden sm:inline">Lock</span>
-          </button>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
           <div
-            onClick={() => {
-              setStatusFilter("all");
-              setMainView("content");
-            }}
+            onClick={() => setStatusFilter("all")}
             className="bg-white border-2 border-[#0F1B3D] shadow-[4px_4px_0px_0px_#0F1B3D] p-5 relative overflow-hidden cursor-pointer transition hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[5px_5px_0px_0px_#0F1B3D]"
           >
             <div className="absolute top-0 left-0 right-0 h-1 bg-[#0F1B3D]" />
@@ -662,10 +437,7 @@ export default function AdminStudio() {
           </div>
 
           <div
-            onClick={() => {
-              setStatusFilter("published");
-              setMainView("content");
-            }}
+            onClick={() => setStatusFilter("published")}
             className="bg-white border-2 border-[#0F1B3D] shadow-[4px_4px_0px_0px_#0F1B3D] p-5 relative overflow-hidden cursor-pointer transition hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[5px_5px_0px_0px_#0F1B3D]"
           >
             <div className="absolute top-0 left-0 right-0 h-1 bg-[#10B981]" />
@@ -689,10 +461,7 @@ export default function AdminStudio() {
           </div>
 
           <div
-            onClick={() => {
-              setStatusFilter("draft");
-              setMainView("content");
-            }}
+            onClick={() => setStatusFilter("draft")}
             className="bg-white border-2 border-[#0F1B3D] shadow-[4px_4px_0px_0px_#0F1B3D] p-5 relative overflow-hidden cursor-pointer transition hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[5px_5px_0px_0px_#0F1B3D]"
           >
             <div className="absolute top-0 left-0 right-0 h-1 bg-[#FF3D88]" />
@@ -714,358 +483,77 @@ export default function AdminStudio() {
               Visible only in internal Admin Studio
             </div>
           </div>
-
-          <div
-            onClick={() => setMainView("inspector")}
-            className="bg-white border-2 border-[#0F1B3D] shadow-[4px_4px_0px_0px_#0F1B3D] p-5 relative overflow-hidden cursor-pointer transition hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[5px_5px_0px_0px_#0F1B3D]"
-          >
-            <div className="absolute top-0 left-0 right-0 h-1 bg-[#3B82F6]" />
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-mono font-bold text-[#0F1B3D]/70 tracking-wider">
-                REST API &amp; DB ENGINE
-              </span>
-              <div className="w-7 h-7 bg-[#EFF6FF] border border-[#3B82F6] flex items-center justify-center text-[#3B82F6]">
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-                </svg>
-              </div>
-            </div>
-            <div className="text-xl font-extrabold font-display text-[#10B981] flex items-center gap-2 mb-1">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse" />
-              ONLINE
-            </div>
-            <div className="text-xs text-[#0F1B3D]/60 font-mono truncate">
-              {dataSource === "prisma" ? "PostgreSQL • Prisma" : "Hybrid Store"} · {latency}ms
-            </div>
-          </div>
         </div>
 
-        {mainView === "inspector" ? (
-          <div className="space-y-6">
-            <div className="bg-[#0F1B3D] text-white border-2 border-[#0F1B3D] shadow-[6px_6px_0px_0px_#FF3D88] p-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/15 mb-6">
-                <div>
-                  <div className="inline-flex items-center gap-2 px-2.5 py-0.5 bg-[#FF3D88] text-white font-mono text-[10px] font-bold uppercase tracking-wider mb-2">
-                    TASK 2 ENGINEERING SHOWCASE
-                  </div>
-                  <h2 className="text-2xl font-display font-extrabold text-white">
-                    REST API &amp; Relational Schema Inspector
-                  </h2>
-                  <p className="text-xs font-mono text-white/70 mt-1">
-                    Direct architectural replacement for legacy PHP CodeIgniter + WordPress REST endpoints.
-                  </p>
-                </div>
-                <button
-                  onClick={() => setMainView("content")}
-                  className="px-4 py-2 bg-white text-[#0F1B3D] font-mono text-xs font-bold border border-white hover:bg-[#00F5D4] transition shrink-0"
-                >
-                  ← Back to Content Manager
-                </button>
+        <div className="bg-white border-2 border-[#0F1B3D] shadow-[4px_4px_0px_0px_#0F1B3D] p-3 mb-6 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3 flex-1 min-w-[280px]">
+            <div className="relative flex-1 max-w-md">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#0F1B3D]/50">
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
               </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                <div className="lg:col-span-7 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#00F5D4]">
-                      1. Interactive REST API Endpoint Tester
-                    </span>
-                    <span className="text-[11px] font-mono text-white/50">
-                      Live Next.js Route Handlers
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    {[
-                      {
-                        method: "GET",
-                        badgeClass: "bg-[#3B82F6] text-white",
-                        endpoint: "/api/posts",
-                        desc: "List all articles with status & limit filters",
-                        run: () => {
-                          setTesterMethod("GET");
-                          setTesterUrl("/api/posts?status=all&limit=6");
-                          runTesterRequest("GET", "/api/posts?status=all&limit=6");
-                        },
-                      },
-                      {
-                        method: "POST",
-                        badgeClass: "bg-[#10B981] text-white",
-                        endpoint: "/api/posts",
-                        desc: "Create new article with Zod schema validation",
-                        run: () => {
-                          setTesterMethod("POST");
-                          setTesterUrl("/api/posts");
-                          const sample = JSON.stringify(
-                            {
-                              title: `Live API Test Article #${Math.floor(Math.random() * 900 + 100)}`,
-                              slug: `live-api-test-${Date.now().toString().slice(-4)}`,
-                              category: "Strategy",
-                              excerpt: "Engineered via live POST route tester in Tactyqal Admin CMS.",
-                              content: "## Generated via Live POST Tester\n\nFull-stack verification of JSON payload parsing, Zod validation, and database mutation.",
-                              tags: ["test", "api"],
-                              coverImage: "/extracted/blog-ele.webp",
-                              published: true,
-                            },
-                            null,
-                            2
-                          );
-                          setTesterBody(sample);
-                          runTesterRequest("POST", "/api/posts", sample);
-                        },
-                      },
-                      {
-                        method: "PUT",
-                        badgeClass: "bg-[#F59E0B] text-[#0F1B3D]",
-                        endpoint: "/api/posts/[id]",
-                        desc: "Update post fields or toggle published state",
-                        run: () => {
-                          const target = posts[0];
-                          const url = target ? `/api/posts/${target.id}` : "/api/posts";
-                          setTesterMethod("PUT");
-                          setTesterUrl(url);
-                          const sample = JSON.stringify(
-                            { published: target ? !target.published : true, featured: false },
-                            null,
-                            2
-                          );
-                          setTesterBody(sample);
-                          runTesterRequest("PUT", url, sample);
-                        },
-                      },
-                      {
-                        method: "DELETE",
-                        badgeClass: "bg-[#EF4444] text-white",
-                        endpoint: "/api/posts/[id]",
-                        desc: "Delete article by UUID or CUID identifier",
-                        run: () => {
-                          const target = posts[posts.length - 1];
-                          const url = target ? `/api/posts/${target.id}` : "/api/posts";
-                          setTesterMethod("DELETE");
-                          setTesterUrl(url);
-                          runTesterRequest("DELETE", url);
-                        },
-                      },
-                    ].map((ep) => (
-                      <div
-                        key={ep.method + ep.endpoint}
-                        className="p-3 bg-[#162654] border border-[#263B73] flex flex-col justify-between"
-                      >
-                        <div>
-                          <div className="flex items-center gap-2 mb-1.5">
-                            <span className={`px-2 py-0.5 text-[10px] font-mono font-bold ${ep.badgeClass}`}>
-                              {ep.method}
-                            </span>
-                            <span className="font-mono text-xs font-bold text-white truncate">
-                              {ep.endpoint}
-                            </span>
-                          </div>
-                          <p className="text-[11px] text-white/60 font-sans line-clamp-1 mb-2.5">
-                            {ep.desc}
-                          </p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={ep.run}
-                          disabled={testerLoading}
-                          className="w-full py-1.5 px-2 bg-white/10 hover:bg-[#FF3D88] text-white font-mono text-[11px] font-bold border border-white/20 transition flex items-center justify-center gap-1.5 cursor-pointer"
-                        >
-                          <span>▶</span>
-                          <span>Send Live Request</span>
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="border border-white/20 bg-[#0A1229] p-4 space-y-3">
-                    <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#00F5D4]" />
-                        <span className="font-mono text-xs font-bold text-[#00F5D4]">
-                          Live JSON Response Console
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {testerResponse && (
-                          <span
-                            className={`px-2 py-0.5 font-mono text-[10px] font-bold ${
-                              testerResponse.status < 300 ? "bg-[#10B981] text-white" : "bg-[#EF4444] text-white"
-                            }`}
-                          >
-                            HTTP {testerResponse.status} • {testerResponse.time}ms
-                          </span>
-                        )}
-                        <button
-                          type="button"
-                          onClick={() => {
-                            navigator.clipboard.writeText(getCurlSnippet());
-                            setCopiedCurl(true);
-                            setTimeout(() => setCopiedCurl(false), 2000);
-                          }}
-                          className="px-2 py-0.5 border border-white/30 text-[10px] font-mono text-white/80 hover:text-white hover:border-[#00F5D4] transition cursor-pointer"
-                        >
-                          {copiedCurl ? "cURL Copied ✓" : "Copy cURL"}
-                        </button>
-                      </div>
-                    </div>
-
-                    <pre className="font-mono text-xs text-[#00F5D4] overflow-auto max-h-60 p-3 bg-[#0F1B3D] border border-white/10 leading-relaxed">
-                      {testerResponse
-                        ? JSON.stringify(testerResponse.body, null, 2)
-                        : `{\n  "status": "idle",\n  "driver": "${dataSource}",\n  "authenticated": true,\n  "authHeader": "Bearer admin123",\n  "message": "Click '▶ Send Live Request' above to test endpoints"\n}`}
-                    </pre>
-                  </div>
-                </div>
-
-                <div className="lg:col-span-5 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#00F5D4]">
-                      2. Database Schema &amp; Architecture
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        navigator.clipboard.writeText(PRISMA_SCHEMA);
-                        setCopiedSchema(true);
-                        setTimeout(() => setCopiedSchema(false), 2000);
-                      }}
-                      className="px-2 py-0.5 border border-white/30 text-[10px] font-mono text-white/80 hover:text-white hover:border-[#00F5D4] transition cursor-pointer"
-                    >
-                      {copiedSchema ? "Schema Copied ✓" : "Copy Schema"}
-                    </button>
-                  </div>
-
-                  <div className="border border-white/20 bg-[#0A1229] p-3">
-                    <div className="font-mono text-[10px] text-white/50 mb-2 uppercase tracking-wider">
-                      prisma/schema.prisma · PostgreSQL Model
-                    </div>
-                    <pre className="font-mono text-[11px] text-[#00F5D4] overflow-auto max-h-56 p-2 bg-[#0F1B3D] border border-white/10 leading-relaxed">
-                      {PRISMA_SCHEMA}
-                    </pre>
-                  </div>
-
-                  <div className="border border-white/20 overflow-x-auto bg-[#0A1229]">
-                    <table className="w-full text-left text-[11px] font-mono">
-                      <thead className="bg-white/10 border-b border-white/20">
-                        <tr>
-                          <th className="p-2.5 text-white">METRIC</th>
-                          <th className="p-2.5 text-[#FF3D88]">PHP + WORDPRESS</th>
-                          <th className="p-2.5 text-[#10B981]">NEXT.JS + POSTGRES</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-white/10 text-white/80">
-                        <tr>
-                          <td className="p-2.5 font-bold text-white">Runtime</td>
-                          <td className="p-2.5 text-[#FF3D88]">2 split servers</td>
-                          <td className="p-2.5 text-[#10B981]">Unified full-stack</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2.5 font-bold text-white">Security</td>
-                          <td className="p-2.5 text-[#FF3D88]">60k+ WP plugins</td>
-                          <td className="p-2.5 text-[#10B981]">Zod schema validated</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2.5 font-bold text-white">Type Safety</td>
-                          <td className="p-2.5 text-[#FF3D88]">Zero type safety</td>
-                          <td className="p-2.5 text-[#10B981]">End-to-end TS types</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2.5 font-bold text-white">Cache Reval</td>
-                          <td className="p-2.5 text-[#FF3D88]">Fragile cache purge</td>
-                          <td className="p-2.5 text-[#10B981]">revalidatePath()</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : null}
-
-        {mainView === "content" && (
-          <>
-            <div className="bg-white border-2 border-[#0F1B3D] shadow-[4px_4px_0px_0px_#0F1B3D] p-3 mb-6 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-3 flex-1 min-w-[280px]">
-                <div className="relative flex-1 max-w-md">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#0F1B3D]/50">
-                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <circle cx="11" cy="11" r="8" />
-                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                    </svg>
-                  </div>
-                  <input
-                    type="search"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Search by title, slug, category, or content..."
-                    className="w-full pl-9 pr-8 py-2 text-xs font-mono border-[1.5px] border-[#0F1B3D] bg-white focus:outline-none focus:border-[#FF3D88]"
-                  />
-                  {search && (
-                    <button
-                      type="button"
-                      onClick={() => setSearch("")}
-                      className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-[#0F1B3D]/60 hover:text-[#FF3D88] font-bold text-xs"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-
-                <select
-                  value={categoryFilter}
-                  onChange={(e) => setCategoryFilter(e.target.value)}
-                  className="px-3 py-2 text-xs font-bold text-[#0F1B3D] border-[1.5px] border-[#0F1B3D] bg-[#F4F6FB] focus:outline-none focus:border-[#FF3D88] cursor-pointer"
-                >
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex items-center gap-3 flex-wrap">
+              <input
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search by title, slug, category, or content..."
+                className="w-full pl-9 pr-8 py-2 text-xs font-mono border-[1.5px] border-[#0F1B3D] bg-white focus:outline-none focus:border-[#FF3D88]"
+              />
+              {search && (
                 <button
                   type="button"
-                  onClick={handleQuickSeed}
-                  disabled={seeding}
-                  className="px-3 py-2 text-xs font-mono font-bold bg-[#FFE4EF] text-[#FF3D88] border-[1.5px] border-[#0F1B3D] hover:bg-[#FF3D88] hover:text-white transition cursor-pointer flex items-center gap-1.5 shadow-[2px_2px_0px_#0F1B3D] active:translate-x-[1px] active:translate-y-[1px]"
+                  onClick={() => setSearch("")}
+                  className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-[#0F1B3D]/60 hover:text-[#FF3D88] font-bold text-xs"
                 >
-                  <span>⚡</span>
-                  <span>{seedSuccess ? "SEEDED ✓" : seeding ? "SEEDING..." : "Quick-Seed Demo Post"}</span>
+                  ✕
                 </button>
+              )}
+            </div>
 
-                <div className="flex items-center border-[1.5px] border-[#0F1B3D] bg-[#F4F6FB] p-0.5">
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className="px-3 py-2 text-xs font-bold text-[#0F1B3D] border-[1.5px] border-[#0F1B3D] bg-[#F4F6FB] focus:outline-none focus:border-[#FF3D88] cursor-pointer"
+            >
+              {CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex items-center border-[1.5px] border-[#0F1B3D] bg-[#F4F6FB] p-0.5">
                   <button
                     type="button"
                     onClick={() => setStatusFilter("all")}
-                    className={`px-3 py-1.5 text-xs font-mono uppercase font-bold transition-colors ${
-                      statusFilter === "all"
-                        ? "bg-[#0F1B3D] text-white"
-                        : "text-[#0F1B3D]/70 hover:text-[#0F1B3D]"
-                    }`}
+                    className={`px-3 py-1.5 text-xs font-mono uppercase font-bold transition-colors ${statusFilter === "all"
+                      ? "bg-[#0F1B3D] text-white"
+                      : "text-[#0F1B3D]/70 hover:text-[#0F1B3D]"
+                      }`}
                   >
                     ALL ({stats.total})
                   </button>
                   <button
                     type="button"
                     onClick={() => setStatusFilter("published")}
-                    className={`px-3 py-1.5 text-xs font-mono uppercase font-bold transition-colors ${
-                      statusFilter === "published"
-                        ? "bg-[#0F1B3D] text-white"
-                        : "text-[#0F1B3D]/70 hover:text-[#0F1B3D]"
-                    }`}
+                    className={`px-3 py-1.5 text-xs font-mono uppercase font-bold transition-colors ${statusFilter === "published"
+                      ? "bg-[#0F1B3D] text-white"
+                      : "text-[#0F1B3D]/70 hover:text-[#0F1B3D]"
+                      }`}
                   >
                     PUBLISHED ({stats.publishedCount})
                   </button>
                   <button
                     type="button"
                     onClick={() => setStatusFilter("draft")}
-                    className={`px-3 py-1.5 text-xs font-mono uppercase font-bold transition-colors ${
-                      statusFilter === "draft"
-                        ? "bg-[#0F1B3D] text-white"
-                        : "text-[#0F1B3D]/70 hover:text-[#0F1B3D]"
-                    }`}
+                    className={`px-3 py-1.5 text-xs font-mono uppercase font-bold transition-colors ${statusFilter === "draft"
+                      ? "bg-[#0F1B3D] text-white"
+                      : "text-[#0F1B3D]/70 hover:text-[#0F1B3D]"
+                      }`}
                   >
                     DRAFTS ({stats.draftCount})
                   </button>
@@ -1092,7 +580,7 @@ export default function AdminStudio() {
                     No articles match your search criteria
                   </div>
                   <p className="text-xs font-mono text-[#0F1B3D]/60 max-w-md mx-auto">
-                    Try searching for another keyword, select &quot;All Categories&quot;, or click Quick-Seed to create a new post instantly.
+                    Try searching for another keyword, select &quot;All Categories&quot;, or click &quot;+ New Article&quot; to write a post.
                   </p>
                   <button
                     type="button"
@@ -1165,20 +653,17 @@ export default function AdminStudio() {
                           title="Click to toggle Published/Draft via PUT /api/posts/[id]"
                         >
                           <div
-                            className={`w-9 h-5 rounded-full border border-[#0F1B3D] p-0.5 transition-colors relative flex items-center ${
-                              post.published ? "bg-[#10B981]" : "bg-[#CBD5E1]"
-                            }`}
+                            className={`w-9 h-5 rounded-full border border-[#0F1B3D] p-0.5 transition-colors relative flex items-center ${post.published ? "bg-[#10B981]" : "bg-[#CBD5E1]"
+                              }`}
                           >
                             <div
-                              className={`w-3.5 h-3.5 rounded-full bg-white shadow-sm border border-[#0F1B3D]/30 transition-transform ${
-                                post.published ? "translate-x-4" : "translate-x-0"
-                              }`}
+                              className={`w-3.5 h-3.5 rounded-full bg-white shadow-sm border border-[#0F1B3D]/30 transition-transform ${post.published ? "translate-x-4" : "translate-x-0"
+                                }`}
                             />
                           </div>
                           <span
-                            className={`text-xs font-mono font-bold ${
-                              post.published ? "text-[#10B981]" : "text-[#F59E0B]"
-                            }`}
+                            className={`text-xs font-mono font-bold ${post.published ? "text-[#10B981]" : "text-[#F59E0B]"
+                              }`}
                           >
                             {post.published ? "Live" : "Draft"}
                           </span>
@@ -1235,8 +720,6 @@ export default function AdminStudio() {
                 </div>
               )}
             </div>
-          </>
-        )}
       </main>
 
       {modalOpen && (
@@ -1360,11 +843,10 @@ export default function AdminStudio() {
                         key={cov.url}
                         type="button"
                         onClick={() => setFormCoverImage(cov.url)}
-                        className={`flex items-center gap-2 p-1.5 border transition-all text-left ${
-                          formCoverImage === cov.url
-                            ? "bg-[#FFE4EF] border-[#FF3D88] shadow-[2px_2px_0px_#FF3D88]"
-                            : "bg-white border-[#0F1B3D]/30 hover:border-[#0F1B3D]"
-                        }`}
+                        className={`flex items-center gap-2 p-1.5 border transition-all text-left ${formCoverImage === cov.url
+                          ? "bg-[#FFE4EF] border-[#FF3D88] shadow-[2px_2px_0px_#FF3D88]"
+                          : "bg-white border-[#0F1B3D]/30 hover:border-[#0F1B3D]"
+                          }`}
                       >
                         <img
                           src={cov.url}
@@ -1412,9 +894,8 @@ export default function AdminStudio() {
                     Live Card &amp; Reader Preview
                   </span>
                   <span
-                    className={`font-mono text-[10px] font-bold px-2 py-0.5 ${
-                      formPublished ? "bg-[#10B981] text-white" : "bg-[#F59E0B] text-white"
-                    }`}
+                    className={`font-mono text-[10px] font-bold px-2 py-0.5 ${formPublished ? "bg-[#10B981] text-white" : "bg-[#F59E0B] text-white"
+                      }`}
                   >
                     {formPublished ? "● LIVE" : "○ DRAFT"}
                   </span>

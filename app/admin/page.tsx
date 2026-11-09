@@ -3,7 +3,7 @@ import AdminStudio from "@/components/admin/AdminStudio";
 
 export const metadata: Metadata = {
   title: "Admin Studio — Tactyqal Labs Blog CMS",
-  description: "Internal content management system and REST API architecture inspector for Tactyqal Labs.",
+  description: "Internal content management studio for Tactyqal Labs.",
 };
 
 export default function AdminPage() {
