@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -39,6 +39,47 @@ function generateSlug(title: string) {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
+function compressImageToWebP(file: File): Promise<{ dataUrl: string; sizeKb: number }> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const maxWidth = 1200;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          reject(new Error("Canvas context failed"));
+          return;
+        }
+        ctx.drawImage(img, 0, 0, width, height);
+
+        let dataUrl = canvas.toDataURL("image/webp", 0.82);
+        if (!dataUrl.startsWith("data:image/webp")) {
+          dataUrl = canvas.toDataURL("image/jpeg", 0.82);
+        }
+
+        const sizeKb = Math.round((dataUrl.length * 3) / 4 / 1024);
+        resolve({ dataUrl, sizeKb });
+      };
+      img.onerror = reject;
+      img.src = e.target?.result as string;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 export default function AdminStudio() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [passwordInput, setPasswordInput] = useState("");
@@ -68,6 +109,9 @@ export default function AdminStudio() {
   const [formSlugManual, setFormSlugManual] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [uploadMeta, setUploadMeta] = useState<{ name: string; sizeKb: number } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const session = sessionStorage.getItem("tactyqal_admin_session");
@@ -127,7 +171,11 @@ export default function AdminStudio() {
     );
     setFormCategory("Ideas");
     setFormTags("startup, young founders, tactical");
-    setFormCoverImage("/extracted/blog-nocode.webp");
+    setFormCoverImage("https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80");
+    setUploadMeta(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
     setFormAuthor("Partha Chakraborty");
     setFormAuthorRole("Founder, Tactyqal Labs");
     setFormPublished(true);
@@ -145,13 +193,42 @@ export default function AdminStudio() {
     setFormContent(post.content);
     setFormCategory(post.category);
     setFormTags(Array.isArray(post.tags) ? post.tags.join(", ") : "");
-    setFormCoverImage(post.coverImage || "/extracted/blog-ele.webp");
+    const img = post.coverImage || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80";
+    setFormCoverImage(img);
+    if (img.startsWith("data:")) {
+      const sizeKb = Math.round((img.length * 3) / 4 / 1024);
+      setUploadMeta({ name: "Uploaded Image", sizeKb });
+    } else {
+      setUploadMeta(null);
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
     setFormAuthor(post.author || "Partha Chakraborty");
     setFormAuthorRole(post.authorRole || "Founder, Tactyqal Labs");
     setFormPublished(post.published);
     setFormFeatured(post.featured ?? false);
     setFormSlugManual(true);
     setModalOpen(true);
+  };
+
+  const handleImageFile = async (file: File) => {
+    if (!file.type.startsWith("image/")) return;
+    try {
+      const { dataUrl, sizeKb } = await compressImageToWebP(file);
+      setFormCoverImage(dataUrl);
+      setUploadMeta({ name: file.name, sizeKb });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleRemoveUpload = () => {
+    setUploadMeta(null);
+    setFormCoverImage("https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   useEffect(() => {
@@ -724,14 +801,14 @@ export default function AdminStudio() {
 
       {modalOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-hidden"
           onClick={() => setModalOpen(false)}
         >
           <div
-            className="relative w-full max-w-5xl bg-white border-2 border-[#0F1B3D] shadow-[10px_10px_0px_0px_#FF3D88] overflow-hidden my-auto"
+            className="relative w-full max-w-5xl max-h-[90vh] flex flex-col bg-white border-2 border-[#0F1B3D] shadow-[10px_10px_0px_0px_#FF3D88] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="bg-[#0F1B3D] text-white px-6 py-4 flex items-center justify-between border-b-2 border-[#0F1B3D]">
+            <div className="shrink-0 bg-[#0F1B3D] text-white px-6 py-4 flex items-center justify-between border-b-2 border-[#0F1B3D]">
               <div className="flex items-center gap-3">
                 <span className="px-2 py-0.5 bg-[#FF3D88] text-white font-mono text-[10px] font-bold uppercase tracking-wider">
                   ARTICLE STUDIO
@@ -754,8 +831,8 @@ export default function AdminStudio() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-12 max-h-[75vh]">
-              <div className="md:col-span-7 p-6 border-b md:border-b-0 md:border-r-[1.5px] border-[#0F1B3D] overflow-y-auto space-y-4">
+            <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-12 overflow-hidden">
+              <div className="md:col-span-7 overflow-y-auto p-6 space-y-5 border-b md:border-b-0 md:border-r-2 border-[#0F1B3D]">
                 <div>
                   <label className="block font-mono text-xs uppercase font-bold text-[#0F1B3D]/70 mb-1">
                     Article Title *
@@ -828,36 +905,135 @@ export default function AdminStudio() {
                 </div>
 
                 <div>
-                  <label className="block font-mono text-xs uppercase font-bold text-[#0F1B3D]/70 mb-1">
-                    Cover Image URL &amp; Preset Picker
-                  </label>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="block font-mono text-xs uppercase font-bold text-[#0F1B3D]/70">
+                      Cover Image (Upload from Computer or URL)
+                    </label>
+                    {uploadMeta && (
+                      <span className="font-mono text-[11px] text-[#00875A] font-bold bg-[#E3FCEF] px-2 py-0.5 border border-[#ABF5D1]">
+                        ✓ {uploadMeta.sizeKb} KB Compressed WebP
+                      </span>
+                    )}
+                  </div>
+
                   <input
-                    type="text"
-                    value={formCoverImage}
-                    onChange={(e) => setFormCoverImage(e.target.value)}
-                    className="w-full border-2 border-[#0F1B3D] px-3 py-2 font-mono text-xs bg-white mb-2 focus:outline-none focus:border-[#FF3D88]"
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleImageFile(file);
+                    }}
                   />
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                    {COVERS.map((cov) => (
-                      <button
-                        key={cov.url}
-                        type="button"
-                        onClick={() => setFormCoverImage(cov.url)}
-                        className={`flex items-center gap-2 p-1.5 border transition-all text-left ${formCoverImage === cov.url
-                          ? "bg-[#FFE4EF] border-[#FF3D88] shadow-[2px_2px_0px_#FF3D88]"
-                          : "bg-white border-[#0F1B3D]/30 hover:border-[#0F1B3D]"
-                          }`}
-                      >
-                        <img
-                          src={cov.url}
-                          alt={cov.label}
-                          className="w-8 h-6 object-cover border border-[#0F1B3D]/40 shrink-0"
-                        />
-                        <span className="text-[11px] font-mono truncate font-medium text-[#0F1B3D]">
-                          {cov.label}
-                        </span>
-                      </button>
-                    ))}
+
+                  <div
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setIsDragging(true);
+                    }}
+                    onDragLeave={() => setIsDragging(false)}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setIsDragging(false);
+                      const file = e.dataTransfer.files?.[0];
+                      if (file) handleImageFile(file);
+                    }}
+                    onClick={() => fileInputRef.current?.click()}
+                    className={`border-2 border-dashed p-4 text-center cursor-pointer transition-colors mb-3 ${
+                      isDragging
+                        ? "border-[#FF3D88] bg-[#FFE4EF]"
+                        : "border-[#0F1B3D]/40 bg-[#F4F6FB] hover:border-[#0F1B3D] hover:bg-white"
+                    }`}
+                  >
+                    {uploadMeta ? (
+                      <div className="flex items-center justify-between gap-3 text-left">
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={formCoverImage}
+                            alt="Upload preview"
+                            className="w-12 h-10 object-cover border border-[#0F1B3D] shrink-0"
+                          />
+                          <div>
+                            <p className="font-mono text-xs font-bold text-[#0F1B3D] truncate max-w-[220px] sm:max-w-[280px]">
+                              {uploadMeta.name}
+                            </p>
+                            <p className="font-mono text-[11px] text-[#00875A]">
+                              ✓ Ready for PostgreSQL ({uploadMeta.sizeKb} KB)
+                            </p>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveUpload();
+                          }}
+                          className="px-2.5 py-1 text-[11px] font-mono bg-white border border-[#EF4444] text-[#EF4444] hover:bg-[#EF4444] hover:text-white transition cursor-pointer font-bold shrink-0"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="py-2">
+                        <div className="font-mono text-xs font-bold text-[#0F1B3D] mb-0.5">
+                          + Upload Image from Device (PNG, JPG, WebP)
+                        </div>
+                        <div className="font-mono text-[11px] text-[#0F1B3D]/60">
+                          Drag &amp; drop or click to browse. Automatically compressed to WebP for PostgreSQL.
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <div>
+                      <span className="font-mono text-[11px] uppercase font-bold text-[#0F1B3D]/60 block mb-1">
+                        Or paste image URL:
+                      </span>
+                      <input
+                        type="text"
+                        value={formCoverImage.startsWith("data:") ? "" : formCoverImage}
+                        placeholder={formCoverImage.startsWith("data:") ? "Using uploaded local image" : "https://..."}
+                        onChange={(e) => {
+                          setUploadMeta(null);
+                          setFormCoverImage(e.target.value);
+                        }}
+                        className="w-full border-2 border-[#0F1B3D] px-3 py-1.5 font-mono text-xs bg-white focus:outline-none focus:border-[#FF3D88]"
+                      />
+                    </div>
+
+                    <div>
+                      <span className="font-mono text-[11px] uppercase font-bold text-[#0F1B3D]/60 block mb-1">
+                        Or pick a Tactyqal preset:
+                      </span>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        {COVERS.map((cov) => (
+                          <button
+                            key={cov.url}
+                            type="button"
+                            onClick={() => {
+                              setUploadMeta(null);
+                              setFormCoverImage(cov.url);
+                            }}
+                            className={`flex items-center gap-2 p-1.5 border transition-all text-left ${
+                              formCoverImage === cov.url
+                                ? "bg-[#FFE4EF] border-[#FF3D88] shadow-[2px_2px_0px_#FF3D88]"
+                                : "bg-white border-[#0F1B3D]/30 hover:border-[#0F1B3D]"
+                            }`}
+                          >
+                            <img
+                              src={cov.url}
+                              alt={cov.label}
+                              className="w-8 h-6 object-cover border border-[#0F1B3D]/40 shrink-0"
+                            />
+                            <span className="text-[11px] font-mono truncate font-medium text-[#0F1B3D]">
+                              {cov.label}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -874,28 +1050,29 @@ export default function AdminStudio() {
                   />
                 </div>
 
-                <div>
+                <div className="pb-4">
                   <label className="block font-mono text-xs uppercase font-bold text-[#0F1B3D]/70 mb-1">
                     Full Article Content (Markdown supported) *
                   </label>
                   <textarea
-                    rows={10}
+                    rows={8}
                     value={formContent}
                     onChange={(e) => setFormContent(e.target.value)}
                     placeholder="## Introduction\n\nWrite your multi-paragraph content with Markdown..."
-                    className="w-full border-2 border-[#0F1B3D] p-3 font-mono text-xs leading-relaxed bg-white focus:outline-none focus:border-[#FF3D88]"
+                    className="w-full border-2 border-[#0F1B3D] p-3 font-mono text-xs leading-relaxed bg-white focus:outline-none focus:border-[#FF3D88] resize-y"
                   />
                 </div>
               </div>
 
-              <div className="md:col-span-5 p-6 bg-[#F4F6FB] overflow-y-auto flex flex-col gap-4">
+              <div className="md:col-span-5 p-6 bg-[#F4F6FB] overflow-y-auto space-y-4">
                 <div className="flex items-center justify-between pb-2 border-b border-[#0F1B3D]/20">
                   <span className="font-mono text-xs uppercase font-bold text-[#0F1B3D]/70">
                     Live Card &amp; Reader Preview
                   </span>
                   <span
-                    className={`font-mono text-[10px] font-bold px-2 py-0.5 ${formPublished ? "bg-[#10B981] text-white" : "bg-[#F59E0B] text-white"
-                      }`}
+                    className={`font-mono text-[10px] font-bold px-2 py-0.5 ${
+                      formPublished ? "bg-[#10B981] text-white" : "bg-[#F59E0B] text-white"
+                    }`}
                   >
                     {formPublished ? "● LIVE" : "○ DRAFT"}
                   </span>
@@ -908,7 +1085,8 @@ export default function AdminStudio() {
                       alt="Preview"
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80";
+                        (e.target as HTMLImageElement).src =
+                          "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80";
                       }}
                     />
                   </div>
@@ -944,9 +1122,9 @@ export default function AdminStudio() {
               </div>
             </div>
 
-            <div className="bg-white border-t-2 border-[#0F1B3D] px-6 py-4 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-4">
-                <label className="flex items-center gap-2 cursor-pointer font-mono text-xs uppercase font-bold text-[#0F1B3D]">
+            <div className="shrink-0 bg-white border-t-2 border-[#0F1B3D] px-6 py-4 flex flex-wrap items-center justify-between gap-4 z-20">
+              <div className="flex items-center gap-5">
+                <label className="flex items-center gap-2 cursor-pointer font-mono text-xs uppercase font-bold text-[#0F1B3D] select-none">
                   <input
                     type="checkbox"
                     checked={formPublished}
@@ -955,7 +1133,7 @@ export default function AdminStudio() {
                   />
                   <span>Publish Immediately</span>
                 </label>
-                <label className="flex items-center gap-2 cursor-pointer font-mono text-xs uppercase font-bold text-[#0F1B3D]">
+                <label className="flex items-center gap-2 cursor-pointer font-mono text-xs uppercase font-bold text-[#0F1B3D] select-none">
                   <input
                     type="checkbox"
                     checked={formFeatured}
@@ -970,7 +1148,7 @@ export default function AdminStudio() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 font-mono text-xs border border-[#0F1B3D] text-[#0F1B3D] hover:bg-[#F4F6FB] transition"
+                  className="px-4 py-2 font-mono text-xs border border-[#0F1B3D] text-[#0F1B3D] hover:bg-[#F4F6FB] transition cursor-pointer"
                 >
                   Cancel
                 </button>

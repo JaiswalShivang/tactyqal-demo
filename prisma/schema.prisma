@@ -13,7 +13,7 @@ model Post {
   slug       String   @unique
   excerpt    String
   content    String   @db.Text
-  coverImage String?
+  coverImage String?  @db.Text
   category   String
   tags       String[]
   author     String   @default("Partha Chakraborty")
