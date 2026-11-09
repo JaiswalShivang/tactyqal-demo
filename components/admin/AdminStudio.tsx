@@ -7,9 +7,6 @@ import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
 import type { Post } from "@/lib/types";
 
-type Tab = "posts" | "new" | "edit";
-type InspectorSubTab = "tester" | "schema" | "architecture";
-
 const COVERS = [
   { label: "Elevator Pitch", url: "/extracted/blog-ele.webp" },
   { label: "Startup Team", url: "/extracted/blog-startup.webp" },
@@ -19,7 +16,16 @@ const COVERS = [
   { label: "Gen-Z Founders", url: "/extracted/blog-genz.webp" },
 ];
 
-const CATEGORIES = ["Pitching", "Team Building", "Strategy", "Ideas", "AgriTech", "EdTech", "No-Code"];
+const CATEGORIES = [
+  "All Categories",
+  "Ideas",
+  "Pitching",
+  "Team Building",
+  "Strategy",
+  "AgriTech",
+  "EdTech",
+  "No-Code",
+];
 
 const PRISMA_SCHEMA = `model Post {
   id          String   @id @default(cuid())
@@ -59,14 +65,16 @@ export default function AdminStudio() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("All");
+  const [categoryFilter, setCategoryFilter] = useState("All Categories");
   const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft">("all");
-  const [tab, setTab] = useState<Tab>("posts");
+  const [mainView, setMainView] = useState<"content" | "inspector">("content");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<"create" | "edit">("create");
   const [editingPost, setEditingPost] = useState<Post | null>(null);
-  const [inspectorOpen, setInspectorOpen] = useState(false);
-  const [inspectorTab, setInspectorTab] = useState<InspectorSubTab>("tester");
-  const [dataSource, setDataSource] = useState("file");
-  const [latency, setLatency] = useState(12);
+  const [dataSource, setDataSource] = useState("prisma");
+  const [latency, setLatency] = useState(14);
+  const [seeding, setSeeding] = useState(false);
+  const [seedSuccess, setSeedSuccess] = useState(false);
 
   const [formTitle, setFormTitle] = useState("");
   const [formSlug, setFormSlug] = useState("");
@@ -91,7 +99,7 @@ export default function AdminStudio() {
         title: "How Indian Teen Founders Are Raising Pre-Seed Grants",
         category: "Strategy",
         excerpt: "A tactical breakdown of teenage entrepreneurs winning state and venture grants without writing code.",
-        content: "## The Shift in Youth Entrepreneurship\\n\\nIndian teenage founders are bypassing traditional gatekeepers by leveraging no-code and agentic AI tools to build working MVPs in weeks.\\n\\n## Key Takeaways\\n\\n- Focus on real customer problem discovery before tech stack selection\\n- Deploy functional prototypes with Supabase and FlutterFlow\\n- Pitch traction over theoretical metrics",
+        content: "## The Shift in Youth Entrepreneurship\n\nIndian teenage founders are bypassing traditional gatekeepers by leveraging no-code and agentic AI tools to build working MVPs in weeks.\n\n## Key Takeaways\n\n- Focus on real customer problem discovery before tech stack selection\n- Deploy functional prototypes with Supabase and FlutterFlow\n- Pitch traction over theoretical metrics",
         tags: ["grants", "teen founders", "funding"],
         coverImage: "/extracted/blog-ele.webp",
         published: true,
@@ -117,7 +125,7 @@ export default function AdminStudio() {
       const res = await fetch("/api/posts?status=all&limit=100");
       const elapsed = Date.now() - start;
       setLatency(elapsed);
-      const ds = res.headers.get("x-data-source") ?? "file";
+      const ds = res.headers.get("x-data-source") ?? "prisma";
       setDataSource(ds);
       const json = (await res.json()) as { data?: Post[]; count?: number };
       if (json.data && Array.isArray(json.data)) {
@@ -136,11 +144,12 @@ export default function AdminStudio() {
 
   const handleOpenCreate = () => {
     setEditingPost(null);
+    setModalMode("create");
     setFormTitle("");
     setFormSlug("");
     setFormExcerpt("");
     setFormContent(
-      "## Executive Summary\\n\\nWrite the core thesis of your startup article here...\\n\\n## Tactical Framework\\n\\n1. Step one for young founders\\n2. Step two for scaling without code\\n3. Step three for customer acquisition\\n\\n## Conclusion\\n\\nFinal actionable advice for builders."
+      "## Executive Summary\n\nWrite the core thesis of your startup article here...\n\n## Tactical Framework\n\n1. Step one for young founders\n2. Step two for scaling without code\n3. Step three for customer acquisition\n\n## Conclusion\n\nFinal actionable advice for builders."
     );
     setFormCategory("Ideas");
     setFormTags("startup, young founders, tactical");
@@ -150,11 +159,12 @@ export default function AdminStudio() {
     setFormPublished(true);
     setFormFeatured(false);
     setFormSlugManual(false);
-    setTab("new");
+    setModalOpen(true);
   };
 
   const handleOpenEdit = (post: Post) => {
     setEditingPost(post);
+    setModalMode("edit");
     setFormTitle(post.title);
     setFormSlug(post.slug);
     setFormExcerpt(post.excerpt);
@@ -167,7 +177,7 @@ export default function AdminStudio() {
     setFormPublished(post.published);
     setFormFeatured(post.featured ?? false);
     setFormSlugManual(true);
-    setTab("edit");
+    setModalOpen(true);
   };
 
   useEffect(() => {
@@ -197,7 +207,7 @@ export default function AdminStudio() {
         featured: formFeatured,
       };
 
-      if (tab === "edit" && editingPost) {
+      if (modalMode === "edit" && editingPost) {
         await fetch(`/api/posts/${editingPost.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -212,7 +222,7 @@ export default function AdminStudio() {
       }
 
       await fetchPosts();
-      setTab("posts");
+      setModalOpen(false);
       setEditingPost(null);
     } catch (err) {
       console.error(err);
@@ -249,6 +259,41 @@ export default function AdminStudio() {
     }
   };
 
+  const handleQuickSeed = async () => {
+    setSeeding(true);
+    try {
+      const randomId = Math.floor(Math.random() * 900 + 100);
+      const payload = {
+        title: `Teen Founder Playbook: 0 to ₹1 Lakh ARR in 60 Days #${randomId}`,
+        slug: `teen-founder-playbook-${Date.now().toString().slice(-4)}`,
+        category: "Ideas",
+        excerpt: "How high school builders are launching micro-SaaS and agency tooling using no-code, Next.js, and AI automation.",
+        content: "## The New Era of Teenage Software Founders\n\nHigh-schoolers today don't need years of theoretical computer science to launch viable commercial software. By pairing modern no-code workflows with AI tools and rigorous customer discovery, teenage founders are launching revenue-generating applications in 8 weeks.\n\n### The 3 Core Tenets\n\n1. **Obsess Over One Pain Point:** Avoid building massive platforms. Solve one painful friction for local businesses or peers.\n2. **Deploy Rapid Prototypes:** Use Supabase, Tailwind, and Next.js to reach production in under two weeks.\n3. **Charge From Day One:** Real validation is not email signups; it is revenue.\n\n> The best way to learn entrepreneurship is to ship software that people pay for.",
+        coverImage: "/extracted/blog-startup.webp",
+        tags: ["playbook", "teen founders", "revenue"],
+        author: "Partha Chakraborty",
+        authorRole: "Founder, Tactyqal Labs",
+        readTime: 4,
+        published: true,
+        featured: false,
+      };
+
+      await fetch("/api/posts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      await fetchPosts();
+      setSeedSuccess(true);
+      setTimeout(() => setSeedSuccess(false), 2500);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSeeding(false);
+    }
+  };
+
   const filteredPosts = useMemo(() => {
     return posts.filter((p) => {
       const q = search.trim().toLowerCase();
@@ -256,9 +301,10 @@ export default function AdminStudio() {
         !q ||
         p.title.toLowerCase().includes(q) ||
         p.slug.toLowerCase().includes(q) ||
-        p.excerpt.toLowerCase().includes(q);
+        p.excerpt.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q);
       const matchesCat =
-        categoryFilter === "All" ||
+        categoryFilter === "All Categories" ||
         p.category.toLowerCase() === categoryFilter.toLowerCase();
       const matchesStatus =
         statusFilter === "all" ||
@@ -275,18 +321,21 @@ export default function AdminStudio() {
     return { total, publishedCount, draftCount };
   }, [posts]);
 
-  const runTesterRequest = async () => {
+  const runTesterRequest = async (overrideMethod?: string, overrideUrl?: string, overrideBody?: string) => {
     setTesterLoading(true);
+    const method = overrideMethod || testerMethod;
+    const url = overrideUrl || testerUrl;
+    const bodyPayload = overrideBody !== undefined ? overrideBody : testerBody;
     const start = Date.now();
     try {
       const opts: RequestInit = {
-        method: testerMethod,
+        method,
         headers: { "Content-Type": "application/json" },
       };
-      if (["POST", "PUT", "PATCH"].includes(testerMethod) && testerBody) {
-        opts.body = testerBody;
+      if (["POST", "PUT", "PATCH"].includes(method) && bodyPayload) {
+        opts.body = bodyPayload;
       }
-      const res = await fetch(testerUrl, opts);
+      const res = await fetch(url, opts);
       const time = Date.now() - start;
       const headers: Record<string, string> = {};
       res.headers.forEach((v, k) => {
@@ -294,7 +343,7 @@ export default function AdminStudio() {
       });
       const body = await res.json();
       setTesterResponse({ status: res.status, time, headers, body });
-      if (["POST", "PUT", "PATCH", "DELETE"].includes(testerMethod)) {
+      if (["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
         fetchPosts();
       }
     } catch (e) {
@@ -323,406 +372,743 @@ export default function AdminStudio() {
 
   return (
     <div className="min-h-screen bg-[#F4F6FB] text-[#0F1B3D] selection:bg-[#FF3D88] selection:text-white">
-      <header className="bg-[#0F1B3D] text-white border-b-2 border-[#0F1B3D] sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              className="font-extrabold text-sm tracking-tight text-white hover:text-[#00F5D4] transition-colors"
+      <header className="bg-[#0F1B3D] text-white border-b-2 border-[#0F1B3D] px-4 sm:px-6 h-16 flex items-center justify-between sticky top-0 z-40">
+        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+          <Link
+            href="/"
+            className="font-display font-extrabold text-base tracking-tight text-white hover:text-[#00F5D4] transition whitespace-nowrap"
+          >
+            TACTYQAL
+          </Link>
+          <span className="px-2 py-0.5 bg-[#FF3D88] text-white font-mono text-[10px] font-bold uppercase tracking-wider whitespace-nowrap">
+            CMS v2.0
+          </span>
+          <span className="text-white/20 hidden xl:inline-block">/</span>
+          <span className="text-xs font-mono text-white/70 hidden xl:inline-block whitespace-nowrap">
+            Blog Backend &amp; Content Studio
+          </span>
+          <span className="px-2.5 py-1 bg-[#162654] border border-white/15 text-[11px] font-mono text-[#00F5D4] hidden md:flex items-center gap-1.5 whitespace-nowrap">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00F5D4] animate-pulse" />
+            DB Ready • {latency}ms
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <div className="flex border border-white/20 bg-[#162654]/80 p-0.5">
+            <button
+              onClick={() => setMainView("content")}
+              className={`px-3 py-1.5 text-xs font-mono font-bold whitespace-nowrap transition-colors ${
+                mainView === "content"
+                  ? "bg-[#00F5D4] text-[#0F1B3D]"
+                  : "text-white/80 hover:text-white"
+              }`}
             >
-              TACTYQAL LABS
-            </Link>
-            <span className="text-white/20">/</span>
-            <span className="font-mono text-xs uppercase tracking-wider text-white/80 hidden sm:inline">
-              INTERNAL CMS // BLOG BACKEND v2.0 (REPLACING WORDPRESS)
-            </span>
+              Content Manager
+            </button>
+            <button
+              onClick={() => setMainView("inspector")}
+              className={`px-3 py-1.5 text-xs font-mono font-bold whitespace-nowrap flex items-center gap-1.5 transition-colors ${
+                mainView === "inspector"
+                  ? "bg-[#00F5D4] text-[#0F1B3D]"
+                  : "text-white/80 hover:text-white"
+              }`}
+            >
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <polyline points="4 17 10 11 4 5" />
+                <line x1="12" y1="19" x2="20" y2="19" />
+              </svg>
+              <span>API &amp; Schema Inspector</span>
+            </button>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="hidden lg:flex items-center gap-2 bg-white/10 px-3 py-1.5 border border-white/20">
-              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-              <span className="font-mono text-[11px] text-white">
-                {dataSource === "prisma" ? "PRISMA + POSTGRESQL" : "FILE STORE (data/posts.json)"} · {latency}ms
-              </span>
-            </div>
+          <Link
+            href="/"
+            target="_blank"
+            className="px-3 py-2 text-xs font-mono bg-[#162654] hover:bg-white hover:text-[#0F1B3D] border border-white/20 transition whitespace-nowrap hidden lg:inline-flex items-center gap-1"
+          >
+            <span>Public Site</span>
+            <span>↗</span>
+          </Link>
 
-            <button
-              onClick={() => setInspectorOpen(!inspectorOpen)}
-              className={`font-mono text-xs px-3 py-1.5 border transition-all ${inspectorOpen
-                  ? "bg-[#00F5D4] text-[#0F1B3D] border-[#00F5D4] font-bold"
-                  : "border-white/30 text-white hover:border-[#00F5D4] hover:text-[#00F5D4]"
-                }`}
-            >
-              {inspectorOpen ? "✕ CLOSE INSPECTOR" : "⚙ API & SCHEMA INSPECTOR"}
-            </button>
+          <Link
+            href="/blog"
+            target="_blank"
+            className="px-3 py-2 text-xs font-mono bg-[#162654] hover:bg-white hover:text-[#0F1B3D] border border-white/20 transition whitespace-nowrap hidden md:inline-flex items-center gap-1"
+          >
+            <span>/blog</span>
+            <span>↗</span>
+          </Link>
 
-            <Link
-              href="/blog"
-              target="_blank"
-              className="font-mono text-xs px-3 py-1.5 border border-white/30 text-white hover:border-white transition-colors hidden md:inline-block"
-            >
-              VIEW PUBLIC BLOG ↗
-            </Link>
-
-            <button
-              onClick={handleOpenCreate}
-              className="bg-[#FF3D88] hover:bg-[#E62E76] text-white font-bold text-xs uppercase font-mono px-4 py-2 border-2 border-white shadow-[2px_2px_0px_#0F1B3D] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
-            >
-              + NEW ARTICLE
-            </button>
-          </div>
+          <button
+            onClick={handleOpenCreate}
+            className="px-4 py-2 bg-[#FF3D88] hover:bg-[#e62e76] text-white text-xs font-bold uppercase tracking-wider shadow-[3px_3px_0px_0px_#FFFFFF] whitespace-nowrap active:translate-x-[1px] active:translate-y-[1px] transition cursor-pointer"
+          >
+            + New Article
+          </button>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white border-2 border-[#0F1B3D] p-4 shadow-[3px_3px_0px_#0F1B3D]">
-            <div className="font-mono text-[11px] uppercase tracking-wider text-[#0F1B3D]/60 mb-1">
-              TOTAL ARTICLES
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
+          <div
+            onClick={() => {
+              setStatusFilter("all");
+              setMainView("content");
+            }}
+            className="bg-white border-2 border-[#0F1B3D] shadow-[4px_4px_0px_0px_#0F1B3D] p-5 relative overflow-hidden cursor-pointer transition hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[5px_5px_0px_0px_#0F1B3D]"
+          >
+            <div className="absolute top-0 left-0 right-0 h-1 bg-[#0F1B3D]" />
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-mono font-bold text-[#0F1B3D]/70 tracking-wider">
+                TOTAL ARTICLES
+              </span>
+              <div className="w-7 h-7 bg-[#F4F6FB] border border-[#0F1B3D] flex items-center justify-center text-[#0F1B3D]">
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <polyline points="10 9 9 9 8 9" />
+                </svg>
+              </div>
             </div>
-            <div className="font-extrabold text-3xl font-display">{stats.total}</div>
-            <div className="font-mono text-[11px] text-[#0F1B3D]/50 mt-1">
-              Pre-seeded multi-paragraph guides
+            <div className="text-3xl font-extrabold font-display text-[#0F1B3D] mb-1">
+              {stats.total}
+            </div>
+            <div className="text-xs text-[#0F1B3D]/60 font-sans">
+              Click to view all {stats.total} articles
             </div>
           </div>
 
-          <div className="bg-white border-2 border-[#0F1B3D] p-4 shadow-[3px_3px_0px_#0F1B3D]">
-            <div className="font-mono text-[11px] uppercase tracking-wider text-[#0F1B3D]/60 mb-1">
-              PUBLISHED LIVE
+          <div
+            onClick={() => {
+              setStatusFilter("published");
+              setMainView("content");
+            }}
+            className="bg-white border-2 border-[#0F1B3D] shadow-[4px_4px_0px_0px_#0F1B3D] p-5 relative overflow-hidden cursor-pointer transition hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[5px_5px_0px_0px_#0F1B3D]"
+          >
+            <div className="absolute top-0 left-0 right-0 h-1 bg-[#10B981]" />
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-mono font-bold text-[#0F1B3D]/70 tracking-wider">
+                PUBLISHED LIVE
+              </span>
+              <div className="w-7 h-7 bg-[#E8F8F3] border border-[#10B981] flex items-center justify-center text-[#10B981]">
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+              </div>
             </div>
-            <div className="font-extrabold text-3xl font-display text-[#10B981]">
+            <div className="text-3xl font-extrabold font-display text-[#10B981] mb-1">
               {stats.publishedCount}
             </div>
-            <div className="font-mono text-[11px] text-[#0F1B3D]/50 mt-1">
+            <div className="text-xs text-[#0F1B3D]/60 font-sans">
               Serving /blog &amp; homepage feed
             </div>
           </div>
 
-          <div className="bg-white border-2 border-[#0F1B3D] p-4 shadow-[3px_3px_0px_#0F1B3D]">
-            <div className="font-mono text-[11px] uppercase tracking-wider text-[#0F1B3D]/60 mb-1">
-              DRAFTS / HIDDEN
+          <div
+            onClick={() => {
+              setStatusFilter("draft");
+              setMainView("content");
+            }}
+            className="bg-white border-2 border-[#0F1B3D] shadow-[4px_4px_0px_0px_#0F1B3D] p-5 relative overflow-hidden cursor-pointer transition hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[5px_5px_0px_0px_#0F1B3D]"
+          >
+            <div className="absolute top-0 left-0 right-0 h-1 bg-[#FF3D88]" />
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-mono font-bold text-[#0F1B3D]/70 tracking-wider">
+                DRAFTS / HIDDEN
+              </span>
+              <div className="w-7 h-7 bg-[#FFE4EF] border border-[#FF3D88] flex items-center justify-center text-[#FF3D88]">
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                  <line x1="1" y1="1" x2="23" y2="23" />
+                </svg>
+              </div>
             </div>
-            <div className="font-extrabold text-3xl font-display text-[#FF3D88]">
+            <div className="text-3xl font-extrabold font-display text-[#FF3D88] mb-1">
               {stats.draftCount}
             </div>
-            <div className="font-mono text-[11px] text-[#0F1B3D]/50 mt-1">
-              Visible only in Admin Studio
+            <div className="text-xs text-[#0F1B3D]/60 font-sans">
+              Visible only in internal Admin Studio
             </div>
           </div>
 
-          <div className="bg-white border-2 border-[#0F1B3D] p-4 shadow-[3px_3px_0px_#0F1B3D]">
-            <div className="font-mono text-[11px] uppercase tracking-wider text-[#0F1B3D]/60 mb-1">
-              REST API STATUS
+          <div
+            onClick={() => setMainView("inspector")}
+            className="bg-white border-2 border-[#0F1B3D] shadow-[4px_4px_0px_0px_#0F1B3D] p-5 relative overflow-hidden cursor-pointer transition hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[5px_5px_0px_0px_#0F1B3D]"
+          >
+            <div className="absolute top-0 left-0 right-0 h-1 bg-[#3B82F6]" />
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-mono font-bold text-[#0F1B3D]/70 tracking-wider">
+                REST API &amp; DB ENGINE
+              </span>
+              <div className="w-7 h-7 bg-[#EFF6FF] border border-[#3B82F6] flex items-center justify-center text-[#3B82F6]">
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                </svg>
+              </div>
             </div>
-            <div className="font-extrabold text-xl font-display flex items-center gap-2 text-[#10B981]">
-              <span className="w-3 h-3 rounded-full bg-[#10B981] animate-pulse" />
+            <div className="text-xl font-extrabold font-display text-[#10B981] flex items-center gap-2 mb-1">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse" />
               ONLINE
             </div>
-            <div className="font-mono text-[11px] text-[#0F1B3D]/60 mt-1">
-              GET · POST · PUT · DELETE · PATCH
+            <div className="text-xs text-[#0F1B3D]/60 font-mono truncate">
+              {dataSource === "prisma" ? "PostgreSQL • Prisma" : "Hybrid Store"} · {latency}ms
             </div>
           </div>
         </div>
 
-        {inspectorOpen && (
-          <div className="bg-[#0F1B3D] text-white border-2 border-[#0F1B3D] shadow-[5px_5px_0px_#0F1B3D] mb-8 overflow-hidden">
-            <div className="border-b border-white/10 px-5 py-3 flex flex-wrap items-center justify-between gap-3 bg-[#0A1229]">
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-xs uppercase text-[#00F5D4] font-bold">
-                  INTERACTIVE REST API &amp; DATABASE INSPECTOR
-                </span>
-                <span className="font-mono text-[11px] text-white/50">
-                  {dataSource.toUpperCase()} DRIVER
-                </span>
+        {mainView === "inspector" ? (
+          <div className="space-y-6">
+            <div className="bg-[#0F1B3D] text-white border-2 border-[#0F1B3D] shadow-[6px_6px_0px_0px_#FF3D88] p-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/15 mb-6">
+                <div>
+                  <div className="inline-flex items-center gap-2 px-2.5 py-0.5 bg-[#FF3D88] text-white font-mono text-[10px] font-bold uppercase tracking-wider mb-2">
+                    TASK 2 ENGINEERING SHOWCASE
+                  </div>
+                  <h2 className="text-2xl font-display font-extrabold text-white">
+                    REST API &amp; Relational Schema Inspector
+                  </h2>
+                  <p className="text-xs font-mono text-white/70 mt-1">
+                    Direct architectural replacement for legacy PHP CodeIgniter + WordPress REST endpoints.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setMainView("content")}
+                  className="px-4 py-2 bg-white text-[#0F1B3D] font-mono text-xs font-bold border border-white hover:bg-[#00F5D4] transition shrink-0"
+                >
+                  ← Back to Content Manager
+                </button>
               </div>
-              <div className="flex border border-white/20">
-                {(["tester", "schema", "architecture"] as InspectorSubTab[]).map((st) => (
-                  <button
-                    key={st}
-                    onClick={() => setInspectorTab(st)}
-                    className={`font-mono text-xs px-4 py-1.5 uppercase transition-colors ${inspectorTab === st
-                        ? "bg-[#00F5D4] text-[#0F1B3D] font-bold"
-                        : "text-white/70 hover:text-white hover:bg-white/10"
-                      }`}
-                  >
-                    {st === "tester"
-                      ? "REST API Tester"
-                      : st === "schema"
-                        ? "Prisma Schema"
-                        : "Architecture vs WordPress"}
-                  </button>
-                ))}
-              </div>
-            </div>
 
-            <div className="p-5">
-              {inspectorTab === "tester" && (
-                <div className="space-y-4">
-                  <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <div className="lg:col-span-7 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#00F5D4]">
+                      1. Interactive REST API Endpoint Tester
+                    </span>
+                    <span className="text-[11px] font-mono text-white/50">
+                      Live Next.js Route Handlers
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {[
                       {
-                        label: "GET All Posts (status=all)",
                         method: "GET",
-                        url: "/api/posts?status=all&limit=10",
+                        badgeClass: "bg-[#3B82F6] text-white",
+                        endpoint: "/api/posts",
+                        desc: "List all articles with status & limit filters",
+                        run: () => {
+                          setTesterMethod("GET");
+                          setTesterUrl("/api/posts?status=all&limit=6");
+                          runTesterRequest("GET", "/api/posts?status=all&limit=6");
+                        },
                       },
                       {
-                        label: "GET Published Only",
-                        method: "GET",
-                        url: "/api/posts?status=published&limit=6",
-                      },
-                      {
-                        label: "GET Single Post by Slug",
-                        method: "GET",
-                        url: "/api/posts/50-no-code-startup-app-ideas",
-                      },
-                      {
-                        label: "POST Create Article",
                         method: "POST",
-                        url: "/api/posts",
+                        badgeClass: "bg-[#10B981] text-white",
+                        endpoint: "/api/posts",
+                        desc: "Create new article with Zod schema validation",
+                        run: () => {
+                          setTesterMethod("POST");
+                          setTesterUrl("/api/posts");
+                          const sample = JSON.stringify(
+                            {
+                              title: `Live API Test Article #${Math.floor(Math.random() * 900 + 100)}`,
+                              slug: `live-api-test-${Date.now().toString().slice(-4)}`,
+                              category: "Strategy",
+                              excerpt: "Engineered via live POST route tester in Tactyqal Admin CMS.",
+                              content: "## Generated via Live POST Tester\n\nFull-stack verification of JSON payload parsing, Zod validation, and database mutation.",
+                              tags: ["test", "api"],
+                              coverImage: "/extracted/blog-ele.webp",
+                              published: true,
+                            },
+                            null,
+                            2
+                          );
+                          setTesterBody(sample);
+                          runTesterRequest("POST", "/api/posts", sample);
+                        },
                       },
                       {
-                        label: "PUT Toggle Publish Status",
                         method: "PUT",
-                        url: posts[0] ? `/api/posts/${posts[0].id}` : "/api/posts",
+                        badgeClass: "bg-[#F59E0B] text-[#0F1B3D]",
+                        endpoint: "/api/posts/[id]",
+                        desc: "Update post fields or toggle published state",
+                        run: () => {
+                          const target = posts[0];
+                          const url = target ? `/api/posts/${target.id}` : "/api/posts";
+                          setTesterMethod("PUT");
+                          setTesterUrl(url);
+                          const sample = JSON.stringify(
+                            { published: target ? !target.published : true, featured: false },
+                            null,
+                            2
+                          );
+                          setTesterBody(sample);
+                          runTesterRequest("PUT", url, sample);
+                        },
                       },
                       {
-                        label: "DELETE Post",
                         method: "DELETE",
-                        url: posts[0] ? `/api/posts/${posts[0].id}` : "/api/posts",
+                        badgeClass: "bg-[#EF4444] text-white",
+                        endpoint: "/api/posts/[id]",
+                        desc: "Delete article by UUID or CUID identifier",
+                        run: () => {
+                          const target = posts[posts.length - 1];
+                          const url = target ? `/api/posts/${target.id}` : "/api/posts";
+                          setTesterMethod("DELETE");
+                          setTesterUrl(url);
+                          runTesterRequest("DELETE", url);
+                        },
                       },
-                    ].map((preset) => (
-                      <button
-                        key={preset.label}
-                        onClick={() => {
-                          setTesterMethod(preset.method);
-                          setTesterUrl(preset.url);
-                          if (preset.method === "PUT" && posts[0]) {
-                            setTesterBody(
-                              JSON.stringify(
-                                { published: !posts[0].published, title: posts[0].title },
-                                null,
-                                2
-                              )
-                            );
-                          }
-                        }}
-                        className="font-mono text-xs px-3 py-1.5 border border-white/30 bg-white/5 hover:bg-[#00F5D4] hover:text-[#0F1B3D] hover:border-[#00F5D4] transition-colors"
+                    ].map((ep) => (
+                      <div
+                        key={ep.method + ep.endpoint}
+                        className="p-3 bg-[#162654] border border-[#263B73] flex flex-col justify-between"
                       >
-                        {preset.label}
-                      </button>
+                        <div>
+                          <div className="flex items-center gap-2 mb-1.5">
+                            <span className={`px-2 py-0.5 text-[10px] font-mono font-bold ${ep.badgeClass}`}>
+                              {ep.method}
+                            </span>
+                            <span className="font-mono text-xs font-bold text-white truncate">
+                              {ep.endpoint}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-white/60 font-sans line-clamp-1 mb-2.5">
+                            {ep.desc}
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={ep.run}
+                          disabled={testerLoading}
+                          className="w-full py-1.5 px-2 bg-white/10 hover:bg-[#FF3D88] text-white font-mono text-[11px] font-bold border border-white/20 transition flex items-center justify-center gap-1.5"
+                        >
+                          <span>▶</span>
+                          <span>Send Live Request</span>
+                        </button>
+                      </div>
                     ))}
                   </div>
 
-                  <div className="flex gap-2">
-                    <select
-                      value={testerMethod}
-                      onChange={(e) => setTesterMethod(e.target.value)}
-                      className="font-mono text-xs bg-[#162654] text-white border border-[#263B73] px-3 py-2.5 font-bold"
-                    >
-                      {["GET", "POST", "PUT", "PATCH", "DELETE"].map((m) => (
-                        <option key={m} value={m}>
-                          {m}
-                        </option>
-                      ))}
-                    </select>
-
-                    <input
-                      type="text"
-                      value={testerUrl}
-                      onChange={(e) => setTesterUrl(e.target.value)}
-                      className="flex-1 font-mono text-xs bg-[#162654] text-white border border-[#263B73] px-3 py-2.5 focus:outline-none focus:border-[#00F5D4]"
-                    />
-
-                    <button
-                      onClick={runTesterRequest}
-                      disabled={testerLoading}
-                      className="bg-[#FF3D88] hover:bg-[#E62E76] text-white font-mono font-bold text-xs px-6 py-2.5 border border-white"
-                    >
-                      {testerLoading ? "SENDING..." : "SEND REQUEST"}
-                    </button>
-                  </div>
-
-                  {["POST", "PUT", "PATCH"].includes(testerMethod) && (
-                    <div>
-                      <div className="font-mono text-[11px] uppercase text-white/50 mb-1">
-                        REQUEST BODY (JSON)
+                  <div className="border border-white/20 bg-[#0A1229] p-4 space-y-3">
+                    <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[#00F5D4]" />
+                        <span className="font-mono text-xs font-bold text-[#00F5D4]">
+                          Live JSON Response Console
+                        </span>
                       </div>
-                      <textarea
-                        value={testerBody}
-                        onChange={(e) => setTesterBody(e.target.value)}
-                        rows={6}
-                        className="w-full font-mono text-xs bg-[#162654] text-white border border-[#263B73] p-3 resize-y focus:outline-none focus:border-[#00F5D4]"
-                      />
-                    </div>
-                  )}
-
-                  {testerResponse && (
-                    <div className="border border-white/20 bg-[#0A1229] p-4">
-                      <div className="flex items-center justify-between mb-2 pb-2 border-b border-white/10">
-                        <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
+                        {testerResponse && (
                           <span
-                            className={`font-mono text-xs font-bold px-2 py-0.5 ${testerResponse.status < 300
-                                ? "bg-[#10B981] text-white"
-                                : "bg-[#FF3D88] text-white"
-                              }`}
+                            className={`px-2 py-0.5 font-mono text-[10px] font-bold ${
+                              testerResponse.status < 300 ? "bg-[#10B981] text-white" : "bg-[#EF4444] text-white"
+                            }`}
                           >
-                            HTTP {testerResponse.status}
+                            HTTP {testerResponse.status} • {testerResponse.time}ms
                           </span>
-                          <span className="font-mono text-xs text-white/60">
-                            Latency: {testerResponse.time}ms
-                          </span>
-                          {testerResponse.headers["x-data-source"] && (
-                            <span className="font-mono text-xs text-[#00F5D4]">
-                              Driver: {testerResponse.headers["x-data-source"]}
-                            </span>
-                          )}
-                        </div>
-
+                        )}
                         <button
+                          type="button"
                           onClick={() => {
                             navigator.clipboard.writeText(getCurlSnippet());
                             setCopiedCurl(true);
                             setTimeout(() => setCopiedCurl(false), 2000);
                           }}
-                          className="font-mono text-xs px-3 py-1 border border-white/30 text-white/80 hover:text-white hover:border-[#00F5D4]"
+                          className="px-2 py-0.5 border border-white/30 text-[10px] font-mono text-white/80 hover:text-white hover:border-[#00F5D4] transition"
                         >
-                          {copiedCurl ? "COPIED cURL ✓" : "COPY AS cURL"}
+                          {copiedCurl ? "cURL Copied ✓" : "Copy cURL"}
                         </button>
                       </div>
-
-                      <pre className="font-mono text-xs text-[#00F5D4] overflow-auto max-h-72 p-2 bg-[#0F1B3D]">
-                        {JSON.stringify(testerResponse.body, null, 2)}
-                      </pre>
                     </div>
-                  )}
-                </div>
-              )}
 
-              {inspectorTab === "schema" && (
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-mono text-xs uppercase text-white/50">
-                      prisma/schema.prisma · Relational Post Model
+                    <pre className="font-mono text-xs text-[#00F5D4] overflow-auto max-h-60 p-3 bg-[#0F1B3D] border border-white/10 leading-relaxed">
+                      {testerResponse
+                        ? JSON.stringify(testerResponse.body, null, 2)
+                        : `// Click "▶ Send Live Request" on any endpoint above to inspect\n// real HTTP status codes, latency, and response headers.\n{\n  "status": "idle",\n  "driver": "${dataSource}",\n  "message": "Awaiting test execution"\n}`}
+                    </pre>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-5 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#00F5D4]">
+                      2. Database Schema &amp; Architecture
                     </span>
                     <button
+                      type="button"
                       onClick={() => {
                         navigator.clipboard.writeText(PRISMA_SCHEMA);
                         setCopiedSchema(true);
                         setTimeout(() => setCopiedSchema(false), 2000);
                       }}
-                      className="font-mono text-xs px-3 py-1 border border-white/30 hover:border-[#00F5D4] text-white"
+                      className="px-2 py-0.5 border border-white/30 text-[10px] font-mono text-white/80 hover:text-white hover:border-[#00F5D4] transition"
                     >
-                      {copiedSchema ? "COPIED ✓" : "COPY SCHEMA"}
+                      {copiedSchema ? "Schema Copied ✓" : "Copy Schema"}
                     </button>
                   </div>
-                  <pre className="font-mono text-xs text-[#00F5D4] bg-[#0A1229] p-4 border border-white/10 overflow-x-auto leading-relaxed">
-                    {PRISMA_SCHEMA}
-                  </pre>
-                  <p className="font-mono text-xs text-white/60 mt-3 leading-relaxed">
-                    Indexes on [published], [category], and [createdAt] guarantee sub-10ms listing and filtering. If DATABASE_URL is not set on the evaluator machine, mutations persist seamlessly to local data/posts.json.
-                  </p>
-                </div>
-              )}
 
-              {inspectorTab === "architecture" && (
-                <div className="space-y-4 text-xs font-mono">
-                  <div className="border border-white/20 overflow-x-auto">
-                    <table className="w-full text-left">
+                  <div className="border border-white/20 bg-[#0A1229] p-3">
+                    <div className="font-mono text-[10px] text-white/50 mb-2 uppercase tracking-wider">
+                      prisma/schema.prisma · PostgreSQL Model
+                    </div>
+                    <pre className="font-mono text-[11px] text-[#00F5D4] overflow-auto max-h-56 p-2 bg-[#0F1B3D] border border-white/10 leading-relaxed">
+                      {PRISMA_SCHEMA}
+                    </pre>
+                  </div>
+
+                  <div className="border border-white/20 overflow-x-auto bg-[#0A1229]">
+                    <table className="w-full text-left text-[11px] font-mono">
                       <thead className="bg-white/10 border-b border-white/20">
                         <tr>
-                          <th className="p-3 text-white">ARCHITECTURAL METRIC</th>
-                          <th className="p-3 text-[#FF3D88]">LEGACY STACK (PHP CodeIgniter + WordPress)</th>
-                          <th className="p-3 text-[#10B981]">NEW TACTYQAL STACK (Next.js 15 + Prisma)</th>
+                          <th className="p-2.5 text-white">METRIC</th>
+                          <th className="p-2.5 text-[#FF3D88]">PHP + WORDPRESS</th>
+                          <th className="p-2.5 text-[#10B981]">NEXT.JS + POSTGRES</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-white/10 text-white/80">
                         <tr>
-                          <td className="p-3 font-bold text-white">Runtime &amp; Deployment</td>
-                          <td className="p-3 text-[#FF3D88]">2 split servers: PHP Apache/Nginx + WordPress DB</td>
-                          <td className="p-3 text-[#10B981]">Unified TypeScript full-stack in 1 container / Vercel</td>
+                          <td className="p-2.5 font-bold text-white">Runtime</td>
+                          <td className="p-2.5 text-[#FF3D88]">2 split servers</td>
+                          <td className="p-2.5 text-[#10B981]">Unified full-stack</td>
                         </tr>
                         <tr>
-                          <td className="p-3 font-bold text-white">Security &amp; Vulnerabilities</td>
-                          <td className="p-3 text-[#FF3D88]">60,000+ WordPress plugins with weekly CVE exploits</td>
-                          <td className="p-3 text-[#10B981]">Zero plugin surface; Zod schema runtime validation</td>
+                          <td className="p-2.5 font-bold text-white">Security</td>
+                          <td className="p-2.5 text-[#FF3D88]">60k+ WP plugins</td>
+                          <td className="p-2.5 text-[#10B981]">Zod schema validated</td>
                         </tr>
                         <tr>
-                          <td className="p-3 font-bold text-white">Type Safety</td>
-                          <td className="p-3 text-[#FF3D88]">Zero type safety between PHP REST API and React UI</td>
-                          <td className="p-3 text-[#10B981]">End-to-end TypeScript Post type from Prisma to UI</td>
+                          <td className="p-2.5 font-bold text-white">Type Safety</td>
+                          <td className="p-2.5 text-[#FF3D88]">Zero type safety</td>
+                          <td className="p-2.5 text-[#10B981]">End-to-end TS types</td>
                         </tr>
                         <tr>
-                          <td className="p-3 font-bold text-white">Cache Invalidation</td>
-                          <td className="p-3 text-[#FF3D88]">Fragile WP Super Cache plugins with purge race bugs</td>
-                          <td className="p-3 text-[#10B981]">Deterministic revalidatePath() on every mutation</td>
-                        </tr>
-                        <tr>
-                          <td className="p-3 font-bold text-white">Design &amp; Token Drift</td>
-                          <td className="p-3 text-[#FF3D88]">Mismatched WP themes vs React custom app CSS</td>
-                          <td className="p-3 text-[#10B981]">Exact same Neo-Brutalist design tokens everywhere</td>
+                          <td className="p-2.5 font-bold text-white">Cache Reval</td>
+                          <td className="p-2.5 text-[#FF3D88]">Fragile cache purge</td>
+                          <td className="p-2.5 text-[#10B981]">revalidatePath()</td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
                 </div>
-              )}
+              </div>
             </div>
           </div>
-        )}
+        ) : null}
 
-        {(tab === "new" || tab === "edit") && (
-          <div className="bg-white border-2 border-[#0F1B3D] shadow-[5px_5px_0px_#0F1B3D] mb-8 overflow-hidden">
-            <div className="bg-[#0F1B3D] text-white px-6 py-4 flex items-center justify-between">
-              <div>
-                <span className="font-mono text-xs uppercase tracking-wider text-[#00F5D4]">
-                  ARTICLE EDITOR
+        {mainView === "content" && (
+          <>
+            <div className="bg-white border-2 border-[#0F1B3D] shadow-[4px_4px_0px_0px_#0F1B3D] p-3 mb-6 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-3 flex-1 min-w-[280px]">
+                <div className="relative flex-1 max-w-md">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#0F1B3D]/50">
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <circle cx="11" cy="11" r="8" />
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                  </div>
+                  <input
+                    type="search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search by title, slug, category, or content..."
+                    className="w-full pl-9 pr-8 py-2 text-xs font-mono border-[1.5px] border-[#0F1B3D] bg-white focus:outline-none focus:border-[#FF3D88]"
+                  />
+                  {search && (
+                    <button
+                      type="button"
+                      onClick={() => setSearch("")}
+                      className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-[#0F1B3D]/60 hover:text-[#FF3D88] font-bold text-xs"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+
+                <select
+                  value={categoryFilter}
+                  onChange={(e) => setCategoryFilter(e.target.value)}
+                  className="px-3 py-2 text-xs font-bold text-[#0F1B3D] border-[1.5px] border-[#0F1B3D] bg-[#F4F6FB] focus:outline-none focus:border-[#FF3D88] cursor-pointer"
+                >
+                  {CATEGORIES.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex items-center gap-3 flex-wrap">
+                <button
+                  type="button"
+                  onClick={handleQuickSeed}
+                  disabled={seeding}
+                  className="px-3 py-2 text-xs font-mono font-bold bg-[#FFE4EF] text-[#FF3D88] border-[1.5px] border-[#0F1B3D] hover:bg-[#FF3D88] hover:text-white transition cursor-pointer flex items-center gap-1.5 shadow-[2px_2px_0px_#0F1B3D] active:translate-x-[1px] active:translate-y-[1px]"
+                >
+                  <span>⚡</span>
+                  <span>{seedSuccess ? "SEEDED ✓" : seeding ? "SEEDING..." : "Quick-Seed Demo Post"}</span>
+                </button>
+
+                <div className="flex items-center border-[1.5px] border-[#0F1B3D] bg-[#F4F6FB] p-0.5">
+                  <button
+                    type="button"
+                    onClick={() => setStatusFilter("all")}
+                    className={`px-3 py-1.5 text-xs font-mono uppercase font-bold transition-colors ${
+                      statusFilter === "all"
+                        ? "bg-[#0F1B3D] text-white"
+                        : "text-[#0F1B3D]/70 hover:text-[#0F1B3D]"
+                    }`}
+                  >
+                    ALL ({stats.total})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setStatusFilter("published")}
+                    className={`px-3 py-1.5 text-xs font-mono uppercase font-bold transition-colors ${
+                      statusFilter === "published"
+                        ? "bg-[#0F1B3D] text-white"
+                        : "text-[#0F1B3D]/70 hover:text-[#0F1B3D]"
+                    }`}
+                  >
+                    PUBLISHED ({stats.publishedCount})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setStatusFilter("draft")}
+                    className={`px-3 py-1.5 text-xs font-mono uppercase font-bold transition-colors ${
+                      statusFilter === "draft"
+                        ? "bg-[#0F1B3D] text-white"
+                        : "text-[#0F1B3D]/70 hover:text-[#0F1B3D]"
+                    }`}
+                  >
+                    DRAFTS ({stats.draftCount})
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white border-2 border-[#0F1B3D] shadow-[6px_6px_0px_0px_#0F1B3D] overflow-hidden">
+              <div className="bg-[#0F1B3D] text-white text-[11px] font-mono uppercase tracking-wider px-5 py-3.5 grid grid-cols-12 items-center gap-4">
+                <div className="col-span-5">ARTICLE &amp; SLUG</div>
+                <div className="col-span-2">CATEGORY</div>
+                <div className="col-span-2">META (TIME / DATE)</div>
+                <div className="col-span-2">STATUS</div>
+                <div className="col-span-1 text-right">ACTIONS</div>
+              </div>
+
+              {loading ? (
+                <div className="p-12 text-center font-mono text-xs uppercase text-[#0F1B3D]/60">
+                  FETCHING PERSISTENT ARTICLES FROM POSTGRESQL / STORE...
+                </div>
+              ) : filteredPosts.length === 0 ? (
+                <div className="p-12 text-center space-y-3">
+                  <div className="font-display font-extrabold text-xl text-[#0F1B3D]">
+                    No articles match your search criteria
+                  </div>
+                  <p className="text-xs font-mono text-[#0F1B3D]/60 max-w-md mx-auto">
+                    Try searching for another keyword, select &quot;All Categories&quot;, or click Quick-Seed to create a new post instantly.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearch("");
+                      setCategoryFilter("All Categories");
+                      setStatusFilter("all");
+                    }}
+                    className="px-4 py-2 text-xs font-mono font-bold bg-[#FFE4EF] text-[#FF3D88] border-[1.5px] border-[#0F1B3D] hover:bg-[#FF3D88] hover:text-white transition"
+                  >
+                    Reset Filters
+                  </button>
+                </div>
+              ) : (
+                <div className="divide-y-[1.5px] divide-[#0F1B3D]/15">
+                  {filteredPosts.map((post) => (
+                    <div
+                      key={post.id}
+                      className="grid grid-cols-12 items-center gap-4 px-5 py-3.5 hover:bg-[#F4F6FB] transition-colors group"
+                    >
+                      <div className="col-span-5 flex items-center gap-3.5 min-w-0">
+                        <div className="w-14 h-10 border border-[#0F1B3D] shrink-0 bg-[#0F1B3D] overflow-hidden">
+                          <img
+                            src={post.coverImage || "/extracted/blog-ele.webp"}
+                            alt={post.title}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = "/extracted/blog-ele.webp";
+                            }}
+                          />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div
+                            onClick={() => handleOpenEdit(post)}
+                            className="font-bold text-[15px] text-[#0F1B3D] group-hover:text-[#FF3D88] transition truncate cursor-pointer leading-snug"
+                            title="Click to edit article"
+                          >
+                            {post.title}
+                          </div>
+                          <div className="text-xs font-mono text-[#0F1B3D]/55 truncate mt-0.5">
+                            /{post.slug}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="col-span-2">
+                        <span className="inline-flex px-2.5 py-0.5 text-[11px] font-mono font-bold uppercase bg-[#FFE4EF] text-[#FF3D88] border border-[#0F1B3D]">
+                          {post.category}
+                        </span>
+                      </div>
+
+                      <div className="col-span-2">
+                        <div className="font-mono text-xs font-semibold text-[#0F1B3D]">
+                          {post.readTime} min read
+                        </div>
+                        <div className="text-[11px] font-mono text-[#0F1B3D]/60 mt-0.5">
+                          {new Date(post.createdAt).toLocaleDateString("en-IN", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </div>
+                      </div>
+
+                      <div className="col-span-2">
+                        <button
+                          type="button"
+                          onClick={() => handleTogglePublished(post)}
+                          className="flex items-center gap-2 group/switch cursor-pointer"
+                          title="Click to toggle Published/Draft via PUT /api/posts/[id]"
+                        >
+                          <div
+                            className={`w-9 h-5 rounded-full border border-[#0F1B3D] p-0.5 transition-colors relative flex items-center ${
+                              post.published ? "bg-[#10B981]" : "bg-[#CBD5E1]"
+                            }`}
+                          >
+                            <div
+                              className={`w-3.5 h-3.5 rounded-full bg-white shadow-sm border border-[#0F1B3D]/30 transition-transform ${
+                                post.published ? "translate-x-4" : "translate-x-0"
+                              }`}
+                            />
+                          </div>
+                          <span
+                            className={`text-xs font-mono font-bold ${
+                              post.published ? "text-[#10B981]" : "text-[#F59E0B]"
+                            }`}
+                          >
+                            {post.published ? "Live" : "Draft"}
+                          </span>
+                        </button>
+                      </div>
+
+                      <div className="col-span-1 flex items-center justify-end gap-1.5">
+                        <Link
+                          href={`/blog/${post.slug}`}
+                          target="_blank"
+                          className="px-2 py-1 text-xs font-mono text-[#0F1B3D] border border-[#0F1B3D] bg-white hover:bg-[#FFE4EF] hover:text-[#FF3D88] transition"
+                          title="View public reader"
+                        >
+                          ↗
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => handleOpenEdit(post)}
+                          className="bg-[#0F1B3D] text-white hover:bg-[#FF3D88] px-2.5 py-1 text-xs font-mono font-bold border border-[#0F1B3D] transition cursor-pointer"
+                          title="Edit article"
+                        >
+                          Edit
+                        </button>
+                        {deleteConfirmId === post.id ? (
+                          <div className="inline-flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() => handleDeletePost(post.id)}
+                              className="bg-[#EF4444] text-white font-mono text-xs font-bold px-2 py-1 border border-[#0F1B3D]"
+                            >
+                              Yes
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setDeleteConfirmId(null)}
+                              className="bg-white text-[#0F1B3D] font-mono text-xs px-1.5 py-1 border border-[#0F1B3D]"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => setDeleteConfirmId(post.id)}
+                            className="bg-white text-[#EF4444] border border-[#0F1B3D] hover:bg-[#EF4444] hover:text-white px-2 py-1 text-xs font-mono font-bold transition cursor-pointer"
+                            title="Delete article"
+                          >
+                            Del
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </>
+        )}
+      </main>
+
+      {modalOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
+          onClick={() => setModalOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-5xl bg-white border-2 border-[#0F1B3D] shadow-[10px_10px_0px_0px_#FF3D88] overflow-hidden my-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="bg-[#0F1B3D] text-white px-6 py-4 flex items-center justify-between border-b-2 border-[#0F1B3D]">
+              <div className="flex items-center gap-3">
+                <span className="px-2 py-0.5 bg-[#FF3D88] text-white font-mono text-[10px] font-bold uppercase tracking-wider">
+                  ARTICLE STUDIO
                 </span>
-                <h2 className="font-display font-extrabold text-xl">
-                  {tab === "edit" ? `Edit: ${editingPost?.title}` : "Create New Blog Post"}
+                <h2 className="font-display font-extrabold text-lg text-white">
+                  {modalMode === "edit" ? `Edit: ${editingPost?.title}` : "Create New Blog Post"}
                 </h2>
               </div>
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-xs text-white/50 hidden sm:inline">
+              <div className="flex items-center gap-4">
+                <span className="font-mono text-xs text-white/60 hidden sm:inline">
                   {currentWc} words · {currentRt} min read
                 </span>
                 <button
-                  onClick={() => {
-                    setTab("posts");
-                    setEditingPost(null);
-                  }}
-                  className="font-mono text-xs px-3 py-1.5 border border-white/30 text-white/80 hover:text-white hover:border-white transition-colors"
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="w-7 h-7 bg-white/10 hover:bg-[#FF3D88] text-white flex items-center justify-center font-bold text-xs border border-white/20 transition cursor-pointer"
                 >
-                  CANCEL
-                </button>
-                <button
-                  onClick={handleSaveArticle}
-                  disabled={saving}
-                  className="bg-[#FF3D88] hover:bg-[#E62E76] text-white font-mono font-bold text-xs uppercase px-5 py-2 border border-white shadow-[2px_2px_0px_#0F1B3D]"
-                >
-                  {saving ? "SAVING..." : "SAVE ARTICLE →"}
+                  ✕
                 </button>
               </div>
             </div>
 
-            <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-12 max-h-[75vh]">
+              <div className="md:col-span-7 p-6 border-b md:border-b-0 md:border-r-[1.5px] border-[#0F1B3D] overflow-y-auto space-y-4">
                 <div>
-                  <label className="block font-mono text-xs uppercase text-black/60 mb-1 font-bold">
-                    Title *
+                  <label className="block font-mono text-xs uppercase font-bold text-[#0F1B3D]/70 mb-1">
+                    Article Title *
                   </label>
                   <input
                     type="text"
                     value={formTitle}
                     onChange={(e) => setFormTitle(e.target.value)}
                     placeholder="e.g. 10 Mistakes Founders Make When Pitching Angels"
-                    className="w-full border-2 border-[#0F1B3D] px-3 py-2.5 font-bold font-sans bg-white focus:outline-none focus:ring-2 focus:ring-[#FF3D88]"
+                    className="w-full border-2 border-[#0F1B3D] px-3 py-2 text-sm font-bold font-sans bg-white focus:outline-none focus:border-[#FF3D88]"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-mono text-xs uppercase text-black/60 mb-1 font-bold">
-                      Slug (URL)
+                    <label className="block font-mono text-xs uppercase font-bold text-[#0F1B3D]/70 mb-1">
+                      URL Slug *
                     </label>
                     <input
                       type="text"
@@ -731,20 +1117,19 @@ export default function AdminStudio() {
                         setFormSlug(e.target.value);
                         setFormSlugManual(true);
                       }}
-                      className="w-full border-2 border-[#0F1B3D] px-3 py-2 font-mono text-xs bg-white focus:outline-none focus:ring-2 focus:ring-[#FF3D88]"
+                      className="w-full border-2 border-[#0F1B3D] px-3 py-2 font-mono text-xs bg-white focus:outline-none focus:border-[#FF3D88]"
                     />
                   </div>
-
                   <div>
-                    <label className="block font-mono text-xs uppercase text-black/60 mb-1 font-bold">
+                    <label className="block font-mono text-xs uppercase font-bold text-[#0F1B3D]/70 mb-1">
                       Category *
                     </label>
                     <select
                       value={formCategory}
                       onChange={(e) => setFormCategory(e.target.value)}
-                      className="w-full border-2 border-[#0F1B3D] px-3 py-2 font-mono text-xs bg-white focus:outline-none focus:ring-2 focus:ring-[#FF3D88]"
+                      className="w-full border-2 border-[#0F1B3D] px-3 py-2 font-mono text-xs bg-white focus:outline-none focus:border-[#FF3D88] cursor-pointer"
                     >
-                      {CATEGORIES.map((c) => (
+                      {CATEGORIES.filter((c) => c !== "All Categories").map((c) => (
                         <option key={c} value={c}>
                           {c}
                         </option>
@@ -753,330 +1138,193 @@ export default function AdminStudio() {
                   </div>
                 </div>
 
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-mono text-xs uppercase font-bold text-[#0F1B3D]/70 mb-1">
+                      Author Name
+                    </label>
+                    <input
+                      type="text"
+                      value={formAuthor}
+                      onChange={(e) => setFormAuthor(e.target.value)}
+                      className="w-full border-2 border-[#0F1B3D] px-3 py-2 font-mono text-xs bg-white focus:outline-none focus:border-[#FF3D88]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-mono text-xs uppercase font-bold text-[#0F1B3D]/70 mb-1">
+                      Author Role / Title
+                    </label>
+                    <input
+                      type="text"
+                      value={formAuthorRole}
+                      onChange={(e) => setFormAuthorRole(e.target.value)}
+                      className="w-full border-2 border-[#0F1B3D] px-3 py-2 font-mono text-xs bg-white focus:outline-none focus:border-[#FF3D88]"
+                    />
+                  </div>
+                </div>
+
                 <div>
-                  <label className="block font-mono text-xs uppercase text-black/60 mb-1 font-bold">
-                    Cover Image URL
+                  <label className="block font-mono text-xs uppercase font-bold text-[#0F1B3D]/70 mb-1">
+                    Cover Image URL &amp; Preset Picker
                   </label>
                   <input
                     type="text"
                     value={formCoverImage}
                     onChange={(e) => setFormCoverImage(e.target.value)}
-                    className="w-full border-2 border-[#0F1B3D] px-3 py-2 font-mono text-xs bg-white mb-2"
+                    className="w-full border-2 border-[#0F1B3D] px-3 py-2 font-mono text-xs bg-white mb-2 focus:outline-none focus:border-[#FF3D88]"
                   />
-                  <div className="flex flex-wrap gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {COVERS.map((cov) => (
                       <button
                         key={cov.url}
                         type="button"
                         onClick={() => setFormCoverImage(cov.url)}
-                        className={`font-mono text-[10px] px-2 py-1 border border-[#0F1B3D] transition-colors ${formCoverImage === cov.url
-                            ? "bg-[#FFE4EF] text-[#FF3D88] font-bold border-[#FF3D88]"
-                            : "bg-white hover:bg-[#F4F6FB]"
-                          }`}
+                        className={`flex items-center gap-2 p-1.5 border transition-all text-left ${
+                          formCoverImage === cov.url
+                            ? "bg-[#FFE4EF] border-[#FF3D88] shadow-[2px_2px_0px_#FF3D88]"
+                            : "bg-white border-[#0F1B3D]/30 hover:border-[#0F1B3D]"
+                        }`}
                       >
-                        {cov.label}
+                        <img
+                          src={cov.url}
+                          alt={cov.label}
+                          className="w-8 h-6 object-cover border border-[#0F1B3D]/40 shrink-0"
+                        />
+                        <span className="text-[11px] font-mono truncate font-medium text-[#0F1B3D]">
+                          {cov.label}
+                        </span>
                       </button>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-mono text-xs uppercase text-black/60 mb-1 font-bold">
+                  <label className="block font-mono text-xs uppercase font-bold text-[#0F1B3D]/70 mb-1">
                     Excerpt / Subtitle (appears on cards &amp; SEO)
                   </label>
                   <textarea
                     rows={2}
                     value={formExcerpt}
                     onChange={(e) => setFormExcerpt(e.target.value)}
-                    className="w-full border-2 border-[#0F1B3D] px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#FF3D88]"
                     placeholder="Brief 1-2 sentence hook describing the guide..."
+                    className="w-full border-2 border-[#0F1B3D] px-3 py-2 text-xs bg-white focus:outline-none focus:border-[#FF3D88]"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-mono text-xs uppercase text-black/60 mb-1 font-bold">
-                    Full Markdown Content *
+                  <label className="block font-mono text-xs uppercase font-bold text-[#0F1B3D]/70 mb-1">
+                    Full Article Content (Markdown supported) *
                   </label>
                   <textarea
-                    rows={12}
+                    rows={10}
                     value={formContent}
                     onChange={(e) => setFormContent(e.target.value)}
-                    className="w-full border-2 border-[#0F1B3D] p-3 font-mono text-xs leading-relaxed bg-white focus:outline-none focus:ring-2 focus:ring-[#FF3D88]"
                     placeholder="## Introduction\n\nWrite your multi-paragraph content with Markdown..."
+                    className="w-full border-2 border-[#0F1B3D] p-3 font-mono text-xs leading-relaxed bg-white focus:outline-none focus:border-[#FF3D88]"
                   />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <div className="flex items-center gap-3 bg-white border-2 border-[#0F1B3D] p-3">
-                    <input
-                      type="checkbox"
-                      id="formPublished"
-                      checked={formPublished}
-                      onChange={(e) => setFormPublished(e.target.checked)}
-                      className="w-4 h-4 accent-[#FF3D88]"
-                    />
-                    <label
-                      htmlFor="formPublished"
-                      className="font-mono text-xs uppercase font-bold cursor-pointer"
-                    >
-                      Published Live ({formPublished ? "Visible on /blog" : "Draft Hidden"})
-                    </label>
-                  </div>
-
-                  <div className="flex items-center gap-3 bg-white border-2 border-[#0F1B3D] p-3">
-                    <input
-                      type="checkbox"
-                      id="formFeatured"
-                      checked={formFeatured}
-                      onChange={(e) => setFormFeatured(e.target.checked)}
-                      className="w-4 h-4 accent-[#FF3D88]"
-                    />
-                    <label
-                      htmlFor="formFeatured"
-                      className="font-mono text-xs uppercase font-bold cursor-pointer"
-                    >
-                      Featured Hero Card
-                    </label>
-                  </div>
                 </div>
               </div>
 
-              <div className="border-2 border-[#0F1B3D] bg-white p-5 flex flex-col shadow-[3px_3px_0px_#0F1B3D]">
-                <div className="font-mono text-xs uppercase tracking-wider text-[#0F1B3D]/60 mb-3 pb-2 border-b border-[#0F1B3D]/20 flex items-center justify-between">
-                  <span>LIVE EDITORIAL PREVIEW</span>
-                  <span className="text-[#FF3D88] font-bold">
+              <div className="md:col-span-5 p-6 bg-[#F4F6FB] overflow-y-auto flex flex-col gap-4">
+                <div className="flex items-center justify-between pb-2 border-b border-[#0F1B3D]/20">
+                  <span className="font-mono text-xs uppercase font-bold text-[#0F1B3D]/70">
+                    Live Card &amp; Reader Preview
+                  </span>
+                  <span
+                    className={`font-mono text-[10px] font-bold px-2 py-0.5 ${
+                      formPublished ? "bg-[#10B981] text-white" : "bg-[#F59E0B] text-white"
+                    }`}
+                  >
                     {formPublished ? "● LIVE" : "○ DRAFT"}
                   </span>
                 </div>
 
-                <div className="overflow-y-auto max-h-[640px] pr-2 space-y-4">
-                  <div className="border-2 border-[#0F1B3D] bg-[#F4F6FB] p-4 shadow-[2px_2px_0px_#0F1B3D]">
-                    <div className="aspect-[16/9] border-2 border-[#0F1B3D] overflow-hidden mb-3 bg-[#0F1B3D]">
-                      <img
-                        src={formCoverImage}
-                        alt="Preview"
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = "/extracted/blog-ele.webp";
-                        }}
-                      />
-                    </div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="font-mono text-[10px] uppercase px-2 py-0.5 border border-[#FF3D88] bg-[#FFE4EF] text-[#FF3D88] font-bold">
-                        {formCategory}
-                      </span>
-                      <span className="font-mono text-[11px] text-black/50">
-                        {currentRt} MIN READ
-                      </span>
-                    </div>
-                    <h3 className="font-display font-extrabold text-lg leading-snug mb-2">
-                      {formTitle || "Your Article Headline Will Render Here"}
-                    </h3>
-                    <p className="text-xs text-black/70 leading-relaxed mb-3 line-clamp-2">
-                      {formExcerpt || "Your excerpt will appear on homepage and blog cards."}
-                    </p>
-                    <div className="font-mono text-[10px] text-black/40">
-                      By {formAuthor} · {formAuthorRole}
-                    </div>
+                <div className="border-2 border-[#0F1B3D] bg-white p-4 shadow-[3px_3px_0px_#0F1B3D]">
+                  <div className="aspect-[16/9] border border-[#0F1B3D] overflow-hidden mb-3 bg-[#0F1B3D]">
+                    <img
+                      src={formCoverImage}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/extracted/blog-ele.webp";
+                      }}
+                    />
                   </div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="font-mono text-[10px] uppercase px-2 py-0.5 border border-[#FF3D88] bg-[#FFE4EF] text-[#FF3D88] font-bold">
+                      {formCategory}
+                    </span>
+                    <span className="font-mono text-[11px] text-[#0F1B3D]/60">
+                      {currentRt} MIN READ
+                    </span>
+                  </div>
+                  <h3 className="font-display font-extrabold text-base leading-snug mb-2 text-[#0F1B3D]">
+                    {formTitle || "Your Article Headline Will Render Here"}
+                  </h3>
+                  <p className="text-xs text-[#0F1B3D]/70 leading-relaxed mb-3 line-clamp-2">
+                    {formExcerpt || "Your excerpt will appear on homepage and blog cards."}
+                  </p>
+                  <div className="font-mono text-[10px] text-[#0F1B3D]/50 border-t border-[#0F1B3D]/10 pt-2">
+                    By {formAuthor} · {formAuthorRole}
+                  </div>
+                </div>
 
-                  <div className="border-t-2 border-[#0F1B3D] pt-4">
-                    <div className="font-mono text-[10px] uppercase text-[#0F1B3D]/50 mb-2 font-bold">
-                      FULL ARTICLE READER PREVIEW
-                    </div>
-                    <div className="prose prose-sm max-w-none font-sans leading-relaxed text-[#0F1B3D]">
-                      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>
-                        {formContent}
-                      </ReactMarkdown>
-                    </div>
+                <div className="border border-[#0F1B3D]/20 bg-white p-4">
+                  <div className="font-mono text-[10px] uppercase font-bold text-[#0F1B3D]/60 mb-2 pb-1 border-b border-[#0F1B3D]/10">
+                    Formatted Markdown Reader
+                  </div>
+                  <div className="prose prose-sm max-w-none text-[#0F1B3D] text-xs font-sans leading-relaxed">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>
+                      {formContent}
+                    </ReactMarkdown>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
 
-        <div className="bg-white border-2 border-[#0F1B3D] shadow-[4px_4px_0px_#0F1B3D] p-4 mb-6">
-          <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
-            <div className="flex flex-1 gap-3 items-center">
-              <input
-                type="search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search articles by title, slug, or content..."
-                className="w-full md:max-w-md border-2 border-[#0F1B3D] px-3 py-2 font-mono text-xs bg-white focus:outline-none focus:ring-2 focus:ring-[#FF3D88]"
-              />
+            <div className="bg-white border-t-2 border-[#0F1B3D] px-6 py-4 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-4">
+                <label className="flex items-center gap-2 cursor-pointer font-mono text-xs uppercase font-bold text-[#0F1B3D]">
+                  <input
+                    type="checkbox"
+                    checked={formPublished}
+                    onChange={(e) => setFormPublished(e.target.checked)}
+                    className="w-4 h-4 accent-[#FF3D88]"
+                  />
+                  <span>Publish Immediately</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer font-mono text-xs uppercase font-bold text-[#0F1B3D]">
+                  <input
+                    type="checkbox"
+                    checked={formFeatured}
+                    onChange={(e) => setFormFeatured(e.target.checked)}
+                    className="w-4 h-4 accent-[#FF3D88]"
+                  />
+                  <span>Featured Hero Card</span>
+                </label>
+              </div>
 
-              <select
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
-                className="border-2 border-[#0F1B3D] px-3 py-2 font-mono text-xs bg-white font-bold"
-              >
-                <option value="All">All Categories</option>
-                {CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex items-center gap-1 border-2 border-[#0F1B3D] bg-white p-0.5">
-              {(["all", "published", "draft"] as const).map((st) => (
+              <div className="flex items-center gap-3">
                 <button
-                  key={st}
-                  onClick={() => setStatusFilter(st)}
-                  className={`font-mono text-xs uppercase px-3 py-1.5 transition-colors ${statusFilter === st
-                      ? "bg-[#0F1B3D] text-white font-bold"
-                      : "text-black/60 hover:text-black"
-                    }`}
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="px-4 py-2 font-mono text-xs border border-[#0F1B3D] text-[#0F1B3D] hover:bg-[#F4F6FB] transition"
                 >
-                  {st === "all" ? "All" : st === "published" ? "Live Only" : "Drafts"}
+                  Cancel
                 </button>
-              ))}
+                <button
+                  type="button"
+                  onClick={handleSaveArticle}
+                  disabled={saving}
+                  className="px-6 py-2.5 bg-[#FF3D88] hover:bg-[#e62e76] text-white font-mono font-bold text-xs uppercase tracking-wider shadow-[4px_4px_0px_0px_#0F1B3D] active:translate-x-[1px] active:translate-y-[1px] transition cursor-pointer"
+                >
+                  {saving ? "Saving..." : "Save Article to Database →"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
-
-        <div className="border-2 border-[#0F1B3D] bg-white shadow-[4px_4px_0px_#0F1B3D] overflow-x-auto">
-          {loading ? (
-            <div className="p-12 text-center font-mono text-xs uppercase text-[#0F1B3D]/50">
-              LOADING PERSISTENT BLOG POSTS...
-            </div>
-          ) : filteredPosts.length === 0 ? (
-            <div className="p-12 text-center space-y-3">
-              <div className="font-display font-extrabold text-2xl text-[#0F1B3D]">No articles match your filter</div>
-              <p className="text-sm text-[#0F1B3D]/60 font-mono">
-                Try searching for another keyword or clear the category filters.
-              </p>
-              <button
-                onClick={() => {
-                  setSearch("");
-                  setCategoryFilter("All");
-                  setStatusFilter("all");
-                }}
-                className="font-mono text-xs px-4 py-2 border-2 border-[#0F1B3D] bg-[#FFE4EF] text-[#FF3D88] font-bold"
-              >
-                RESET FILTERS
-              </button>
-            </div>
-          ) : (
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-[#0F1B3D] text-white font-mono text-xs uppercase tracking-wider">
-                  <th className="p-3 w-16 text-center">COVER</th>
-                  <th className="p-3">ARTICLE TITLE &amp; SLUG</th>
-                  <th className="p-3">CATEGORY</th>
-                  <th className="p-3">READ TIME</th>
-                  <th className="p-3">DATE</th>
-                  <th className="p-3">STATUS (1-CLICK TOGGLE)</th>
-                  <th className="p-3 text-right">ACTIONS</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y-2 divide-[#0F1B3D]">
-                {filteredPosts.map((post) => (
-                  <tr
-                    key={post.id}
-                    className="hover:bg-[#FFE4EF]/40 transition-colors bg-white font-sans text-sm"
-                  >
-                    <td className="p-3 text-center">
-                      <div className="w-12 h-12 border-2 border-[#0F1B3D] overflow-hidden bg-[#0F1B3D] mx-auto">
-                        <img
-                          src={post.coverImage || "/extracted/blog-ele.webp"}
-                          alt={post.title}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = "/extracted/blog-ele.webp";
-                          }}
-                        />
-                      </div>
-                    </td>
-
-                    <td className="p-3">
-                      <div className="font-bold text-sm leading-snug line-clamp-1 text-[#0F1B3D]">{post.title}</div>
-                      <div className="font-mono text-[11px] text-[#0F1B3D]/50 mt-0.5">
-                        /{post.slug}
-                      </div>
-                    </td>
-
-                    <td className="p-3">
-                      <span className="font-mono text-[10px] uppercase font-bold px-2 py-0.5 border border-[#FF3D88] bg-[#FFE4EF] text-[#FF3D88]">
-                        {post.category}
-                      </span>
-                    </td>
-
-                    <td className="p-3 font-mono text-xs text-[#0F1B3D]/60">
-                      {post.readTime} min
-                    </td>
-
-                    <td className="p-3 font-mono text-xs text-[#0F1B3D]/60 whitespace-nowrap">
-                      {new Date(post.createdAt).toLocaleDateString("en-IN", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </td>
-
-                    <td className="p-3 whitespace-nowrap">
-                      <button
-                        onClick={() => handleTogglePublished(post)}
-                        className={`font-mono text-xs px-3 py-1 border-2 border-[#0F1B3D] shadow-[2px_2px_0px_#0F1B3D] font-bold transition-all ${post.published
-                            ? "bg-[#10B981] text-white hover:bg-[#059669]"
-                            : "bg-[#E5E7EB] text-black/70 hover:bg-[#D1D5DB]"
-                          }`}
-                        title="Click to toggle live publish state"
-                      >
-                        {post.published ? "● LIVE (CLICK TO DRAFT)" : "○ DRAFT (CLICK TO PUBLISH)"}
-                      </button>
-                    </td>
-
-                    <td className="p-3 text-right whitespace-nowrap">
-                      <div className="flex items-center justify-end gap-2">
-                        <Link
-                          href={`/blog/${post.slug}`}
-                          target="_blank"
-                          className="font-mono text-xs px-2.5 py-1 border border-[#0F1B3D] hover:bg-[#FFE4EF] hover:text-[#FF3D88] transition-colors"
-                        >
-                          VIEW ↗
-                        </Link>
-                        <button
-                          onClick={() => handleOpenEdit(post)}
-                          className="font-mono text-xs px-2.5 py-1 border border-[#0F1B3D] bg-white hover:bg-[#0F1B3D] hover:text-white transition-colors"
-                        >
-                          EDIT
-                        </button>
-                        {deleteConfirmId === post.id ? (
-                          <div className="inline-flex items-center gap-1">
-                            <button
-                              onClick={() => handleDeletePost(post.id)}
-                              className="font-mono text-xs px-2 py-1 bg-[#FF3D88] text-white font-bold"
-                            >
-                              CONFIRM
-                            </button>
-                            <button
-                              onClick={() => setDeleteConfirmId(null)}
-                              className="font-mono text-xs px-2 py-1 border border-[#0F1B3D]/40"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ) : (
-                          <button
-                            onClick={() => setDeleteConfirmId(post.id)}
-                            className="font-mono text-xs px-2.5 py-1 border border-[#FF3D88] text-[#FF3D88] hover:bg-[#FF3D88] hover:text-white transition-colors"
-                          >
-                            DELETE
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-      </div>
+      )}
     </div>
   );
 }

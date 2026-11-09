@@ -7,7 +7,10 @@ declare global {
 function getSafePostgresUrl(): string {
   const url = process.env.DATABASE_URL?.trim();
   if (url && (url.startsWith("postgresql://") || url.startsWith("postgres://"))) {
-    return url;
+    return url
+      .replace(/&channel_binding=require/g, "")
+      .replace(/\?channel_binding=require&?/g, "?")
+      .replace(/\?$/g, "");
   }
   return "postgresql://postgres:postgres@localhost:5432/tactyqal?schema=public";
 }
