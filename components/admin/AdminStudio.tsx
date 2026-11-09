@@ -62,6 +62,11 @@ function generateSlug(title: string) {
 }
 
 export default function AdminStudio() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [authError, setAuthError] = useState("");
+
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -118,6 +123,32 @@ export default function AdminStudio() {
   const [copiedCurl, setCopiedCurl] = useState(false);
   const [copiedSchema, setCopiedSchema] = useState(false);
 
+  useEffect(() => {
+    const session = sessionStorage.getItem("tactyqal_admin_session");
+    if (session === "admin123") {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, []);
+
+  const handleLogin = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (passwordInput.trim() === "admin123") {
+      sessionStorage.setItem("tactyqal_admin_session", "admin123");
+      setIsAuthenticated(true);
+      setAuthError("");
+    } else {
+      setAuthError("Invalid password. Hint: default admin password is 'admin123'.");
+    }
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("tactyqal_admin_session");
+    setIsAuthenticated(false);
+    setPasswordInput("");
+  };
+
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     const start = Date.now();
@@ -139,8 +170,10 @@ export default function AdminStudio() {
   }, []);
 
   useEffect(() => {
-    fetchPosts();
-  }, [fetchPosts]);
+    if (isAuthenticated) {
+      fetchPosts();
+    }
+  }, [isAuthenticated, fetchPosts]);
 
   const handleOpenCreate = () => {
     setEditingPost(null);
@@ -210,13 +243,19 @@ export default function AdminStudio() {
       if (modalMode === "edit" && editingPost) {
         await fetch(`/api/posts/${editingPost.id}`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer admin123",
+          },
           body: JSON.stringify(payload),
         });
       } else {
         await fetch("/api/posts", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer admin123",
+          },
           body: JSON.stringify(payload),
         });
       }
@@ -240,7 +279,10 @@ export default function AdminStudio() {
     try {
       await fetch(`/api/posts/${post.id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer admin123",
+        },
         body: JSON.stringify({ published: nextPublished }),
       });
       await fetchPosts();
@@ -251,7 +293,12 @@ export default function AdminStudio() {
 
   const handleDeletePost = async (id: string) => {
     try {
-      await fetch(`/api/posts/${id}`, { method: "DELETE" });
+      await fetch(`/api/posts/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer admin123",
+        },
+      });
       setDeleteConfirmId(null);
       await fetchPosts();
     } catch (err) {
@@ -280,7 +327,10 @@ export default function AdminStudio() {
 
       await fetch("/api/posts", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer admin123",
+        },
         body: JSON.stringify(payload),
       });
 
@@ -330,7 +380,10 @@ export default function AdminStudio() {
     try {
       const opts: RequestInit = {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer admin123",
+        },
       };
       if (["POST", "PUT", "PATCH"].includes(method) && bodyPayload) {
         opts.body = bodyPayload;
@@ -359,7 +412,10 @@ export default function AdminStudio() {
   };
 
   const getCurlSnippet = () => {
-    const parts = [`curl -X ${testerMethod} 'http://localhost:3000${testerUrl}'`];
+    const parts = [
+      `curl -X ${testerMethod} 'http://localhost:3000${testerUrl}'`,
+      `  -H 'Authorization: Bearer admin123'`,
+    ];
     if (["POST", "PUT", "PATCH"].includes(testerMethod)) {
       parts.push(`  -H 'Content-Type: application/json'`);
       parts.push(`  -d '${testerBody.replace(/'/g, "'\\''")}'`);
@@ -369,6 +425,119 @@ export default function AdminStudio() {
 
   const currentWc = wordCount(formContent);
   const currentRt = computeReadTime(formContent);
+
+  if (isAuthenticated === null) {
+    return (
+      <div className="min-h-screen bg-[#0F1B3D] flex items-center justify-center font-mono text-xs text-white/60">
+        INITIALIZING SECURITY CONTEXT...
+      </div>
+    );
+  }
+
+  if (isAuthenticated === false) {
+    return (
+      <div className="min-h-screen bg-[#0F1B3D] text-[#FFFFFF] flex flex-col justify-between selection:bg-[#FF3D88] selection:text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none" />
+
+        <header className="border-b border-white/15 px-6 py-4 flex items-center justify-between relative z-10">
+          <Link
+            href="/"
+            className="font-display font-extrabold text-base tracking-tight text-white hover:text-[#00F5D4] transition"
+          >
+            TACTYQAL
+          </Link>
+          <span className="px-2.5 py-1 bg-[#162654] border border-white/15 text-xs font-mono text-white/70">
+            INTERNAL PORTAL
+          </span>
+        </header>
+
+        <div className="flex-1 flex items-center justify-center p-4 relative z-10">
+          <div className="max-w-md w-full bg-white text-[#0F1B3D] border-2 border-[#0F1B3D] shadow-[8px_8px_0px_0px_#FF3D88] p-7 sm:p-8">
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#0F1B3D]/15">
+              <span className="px-2 py-0.5 bg-[#FF3D88] text-white font-mono text-[10px] font-bold uppercase tracking-wider">
+                ADMIN ACCESS ONLY
+              </span>
+              <span className="text-xs font-mono text-[#0F1B3D]/60 font-semibold">
+                PASS: admin123
+              </span>
+            </div>
+
+            <h1 className="font-display font-extrabold text-2xl text-[#0F1B3D] mb-1">
+              Admin Authentication
+            </h1>
+            <p className="text-xs font-sans text-[#0F1B3D]/70 leading-relaxed mb-6">
+              Enter the master admin password to unlock the CMS Studio, PostgreSQL write operations, and backend inspector.
+            </p>
+
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="block font-mono text-xs uppercase font-bold text-[#0F1B3D]/80 mb-1.5">
+                  Master Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={passwordInput}
+                    onChange={(e) => setPasswordInput(e.target.value)}
+                    placeholder="Enter admin password..."
+                    autoFocus
+                    className="w-full border-2 border-[#0F1B3D] px-3.5 py-2.5 text-sm font-mono bg-[#F4F6FB] focus:bg-white focus:outline-none focus:border-[#FF3D88]"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-xs font-mono text-[#0F1B3D]/60 hover:text-[#FF3D88]"
+                  >
+                    {showPassword ? "HIDE" : "SHOW"}
+                  </button>
+                </div>
+              </div>
+
+              {authError && (
+                <div className="p-2.5 bg-[#FFE4EF] border border-[#FF3D88] text-[#FF3D88] text-xs font-mono">
+                  {authError}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="w-full py-3 bg-[#FF3D88] hover:bg-[#e62e76] text-white font-mono font-bold text-xs uppercase tracking-wider shadow-[4px_4px_0px_0px_#0F1B3D] active:translate-x-[1px] active:translate-y-[1px] transition cursor-pointer"
+              >
+                Unlock Admin Studio →
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setPasswordInput("admin123");
+                  sessionStorage.setItem("tactyqal_admin_session", "admin123");
+                  setIsAuthenticated(true);
+                  setAuthError("");
+                }}
+                className="w-full py-2 bg-[#F4F6FB] hover:bg-[#FFE4EF] text-[#0F1B3D] font-mono text-xs font-semibold border border-[#0F1B3D] transition flex items-center justify-center gap-1.5"
+              >
+                <span>⚡</span>
+                <span>Auto-Fill Demo Key (&quot;admin123&quot;)</span>
+              </button>
+            </form>
+
+            <div className="mt-6 pt-4 border-t border-[#0F1B3D]/10 text-center">
+              <Link
+                href="/"
+                className="text-xs font-mono text-[#0F1B3D]/60 hover:text-[#FF3D88] transition"
+              >
+                ← Return to Public Website
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        <footer className="border-t border-white/10 px-6 py-3 text-center text-xs font-mono text-white/50 relative z-10">
+          Tactyqal Labs CMS · Protected Architecture
+        </footer>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F4F6FB] text-[#0F1B3D] selection:bg-[#FF3D88] selection:text-white">
@@ -444,6 +613,18 @@ export default function AdminStudio() {
             className="px-4 py-2 bg-[#FF3D88] hover:bg-[#e62e76] text-white text-xs font-bold uppercase tracking-wider shadow-[3px_3px_0px_0px_#FFFFFF] whitespace-nowrap active:translate-x-[1px] active:translate-y-[1px] transition cursor-pointer"
           >
             + New Article
+          </button>
+
+          <button
+            onClick={handleLogout}
+            title="Lock session and return to password screen"
+            className="px-2.5 py-1.5 text-xs font-mono bg-white/10 hover:bg-[#FF3D88] text-white border border-white/20 transition whitespace-nowrap flex items-center gap-1.5 cursor-pointer"
+          >
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            <span className="hidden sm:inline">Lock</span>
           </button>
         </div>
       </header>
@@ -686,7 +867,7 @@ export default function AdminStudio() {
                           type="button"
                           onClick={ep.run}
                           disabled={testerLoading}
-                          className="w-full py-1.5 px-2 bg-white/10 hover:bg-[#FF3D88] text-white font-mono text-[11px] font-bold border border-white/20 transition flex items-center justify-center gap-1.5"
+                          className="w-full py-1.5 px-2 bg-white/10 hover:bg-[#FF3D88] text-white font-mono text-[11px] font-bold border border-white/20 transition flex items-center justify-center gap-1.5 cursor-pointer"
                         >
                           <span>▶</span>
                           <span>Send Live Request</span>
@@ -720,7 +901,7 @@ export default function AdminStudio() {
                             setCopiedCurl(true);
                             setTimeout(() => setCopiedCurl(false), 2000);
                           }}
-                          className="px-2 py-0.5 border border-white/30 text-[10px] font-mono text-white/80 hover:text-white hover:border-[#00F5D4] transition"
+                          className="px-2 py-0.5 border border-white/30 text-[10px] font-mono text-white/80 hover:text-white hover:border-[#00F5D4] transition cursor-pointer"
                         >
                           {copiedCurl ? "cURL Copied ✓" : "Copy cURL"}
                         </button>
@@ -730,7 +911,7 @@ export default function AdminStudio() {
                     <pre className="font-mono text-xs text-[#00F5D4] overflow-auto max-h-60 p-3 bg-[#0F1B3D] border border-white/10 leading-relaxed">
                       {testerResponse
                         ? JSON.stringify(testerResponse.body, null, 2)
-                        : `// Click "▶ Send Live Request" on any endpoint above to inspect\n// real HTTP status codes, latency, and response headers.\n{\n  "status": "idle",\n  "driver": "${dataSource}",\n  "message": "Awaiting test execution"\n}`}
+                        : `{\n  "status": "idle",\n  "driver": "${dataSource}",\n  "authenticated": true,\n  "authHeader": "Bearer admin123",\n  "message": "Click '▶ Send Live Request' above to test endpoints"\n}`}
                     </pre>
                   </div>
                 </div>
@@ -747,7 +928,7 @@ export default function AdminStudio() {
                         setCopiedSchema(true);
                         setTimeout(() => setCopiedSchema(false), 2000);
                       }}
-                      className="px-2 py-0.5 border border-white/30 text-[10px] font-mono text-white/80 hover:text-white hover:border-[#00F5D4] transition"
+                      className="px-2 py-0.5 border border-white/30 text-[10px] font-mono text-white/80 hover:text-white hover:border-[#00F5D4] transition cursor-pointer"
                     >
                       {copiedSchema ? "Schema Copied ✓" : "Copy Schema"}
                     </button>
