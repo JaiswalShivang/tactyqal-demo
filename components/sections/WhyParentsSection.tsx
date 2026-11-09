@@ -76,19 +76,19 @@ export default function WhyParentsSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch mb-6">
           <div className="lg:col-span-6 border-[1.5px] border-[#0F1B3D] bg-[#0F1B3D] text-[#FFFFFF] shadow-[6px_6px_0px_0px_#FF3D88] p-5 sm:p-6 flex flex-col justify-between h-full">
-            <div>
-              <div className="relative aspect-video border-[1.5px] border-[#263B73] bg-[#0A1229] mb-5 overflow-hidden">
+            <div className="flex flex-col h-full justify-between">
+              <div className="relative w-full flex-1 min-h-[250px] bg-[#0A1229] overflow-hidden border border-[#263B73] flex items-center justify-center my-3">
                 {!isPlaying ? (
                   <div
                     onClick={() => setIsPlaying(true)}
-                    className="absolute inset-0 cursor-pointer group flex flex-col items-center justify-center p-6 select-none relative"
+                    className="absolute inset-0 cursor-pointer group flex flex-col items-center justify-center p-6 select-none"
                   >
                     <img
                       src="https://i.ytimg.com/vi/UyUH06CfLbk/hqdefault.jpg"
                       alt="Startup Ideas 101 with Partha Chakraborty"
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/extracted/blog-ele.webp";
+                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80";
                       }}
                     />
 
@@ -125,13 +125,15 @@ export default function WhyParentsSection() {
                 )}
               </div>
 
-              <h3 className="font-display font-bold text-xl sm:text-2xl tracking-normal mb-2 text-white">
-                Startup Ideas 101 with Partha Chakraborty
-              </h3>
+              <div className="mt-3">
+                <h3 className="font-display font-bold text-xl sm:text-2xl tracking-normal mb-2 text-white">
+                  Startup Ideas 101 with Partha Chakraborty
+                </h3>
 
-              <p className="text-xs sm:text-sm text-paper/75 leading-relaxed tracking-normal">
-                How teenagers spot real daily friction and turn it into scalable software before writing a single line of code.
-              </p>
+                <p className="text-xs sm:text-sm text-paper/75 leading-relaxed tracking-normal">
+                  How teenagers spot real daily friction and turn it into scalable software before writing a single line of code.
+                </p>
+              </div>
             </div>
           </div>
 

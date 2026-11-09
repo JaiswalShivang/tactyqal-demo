@@ -274,7 +274,7 @@ export default function FreeToolsSection() {
         <SectionHeader
           title="Used by 1,000+ Entrepreneurs"
           accent="1,000+"
-          accentColor="volt"
+          accentColor="signal"
           description="Free diagnostic tools to validate your startup idea, team, and go-to-market execution. Each takes under 3 minutes."
           dark={true}
         />

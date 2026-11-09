@@ -150,6 +150,9 @@ export default function BlogListClient({
                               src={featured.coverImage}
                               alt={featured.title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80";
+                              }}
                             />
                           </div>
                         </div>
@@ -201,6 +204,9 @@ export default function BlogListClient({
                                 src={post.coverImage}
                                 alt={post.title}
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80";
+                                }}
                                 loading="lazy"
                               />
                             </div>

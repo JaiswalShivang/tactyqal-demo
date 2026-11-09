@@ -15,22 +15,22 @@ function PostThumbnail({
   title: string;
   className?: string;
 }) {
-  const [hasError, setHasError] = useState(false);
+  const [imgSrc, setImgSrc] = useState<string>(
+    src || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80"
+  );
 
-  if (!src || hasError) {
-    return (
-      <div className={`bg-sand flex items-center justify-center font-display font-bold text-ink/40 text-2xl ${className}`}>
-        {title.charAt(0)}
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (src) setImgSrc(src);
+  }, [src]);
 
   return (
     <img
-      src={src}
+      src={imgSrc}
       alt={title}
       className={`object-cover object-top transition-transform duration-300 group-hover:scale-105 ${className}`}
-      onError={() => setHasError(true)}
+      onError={() => {
+        setImgSrc("https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80");
+      }}
       loading="lazy"
     />
   );
@@ -60,7 +60,7 @@ export default function HomepageBlogSection() {
     pool.find((p) => p.slug === "how-to-build-a-tech-startup-team") || pool[1],
   ].filter(Boolean) as Post[];
   const bottomPosts = [
-    pool.find((p) => p.slug === "11-reasons-why-startups-fail-at-the-idea-stage") || pool[2],
+    pool.find((p) => p.slug === "11-reasons-why-startups-fail-at-the-idea-stage" || p.slug === "11-reasons-startups-fail-at-idea-stage") || pool[2],
     pool.find((p) => p.slug === "30-startup-ideas-to-solve-food-waste-problems") || pool[3],
     pool.find((p) => p.slug === "50-startup-ideas-for-gen-z-entrepreneurs") || pool[4],
   ].filter(Boolean) as Post[];

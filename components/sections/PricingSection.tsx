@@ -35,7 +35,7 @@ export default function PricingSection() {
         <SectionHeader
           title="The Builder's Vault"
           accent="Vault"
-          accentColor="volt"
+          accentColor="signal"
           description="Transparent, all-inclusive tuition for the complete 8-week 1:1 cohort. Results guaranteed or 100% refunded."
           dark={true}
         />

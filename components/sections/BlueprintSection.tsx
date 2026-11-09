@@ -91,13 +91,11 @@ export default function BlueprintSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-stretch mb-12">
-          {PHASES.map((phase, idx) => (
+        <div className="bg-white border-2 border-[#0F1B3D] shadow-[6px_6px_0px_0px_#0F1B3D] divide-y-2 lg:divide-y-0 lg:divide-x-2 divide-[#0F1B3D] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-stretch mb-12">
+          {PHASES.map((phase) => (
             <div
               key={phase.num}
-              className={`border-[1.5px] border-ink bg-ivory p-6 sm:p-7 flex flex-col justify-between h-full relative ${
-                idx > 0 ? "lg:-ml-[1.5px]" : ""
-              } ${idx >= 2 ? "md:-mt-[1.5px] lg:mt-0" : ""}`}
+              className="bg-ivory p-6 sm:p-7 flex flex-col justify-between h-full relative"
             >
               <div>
                 <div className="flex items-center justify-between border-b border-ink/15 pb-3 mb-4">

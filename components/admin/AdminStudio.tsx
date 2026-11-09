@@ -8,12 +8,12 @@ import rehypeSanitize from "rehype-sanitize";
 import type { Post } from "@/lib/types";
 
 const COVERS = [
-  { label: "Elevator Pitch", url: "/extracted/blog-ele.webp" },
-  { label: "Startup Team", url: "/extracted/blog-startup.webp" },
-  { label: "11 Reasons", url: "/extracted/blog-fail.webp" },
-  { label: "50 No-Code Ideas", url: "/extracted/blog-nocode.webp" },
-  { label: "Food Waste", url: "/extracted/blog-foodwaste.webp" },
-  { label: "Gen-Z Founders", url: "/extracted/blog-genz.webp" },
+  { label: "Elevator Pitch", url: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80" },
+  { label: "Startup Team", url: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80" },
+  { label: "11 Reasons", url: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80" },
+  { label: "50 No-Code Ideas", url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80" },
+  { label: "Food Waste", url: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80" },
+  { label: "Gen-Z Founders", url: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80" },
 ];
 
 const CATEGORIES = [
@@ -1116,11 +1116,11 @@ export default function AdminStudio() {
                       <div className="col-span-5 flex items-center gap-3.5 min-w-0">
                         <div className="w-14 h-10 border border-[#0F1B3D] shrink-0 bg-[#0F1B3D] overflow-hidden">
                           <img
-                            src={post.coverImage || "/extracted/blog-ele.webp"}
+                            src={post.coverImage || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80"}
                             alt={post.title}
                             className="w-full h-full object-cover"
                             onError={(e) => {
-                              (e.target as HTMLImageElement).src = "/extracted/blog-ele.webp";
+                              (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80";
                             }}
                           />
                         </div>
@@ -1427,7 +1427,7 @@ export default function AdminStudio() {
                       alt="Preview"
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/extracted/blog-ele.webp";
+                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80";
                       }}
                     />
                   </div>
