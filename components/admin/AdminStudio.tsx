@@ -109,6 +109,7 @@ export default function AdminStudio({ initialPosts }: { initialPosts?: Post[] })
   const [formSlugManual, setFormSlugManual] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [togglingId, setTogglingId] = useState<string | null>(null);
   const [uploadMeta, setUploadMeta] = useState<{ name: string; sizeKb: number } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -289,12 +290,14 @@ export default function AdminStudio({ initialPosts }: { initialPosts?: Post[] })
   };
 
   const handleTogglePublished = async (post: Post) => {
+    if (togglingId === post.id) return;
     const nextPublished = !post.published;
+    setTogglingId(post.id);
     setPosts((prev) =>
       prev.map((p) => (p.id === post.id ? { ...p, published: nextPublished } : p))
     );
     try {
-      await fetch(`/api/posts/${post.id}`, {
+      const res = await fetch(`/api/posts/${post.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -302,9 +305,18 @@ export default function AdminStudio({ initialPosts }: { initialPosts?: Post[] })
         },
         body: JSON.stringify({ published: nextPublished }),
       });
-      await fetchPosts();
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        setPosts((prev) =>
+          prev.map((p) => (p.id === post.id ? { ...p, published: post.published } : p))
+        );
+      }
     } catch {
-      await fetchPosts();
+      setPosts((prev) =>
+        prev.map((p) => (p.id === post.id ? { ...p, published: post.published } : p))
+      );
+    } finally {
+      setTogglingId(null);
     }
   };
 
@@ -459,9 +471,6 @@ export default function AdminStudio({ initialPosts }: { initialPosts?: Post[] })
           >
             TACTYQAL
           </Link>
-          <span className="px-2 py-0.5 bg-[#FF3D88] text-white font-mono text-[10px] font-bold uppercase tracking-wider whitespace-nowrap">
-            CMS v2.0
-          </span>
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
@@ -615,226 +624,229 @@ export default function AdminStudio({ initialPosts }: { initialPosts?: Post[] })
 
           <div className="flex items-center gap-3 flex-wrap">
             <div className="flex items-center border-[1.5px] border-[#0F1B3D] bg-[#F4F6FB] p-0.5">
-                  <button
-                    type="button"
-                    onClick={() => setStatusFilter("all")}
-                    className={`px-3 py-1.5 text-xs font-mono uppercase font-bold transition-colors ${statusFilter === "all"
-                      ? "bg-[#0F1B3D] text-white"
-                      : "text-[#0F1B3D]/70 hover:text-[#0F1B3D]"
-                      }`}
-                  >
-                    ALL ({stats.total})
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setStatusFilter("published")}
-                    className={`px-3 py-1.5 text-xs font-mono uppercase font-bold transition-colors ${statusFilter === "published"
-                      ? "bg-[#0F1B3D] text-white"
-                      : "text-[#0F1B3D]/70 hover:text-[#0F1B3D]"
-                      }`}
-                  >
-                    PUBLISHED ({stats.publishedCount})
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setStatusFilter("draft")}
-                    className={`px-3 py-1.5 text-xs font-mono uppercase font-bold transition-colors ${statusFilter === "draft"
-                      ? "bg-[#0F1B3D] text-white"
-                      : "text-[#0F1B3D]/70 hover:text-[#0F1B3D]"
-                      }`}
-                  >
-                    DRAFTS ({stats.draftCount})
-                  </button>
-                </div>
-              </div>
+              <button
+                type="button"
+                onClick={() => setStatusFilter("all")}
+                className={`px-3 py-1.5 text-xs font-mono uppercase font-bold transition-colors ${statusFilter === "all"
+                  ? "bg-[#0F1B3D] text-white"
+                  : "text-[#0F1B3D]/70 hover:text-[#0F1B3D]"
+                  }`}
+              >
+                ALL ({stats.total})
+              </button>
+              <button
+                type="button"
+                onClick={() => setStatusFilter("published")}
+                className={`px-3 py-1.5 text-xs font-mono uppercase font-bold transition-colors ${statusFilter === "published"
+                  ? "bg-[#0F1B3D] text-white"
+                  : "text-[#0F1B3D]/70 hover:text-[#0F1B3D]"
+                  }`}
+              >
+                PUBLISHED ({stats.publishedCount})
+              </button>
+              <button
+                type="button"
+                onClick={() => setStatusFilter("draft")}
+                className={`px-3 py-1.5 text-xs font-mono uppercase font-bold transition-colors ${statusFilter === "draft"
+                  ? "bg-[#0F1B3D] text-white"
+                  : "text-[#0F1B3D]/70 hover:text-[#0F1B3D]"
+                  }`}
+              >
+                DRAFTS ({stats.draftCount})
+              </button>
             </div>
+          </div>
+        </div>
 
-            <div className="bg-white border-2 border-[#0F1B3D] shadow-[6px_6px_0px_0px_#0F1B3D] overflow-hidden">
-              <div className="bg-[#0F1B3D] text-white text-[11px] font-mono uppercase tracking-wider px-5 py-3.5 grid grid-cols-12 items-center gap-4">
-                <div className="col-span-5">ARTICLE &amp; SLUG</div>
-                <div className="col-span-2">CATEGORY</div>
-                <div className="col-span-2">META (TIME / DATE)</div>
-                <div className="col-span-2">STATUS</div>
-                <div className="col-span-1 text-right">ACTIONS</div>
-              </div>
+        <div className="bg-white border-2 border-[#0F1B3D] shadow-[6px_6px_0px_0px_#0F1B3D] overflow-hidden">
+          <div className="bg-[#0F1B3D] text-white text-[11px] font-mono uppercase tracking-wider px-5 py-3.5 grid grid-cols-12 items-center gap-4">
+            <div className="col-span-5">ARTICLE &amp; SLUG</div>
+            <div className="col-span-2">CATEGORY</div>
+            <div className="col-span-2">META (TIME / DATE)</div>
+            <div className="col-span-2">STATUS</div>
+            <div className="col-span-1 text-right">ACTIONS</div>
+          </div>
 
-              {loading && posts.length === 0 ? (
-                <div className="divide-y-[1.5px] divide-[#0F1B3D]/15">
-                  {[1, 2, 3, 4, 5].map((n) => (
-                    <div
-                      key={n}
-                      className="grid grid-cols-12 items-center gap-4 px-5 py-3.5 animate-pulse bg-white"
-                    >
-                      <div className="col-span-5 flex items-center gap-3.5 min-w-0">
-                        <div className="w-14 h-10 border border-[#0F1B3D]/20 bg-[#0F1B3D]/10 shrink-0" />
-                        <div className="min-w-0 flex-1 space-y-1.5">
-                          <div className="h-4 bg-[#0F1B3D]/15 rounded-none w-3/4" />
-                          <div className="h-2.5 bg-[#0F1B3D]/10 rounded-none w-1/2" />
-                        </div>
-                      </div>
-                      <div className="col-span-2">
-                        <div className="h-5 bg-[#FFE4EF]/70 border border-[#0F1B3D]/20 w-16" />
-                      </div>
-                      <div className="col-span-2 space-y-1">
-                        <div className="h-3 bg-[#0F1B3D]/15 w-16" />
-                        <div className="h-2 bg-[#0F1B3D]/10 w-20" />
-                      </div>
-                      <div className="col-span-2">
-                        <div className="w-9 h-5 rounded-full bg-[#CBD5E1]/60 border border-[#0F1B3D]/20" />
-                      </div>
-                      <div className="col-span-1 flex items-center justify-end gap-1.5">
-                        <div className="w-6 h-6 bg-[#0F1B3D]/10 border border-[#0F1B3D]/20" />
-                        <div className="w-10 h-6 bg-[#0F1B3D]/10 border border-[#0F1B3D]/20" />
-                      </div>
+          {loading && posts.length === 0 ? (
+            <div className="divide-y-[1.5px] divide-[#0F1B3D]/15">
+              {[1, 2, 3, 4, 5].map((n) => (
+                <div
+                  key={n}
+                  className="grid grid-cols-12 items-center gap-4 px-5 py-3.5 animate-pulse bg-white"
+                >
+                  <div className="col-span-5 flex items-center gap-3.5 min-w-0">
+                    <div className="w-14 h-10 border border-[#0F1B3D]/20 bg-[#0F1B3D]/10 shrink-0" />
+                    <div className="min-w-0 flex-1 space-y-1.5">
+                      <div className="h-4 bg-[#0F1B3D]/15 rounded-none w-3/4" />
+                      <div className="h-2.5 bg-[#0F1B3D]/10 rounded-none w-1/2" />
                     </div>
-                  ))}
-                </div>
-              ) : filteredPosts.length === 0 ? (
-                <div className="p-12 text-center space-y-3">
-                  <div className="font-display font-extrabold text-xl text-[#0F1B3D]">
-                    No articles match your search criteria
                   </div>
-                  <p className="text-xs font-mono text-[#0F1B3D]/60 max-w-md mx-auto">
-                    Try searching for another keyword, select &quot;All Categories&quot;, or click &quot;+ New Article&quot; to write a post.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSearch("");
-                      setCategoryFilter("All Categories");
-                      setStatusFilter("all");
-                    }}
-                    className="px-4 py-2 text-xs font-mono font-bold bg-[#FFE4EF] text-[#FF3D88] border-[1.5px] border-[#0F1B3D] hover:bg-[#FF3D88] hover:text-white transition"
-                  >
-                    Reset Filters
-                  </button>
+                  <div className="col-span-2">
+                    <div className="h-5 bg-[#FFE4EF]/70 border border-[#0F1B3D]/20 w-16" />
+                  </div>
+                  <div className="col-span-2 space-y-1">
+                    <div className="h-3 bg-[#0F1B3D]/15 w-16" />
+                    <div className="h-2 bg-[#0F1B3D]/10 w-20" />
+                  </div>
+                  <div className="col-span-2">
+                    <div className="w-9 h-5 rounded-full bg-[#CBD5E1]/60 border border-[#0F1B3D]/20" />
+                  </div>
+                  <div className="col-span-1 flex items-center justify-end gap-1.5">
+                    <div className="w-6 h-6 bg-[#0F1B3D]/10 border border-[#0F1B3D]/20" />
+                    <div className="w-10 h-6 bg-[#0F1B3D]/10 border border-[#0F1B3D]/20" />
+                  </div>
                 </div>
-              ) : (
-                <div className="divide-y-[1.5px] divide-[#0F1B3D]/15">
-                  {filteredPosts.map((post) => (
-                    <div
-                      key={post.id}
-                      className="grid grid-cols-12 items-center gap-4 px-5 py-3.5 hover:bg-[#F4F6FB] transition-colors group"
-                    >
-                      <div className="col-span-5 flex items-center gap-3.5 min-w-0">
-                        <div className="w-14 h-10 border border-[#0F1B3D] shrink-0 bg-[#0F1B3D] overflow-hidden">
-                          <img
-                            src={post.coverImage || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80"}
-                            alt={post.title}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80";
-                            }}
-                          />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div
-                            onClick={() => handleOpenEdit(post)}
-                            className="font-bold text-[15px] text-[#0F1B3D] group-hover:text-[#FF3D88] transition truncate cursor-pointer leading-snug"
-                            title="Click to edit article"
-                          >
-                            {post.title}
-                          </div>
-                          <div className="text-xs font-mono text-[#0F1B3D]/55 truncate mt-0.5">
-                            /{post.slug}
-                          </div>
-                        </div>
+              ))}
+            </div>
+          ) : filteredPosts.length === 0 ? (
+            <div className="p-12 text-center space-y-3">
+              <div className="font-display font-extrabold text-xl text-[#0F1B3D]">
+                No articles match your search criteria
+              </div>
+              <p className="text-xs font-mono text-[#0F1B3D]/60 max-w-md mx-auto">
+                Try searching for another keyword, select &quot;All Categories&quot;, or click &quot;+ New Article&quot; to write a post.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearch("");
+                  setCategoryFilter("All Categories");
+                  setStatusFilter("all");
+                }}
+                className="px-4 py-2 text-xs font-mono font-bold bg-[#FFE4EF] text-[#FF3D88] border-[1.5px] border-[#0F1B3D] hover:bg-[#FF3D88] hover:text-white transition"
+              >
+                Reset Filters
+              </button>
+            </div>
+          ) : (
+            <div className="divide-y-[1.5px] divide-[#0F1B3D]/15">
+              {filteredPosts.map((post) => (
+                <div
+                  key={post.id}
+                  className="grid grid-cols-12 items-center gap-4 px-5 py-3.5 hover:bg-[#F4F6FB] transition-colors group"
+                >
+                  <div className="col-span-5 flex items-center gap-3.5 min-w-0">
+                    <div className="w-14 h-10 border border-[#0F1B3D] shrink-0 bg-[#0F1B3D] overflow-hidden">
+                      <img
+                        src={post.coverImage || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80"}
+                        alt={post.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80";
+                        }}
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div
+                        onClick={() => handleOpenEdit(post)}
+                        className="font-bold text-[15px] text-[#0F1B3D] group-hover:text-[#FF3D88] transition truncate cursor-pointer leading-snug"
+                        title="Click to edit article"
+                      >
+                        {post.title}
                       </div>
-
-                      <div className="col-span-2">
-                        <span className="inline-flex px-2.5 py-0.5 text-[11px] font-mono font-bold uppercase bg-[#FFE4EF] text-[#FF3D88] border border-[#0F1B3D]">
-                          {post.category}
-                        </span>
-                      </div>
-
-                      <div className="col-span-2">
-                        <div className="font-mono text-xs font-semibold text-[#0F1B3D]">
-                          {post.readTime} min read
-                        </div>
-                        <div className="text-[11px] font-mono text-[#0F1B3D]/60 mt-0.5">
-                          {new Date(post.createdAt).toLocaleDateString("en-IN", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          })}
-                        </div>
-                      </div>
-
-                      <div className="col-span-2">
-                        <button
-                          type="button"
-                          onClick={() => handleTogglePublished(post)}
-                          className="flex items-center gap-2 group/switch cursor-pointer"
-                          title="Click to toggle Published/Draft via PUT /api/posts/[id]"
-                        >
-                          <div
-                            className={`w-9 h-5 rounded-full border border-[#0F1B3D] p-0.5 transition-colors relative flex items-center ${post.published ? "bg-[#10B981]" : "bg-[#CBD5E1]"
-                              }`}
-                          >
-                            <div
-                              className={`w-3.5 h-3.5 rounded-full bg-white shadow-sm border border-[#0F1B3D]/30 transition-transform ${post.published ? "translate-x-4" : "translate-x-0"
-                                }`}
-                            />
-                          </div>
-                          <span
-                            className={`text-xs font-mono font-bold ${post.published ? "text-[#10B981]" : "text-[#F59E0B]"
-                              }`}
-                          >
-                            {post.published ? "Live" : "Draft"}
-                          </span>
-                        </button>
-                      </div>
-
-                      <div className="col-span-1 flex items-center justify-end gap-1.5">
-                        <Link
-                          href={`/blog/${post.slug}`}
-                          target="_blank"
-                          className="px-2 py-1 text-xs font-mono text-[#0F1B3D] border border-[#0F1B3D] bg-white hover:bg-[#FFE4EF] hover:text-[#FF3D88] transition"
-                          title="View public reader"
-                        >
-                          ↗
-                        </Link>
-                        <button
-                          type="button"
-                          onClick={() => handleOpenEdit(post)}
-                          className="bg-[#0F1B3D] text-white hover:bg-[#FF3D88] px-2.5 py-1 text-xs font-mono font-bold border border-[#0F1B3D] transition cursor-pointer"
-                          title="Edit article"
-                        >
-                          Edit
-                        </button>
-                        {deleteConfirmId === post.id ? (
-                          <div className="inline-flex items-center gap-1">
-                            <button
-                              type="button"
-                              onClick={() => handleDeletePost(post.id)}
-                              className="bg-[#EF4444] text-white font-mono text-xs font-bold px-2 py-1 border border-[#0F1B3D]"
-                            >
-                              Yes
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => setDeleteConfirmId(null)}
-                              className="bg-white text-[#0F1B3D] font-mono text-xs px-1.5 py-1 border border-[#0F1B3D]"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={() => setDeleteConfirmId(post.id)}
-                            className="bg-white text-[#EF4444] border border-[#0F1B3D] hover:bg-[#EF4444] hover:text-white px-2 py-1 text-xs font-mono font-bold transition cursor-pointer"
-                            title="Delete article"
-                          >
-                            Del
-                          </button>
-                        )}
+                      <div className="text-xs font-mono text-[#0F1B3D]/55 truncate mt-0.5">
+                        /{post.slug}
                       </div>
                     </div>
-                  ))}
+                  </div>
+
+                  <div className="col-span-2">
+                    <span className="inline-flex px-2.5 py-0.5 text-[11px] font-mono font-bold uppercase bg-[#FFE4EF] text-[#FF3D88] border border-[#0F1B3D]">
+                      {post.category}
+                    </span>
+                  </div>
+
+                  <div className="col-span-2">
+                    <div className="font-mono text-xs font-semibold text-[#0F1B3D]">
+                      {post.readTime} min read
+                    </div>
+                    <div className="text-[11px] font-mono text-[#0F1B3D]/60 mt-0.5">
+                      {new Date(post.createdAt).toLocaleDateString("en-IN", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="col-span-2">
+                    <button
+                      type="button"
+                      disabled={togglingId === post.id}
+                      onClick={() => handleTogglePublished(post)}
+                      className={`flex items-center gap-2 group/switch cursor-pointer ${
+                        togglingId === post.id ? "opacity-60 cursor-wait" : ""
+                      }`}
+                      title="Click to toggle Published/Draft"
+                    >
+                      <div
+                        className={`w-9 h-5 rounded-full border border-[#0F1B3D] p-0.5 transition-colors relative flex items-center ${post.published ? "bg-[#10B981]" : "bg-[#CBD5E1]"
+                          }`}
+                      >
+                        <div
+                          className={`w-3.5 h-3.5 rounded-full bg-white shadow-sm border border-[#0F1B3D]/30 transition-transform ${post.published ? "translate-x-4" : "translate-x-0"
+                            }`}
+                        />
+                      </div>
+                      <span
+                        className={`text-xs font-mono font-bold ${post.published ? "text-[#10B981]" : "text-[#F59E0B]"
+                          }`}
+                      >
+                        {post.published ? "Live" : "Draft"}
+                      </span>
+                    </button>
+                  </div>
+
+                  <div className="col-span-1 flex items-center justify-end gap-1.5">
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      target="_blank"
+                      className="px-2 py-1 text-xs font-mono text-[#0F1B3D] border border-[#0F1B3D] bg-white hover:bg-[#FFE4EF] hover:text-[#FF3D88] transition"
+                      title="View public reader"
+                    >
+                      ↗
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => handleOpenEdit(post)}
+                      className="bg-[#0F1B3D] text-white hover:bg-[#FF3D88] px-2.5 py-1 text-xs font-mono font-bold border border-[#0F1B3D] transition cursor-pointer"
+                      title="Edit article"
+                    >
+                      Edit
+                    </button>
+                    {deleteConfirmId === post.id ? (
+                      <div className="inline-flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => handleDeletePost(post.id)}
+                          className="bg-[#EF4444] text-white font-mono text-xs font-bold px-2 py-1 border border-[#0F1B3D]"
+                        >
+                          Yes
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setDeleteConfirmId(null)}
+                          className="bg-white text-[#0F1B3D] font-mono text-xs px-1.5 py-1 border border-[#0F1B3D]"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setDeleteConfirmId(post.id)}
+                        className="bg-white text-[#EF4444] border border-[#0F1B3D] hover:bg-[#EF4444] hover:text-white px-2 py-1 text-xs font-mono font-bold transition cursor-pointer"
+                        title="Delete article"
+                      >
+                        Del
+                      </button>
+                    )}
+                  </div>
                 </div>
-              )}
+              ))}
             </div>
+          )}
+        </div>
       </main>
 
       {modalOpen && (
@@ -978,11 +990,10 @@ export default function AdminStudio({ initialPosts }: { initialPosts?: Post[] })
                       if (file) handleImageFile(file);
                     }}
                     onClick={() => fileInputRef.current?.click()}
-                    className={`border-2 border-dashed p-4 text-center cursor-pointer transition-colors mb-3 ${
-                      isDragging
+                    className={`border-2 border-dashed p-4 text-center cursor-pointer transition-colors mb-3 ${isDragging
                         ? "border-[#FF3D88] bg-[#FFE4EF]"
                         : "border-[#0F1B3D]/40 bg-[#F4F6FB] hover:border-[#0F1B3D] hover:bg-white"
-                    }`}
+                      }`}
                   >
                     {uploadMeta ? (
                       <div className="flex items-center justify-between gap-3 text-left">
@@ -1054,11 +1065,10 @@ export default function AdminStudio({ initialPosts }: { initialPosts?: Post[] })
                               setUploadMeta(null);
                               setFormCoverImage(cov.url);
                             }}
-                            className={`flex items-center gap-2 p-1.5 border transition-all text-left ${
-                              formCoverImage === cov.url
+                            className={`flex items-center gap-2 p-1.5 border transition-all text-left ${formCoverImage === cov.url
                                 ? "bg-[#FFE4EF] border-[#FF3D88] shadow-[2px_2px_0px_#FF3D88]"
                                 : "bg-white border-[#0F1B3D]/30 hover:border-[#0F1B3D]"
-                            }`}
+                              }`}
                           >
                             <img
                               src={cov.url}
@@ -1108,9 +1118,8 @@ export default function AdminStudio({ initialPosts }: { initialPosts?: Post[] })
                     Live Card &amp; Reader Preview
                   </span>
                   <span
-                    className={`font-mono text-[10px] font-bold px-2 py-0.5 ${
-                      formPublished ? "bg-[#10B981] text-white" : "bg-[#F59E0B] text-white"
-                    }`}
+                    className={`font-mono text-[10px] font-bold px-2 py-0.5 ${formPublished ? "bg-[#10B981] text-white" : "bg-[#F59E0B] text-white"
+                      }`}
                   >
                     {formPublished ? "● LIVE" : "○ DRAFT"}
                   </span>

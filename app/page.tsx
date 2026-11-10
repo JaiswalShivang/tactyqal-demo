@@ -13,45 +13,21 @@ import FAQSection from "@/components/sections/FAQSection";
 import ContactSection from "@/components/sections/ContactSection";
 import Footer from "@/components/Footer";
 import { HeroTicker } from "@/components/MarqueeTicker";
-import TicketIntro from "@/components/TicketIntro";
 import CustomCursor from "@/components/CustomCursor";
 import HomepageBlogSection from "@/components/sections/HomepageBlogSection";
 
 export default function HomePage() {
   const [mounted, setMounted] = useState(false);
-  const [introShown, setIntroShown] = useState(false);
-  const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const hasSeenIntro = sessionStorage.getItem("tactyqal-intro-seen");
-    if (hasSeenIntro) {
-      setIntroShown(true);
-      setShowContent(true);
-    } else {
-      setIntroShown(false);
-    }
   }, []);
-
-  const handleIntroDone = () => {
-    sessionStorage.setItem("tactyqal-intro-seen", "1");
-    setShowContent(true);
-    setIntroShown(true);
-  };
 
   return (
     <>
       {mounted && <CustomCursor />}
 
-      {mounted && !introShown && (
-        <TicketIntro onDone={handleIntroDone} />
-      )}
-
-      <div
-        className={`transition-opacity duration-300 ${
-          showContent ? "opacity-100" : "opacity-0"
-        }`}
-      >
+      <div>
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
