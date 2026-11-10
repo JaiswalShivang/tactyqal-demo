@@ -1,36 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 
-declare global {
-  var __prismaClient: PrismaClient | undefined;
-}
+const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
-function getSafePostgresUrl(): string {
-  const url = process.env.DATABASE_URL?.trim();
-  if (url && (url.startsWith("postgresql://") || url.startsWith("postgres://"))) {
-    return url
-      .replace(/-pooler\./g, ".")
-      .replace(/&channel_binding=require/g, "")
-      .replace(/\?channel_binding=require&?/g, "?")
-      .replace(/\?$/g, "");
-  }
-  return "postgresql://postgres:postgres@localhost:5432/tactyqal?schema=public";
-}
-
-function createPrismaClient(): PrismaClient {
-  return new PrismaClient({
-    datasources: {
-      db: {
-        url: getSafePostgresUrl(),
-      },
-    },
+export const prisma =
+  globalForPrisma.prisma ||
+  new PrismaClient({
     log: [],
   });
-}
 
-const prisma =
-  process.env.NODE_ENV === "production"
-    ? createPrismaClient()
-    : (global.__prismaClient ?? (global.__prismaClient = createPrismaClient()));
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 export default prisma;
-

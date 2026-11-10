@@ -468,9 +468,9 @@ async function checkPrismaHealth(): Promise<boolean> {
   lastPrismaCheck = now;
   try {
     const { default: prisma } = await import("./prisma");
-    const probe = prisma.$queryRaw`SELECT 1`;
+    const probe = prisma.post.count();
     const timeout = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error("Timeout")), 1500)
+      setTimeout(() => reject(new Error("Timeout")), 8000)
     );
     await Promise.race([probe, timeout]);
     isPrismaHealthy = true;

@@ -1,5 +1,47 @@
 [
   {
+    "id": "post_oijqbtfiowbmwa3p9d8",
+    "title": "kfbgbuyrhgb",
+    "slug": "kfbgbuyrhgb",
+    "excerpt": "fereiugrb",
+    "content": "## Executive Summary\n\nWrite the core thesis of your startup article here...\n\n## Tactical Framework\n\n1. Step one for young founders\n2. Step two for scaling without code\n3. Step three for customer acquisition\n\n## Conclusion\n\nFinal actionable advice for builders.",
+    "coverImage": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80",
+    "category": "Ideas",
+    "tags": [
+      "startup",
+      "young founders",
+      "tactical"
+    ],
+    "author": "Partha Chakraborty",
+    "authorRole": "Founder, Tactyqal Labs",
+    "readTime": 1,
+    "published": true,
+    "featured": false,
+    "createdAt": "2026-11-10T02:58:44.012Z",
+    "updatedAt": "2026-11-10T02:58:44.012Z"
+  },
+  {
+    "id": "post_0ek4y67zq7vhmwa3opds",
+    "title": "test purpose",
+    "slug": "test-purpose",
+    "excerpt": "this is for the test purpose",
+    "content": "## Executive Summary\n\nWrite the core thesis of your startup article here...\n\n## Tactical Framework\n\n1. Step one for young founders\n2. Step two for scaling without code\n3. Step three for customer acquisition\n\n## Conclusion\n\nFinal actionable advice for builders.",
+    "coverImage": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
+    "category": "Ideas",
+    "tags": [
+      "startup",
+      "young founders",
+      "tactical"
+    ],
+    "author": "Partha Chakraborty",
+    "authorRole": "Founder, Tactyqal Labs",
+    "readTime": 1,
+    "published": true,
+    "featured": false,
+    "createdAt": "2026-11-10T02:58:18.112Z",
+    "updatedAt": "2026-11-10T02:58:18.112Z"
+  },
+  {
     "id": "eqj2j7pnlk8mw75alcm",
     "title": "The elevator pitch for business entrepreneurs",
     "slug": "elevator-pitch-for-business-entrepreneurs",
@@ -16,10 +58,10 @@
     "authorRole": "Founder, Tactyqal Labs",
     "coverImage": "/extracted/blog-ele.webp",
     "readTime": 3,
-    "published": false,
+    "published": true,
     "featured": true,
     "createdAt": "2024-05-01T00:00:00.000Z",
-    "updatedAt": "2026-11-10T01:30:30.436Z"
+    "updatedAt": "2026-11-10T02:57:05.913Z"
   },
   {
     "id": "lb5iawiai3gmw75alcn",
@@ -41,7 +83,7 @@
     "published": true,
     "featured": false,
     "createdAt": "2024-04-20T00:00:00.000Z",
-    "updatedAt": "2024-04-20T00:00:00.000Z"
+    "updatedAt": "2026-11-10T02:57:32.175Z"
   },
   {
     "id": "kx4bqoi0gsomw75alcn",
@@ -64,7 +106,7 @@
     "published": true,
     "featured": false,
     "createdAt": "2024-04-10T00:00:00.000Z",
-    "updatedAt": "2024-04-10T00:00:00.000Z"
+    "updatedAt": "2026-11-10T02:57:07.772Z"
   },
   {
     "id": "o17lmwku4xcmw75alcn",
@@ -87,7 +129,7 @@
     "published": true,
     "featured": false,
     "createdAt": "2025-07-09T00:00:00.000Z",
-    "updatedAt": "2026-11-10T01:13:49.399Z"
+    "updatedAt": "2026-11-10T02:57:05.169Z"
   },
   {
     "id": "y00tcn0vgvamw75alcn",
@@ -110,7 +152,7 @@
     "published": true,
     "featured": false,
     "createdAt": "2024-03-15T00:00:00.000Z",
-    "updatedAt": "2024-03-15T00:00:00.000Z"
+    "updatedAt": "2026-11-10T02:57:34.179Z"
   },
   {
     "id": "6j783a79bwlmw75alcn",
@@ -133,6 +175,6 @@
     "published": true,
     "featured": false,
     "createdAt": "2024-03-05T00:00:00.000Z",
-    "updatedAt": "2024-03-05T00:00:00.000Z"
+    "updatedAt": "2026-11-10T02:57:34.808Z"
   }
 ]
