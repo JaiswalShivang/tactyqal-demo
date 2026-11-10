@@ -387,16 +387,42 @@ async function getPrismaDriver(): Promise<BlogDriver> {
 }
 
 let _driver: BlogDriver | null = null;
+let lastPrismaCheck = 0;
+let isPrismaHealthy = false;
+
+async function checkPrismaHealth(): Promise<boolean> {
+  const now = Date.now();
+  if (now - lastPrismaCheck < 30000) {
+    return isPrismaHealthy;
+  }
+  lastPrismaCheck = now;
+  try {
+    const { default: prisma } = await import("./prisma");
+    const probe = prisma.$queryRaw`SELECT 1`;
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("Timeout")), 1500)
+    );
+    await Promise.race([probe, timeout]);
+    isPrismaHealthy = true;
+    return true;
+  } catch {
+    isPrismaHealthy = false;
+    return false;
+  }
+}
 
 export async function getDriver(): Promise<BlogDriver> {
   if (isValidDatabaseUrl(process.env.DATABASE_URL)) {
-    try {
-      if (!_driver || _driver.dataSource !== "prisma") {
-        _driver = await getPrismaDriver();
+    const healthy = await checkPrismaHealth();
+    if (healthy) {
+      try {
+        if (!_driver || _driver.dataSource !== "prisma") {
+          _driver = await getPrismaDriver();
+        }
+        return _driver;
+      } catch {
+        return fileDriver;
       }
-      return _driver;
-    } catch {
-      return fileDriver;
     }
   }
   return fileDriver;

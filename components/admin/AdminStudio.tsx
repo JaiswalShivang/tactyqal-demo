@@ -80,14 +80,14 @@ function compressImageToWebP(file: File): Promise<{ dataUrl: string; sizeKb: num
   });
 }
 
-export default function AdminStudio() {
+export default function AdminStudio({ initialPosts }: { initialPosts?: Post[] }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [passwordInput, setPasswordInput] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState("");
 
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState<Post[]>(initialPosts || []);
+  const [loading, setLoading] = useState(initialPosts && initialPosts.length > 0 ? false : true);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All Categories");
   const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft">("all");
@@ -140,7 +140,6 @@ export default function AdminStudio() {
   };
 
   const fetchPosts = useCallback(async () => {
-    setLoading(true);
     try {
       const res = await fetch("/api/posts?status=all&limit=100");
       const json = (await res.json()) as { data?: Post[]; count?: number };
@@ -506,7 +505,11 @@ export default function AdminStudio() {
               </div>
             </div>
             <div className="text-3xl font-extrabold font-display text-[#0F1B3D] mb-1">
-              {stats.total}
+              {loading && posts.length === 0 ? (
+                <span className="inline-block w-10 h-8 bg-[#0F1B3D]/10 animate-pulse" />
+              ) : (
+                stats.total
+              )}
             </div>
             <div className="text-xs text-[#0F1B3D]/60 font-sans">
               Click to view all {stats.total} articles
@@ -530,7 +533,11 @@ export default function AdminStudio() {
               </div>
             </div>
             <div className="text-3xl font-extrabold font-display text-[#10B981] mb-1">
-              {stats.publishedCount}
+              {loading && posts.length === 0 ? (
+                <span className="inline-block w-10 h-8 bg-[#10B981]/15 animate-pulse" />
+              ) : (
+                stats.publishedCount
+              )}
             </div>
             <div className="text-xs text-[#0F1B3D]/60 font-sans">
               Serving /blog &amp; homepage feed
@@ -554,7 +561,11 @@ export default function AdminStudio() {
               </div>
             </div>
             <div className="text-3xl font-extrabold font-display text-[#FF3D88] mb-1">
-              {stats.draftCount}
+              {loading && posts.length === 0 ? (
+                <span className="inline-block w-10 h-8 bg-[#FF3D88]/15 animate-pulse" />
+              ) : (
+                stats.draftCount
+              )}
             </div>
             <div className="text-xs text-[#0F1B3D]/60 font-sans">
               Visible only in internal Admin Studio
@@ -647,9 +658,36 @@ export default function AdminStudio() {
                 <div className="col-span-1 text-right">ACTIONS</div>
               </div>
 
-              {loading ? (
-                <div className="p-12 text-center font-mono text-xs uppercase text-[#0F1B3D]/60">
-                  FETCHING PERSISTENT ARTICLES FROM POSTGRESQL / STORE...
+              {loading && posts.length === 0 ? (
+                <div className="divide-y-[1.5px] divide-[#0F1B3D]/15">
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <div
+                      key={n}
+                      className="grid grid-cols-12 items-center gap-4 px-5 py-3.5 animate-pulse bg-white"
+                    >
+                      <div className="col-span-5 flex items-center gap-3.5 min-w-0">
+                        <div className="w-14 h-10 border border-[#0F1B3D]/20 bg-[#0F1B3D]/10 shrink-0" />
+                        <div className="min-w-0 flex-1 space-y-1.5">
+                          <div className="h-4 bg-[#0F1B3D]/15 rounded-none w-3/4" />
+                          <div className="h-2.5 bg-[#0F1B3D]/10 rounded-none w-1/2" />
+                        </div>
+                      </div>
+                      <div className="col-span-2">
+                        <div className="h-5 bg-[#FFE4EF]/70 border border-[#0F1B3D]/20 w-16" />
+                      </div>
+                      <div className="col-span-2 space-y-1">
+                        <div className="h-3 bg-[#0F1B3D]/15 w-16" />
+                        <div className="h-2 bg-[#0F1B3D]/10 w-20" />
+                      </div>
+                      <div className="col-span-2">
+                        <div className="w-9 h-5 rounded-full bg-[#CBD5E1]/60 border border-[#0F1B3D]/20" />
+                      </div>
+                      <div className="col-span-1 flex items-center justify-end gap-1.5">
+                        <div className="w-6 h-6 bg-[#0F1B3D]/10 border border-[#0F1B3D]/20" />
+                        <div className="w-10 h-6 bg-[#0F1B3D]/10 border border-[#0F1B3D]/20" />
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ) : filteredPosts.length === 0 ? (
                 <div className="p-12 text-center space-y-3">
