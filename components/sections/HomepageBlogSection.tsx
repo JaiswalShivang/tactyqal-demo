@@ -3,7 +3,6 @@
 import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import type { Post } from "@/lib/types";
-import { SEED_POSTS } from "@/lib/memory-store";
 import { SectionHeader } from "@/components/SectionHeader";
 
 function PostThumbnail({
@@ -38,13 +37,14 @@ function PostThumbnail({
 
 const POSTS_PER_PAGE = 6;
 
-export default function HomepageBlogSection() {
-  const [posts, setPosts] = useState<Post[]>(SEED_POSTS);
+export default function HomepageBlogSection({ initialPosts }: { initialPosts?: Post[] }) {
+  const [posts, setPosts] = useState<Post[]>(initialPosts || []);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
+    if (initialPosts && initialPosts.length > 0) return;
     const fetchPosts = async () => {
       try {
         const res = await fetch("/api/posts?limit=100&published=true");
@@ -56,7 +56,7 @@ export default function HomepageBlogSection() {
     };
 
     fetchPosts();
-  }, []);
+  }, [initialPosts]);
 
   const categories = useMemo(() => {
     const counts: Record<string, number> = {};

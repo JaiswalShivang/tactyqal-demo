@@ -169,6 +169,35 @@ const fileDriver: BlogDriver = {
     const nextPosts = [post, ...posts];
     writePostsToFile(nextPosts);
     setMemoryPosts(nextPosts);
+
+    if (isValidDatabaseUrl(process.env.DATABASE_URL)) {
+      import("./prisma")
+        .then(({ default: prisma }) => {
+          prisma.post
+            .create({
+              data: {
+                id: post.id,
+                title: post.title,
+                slug: post.slug,
+                excerpt: post.excerpt,
+                content: post.content,
+                coverImage: post.coverImage,
+                category: post.category,
+                tags: post.tags,
+                author: post.author,
+                authorRole: post.authorRole,
+                readTime: post.readTime,
+                published: post.published,
+                featured: post.featured,
+                createdAt: post.createdAt,
+                updatedAt: post.updatedAt,
+              },
+            })
+            .catch(() => {});
+        })
+        .catch(() => {});
+    }
+
     return post;
   },
 
@@ -207,6 +236,34 @@ const fileDriver: BlogDriver = {
     newPosts[idx] = updated;
     writePostsToFile(newPosts);
     setMemoryPosts(newPosts);
+
+    if (isValidDatabaseUrl(process.env.DATABASE_URL)) {
+      import("./prisma")
+        .then(({ default: prisma }) => {
+          prisma.post
+            .updateMany({
+              where: { OR: [{ id: updated.id }, { slug: updated.slug }] },
+              data: {
+                title: updated.title,
+                slug: updated.slug,
+                excerpt: updated.excerpt,
+                content: updated.content,
+                coverImage: updated.coverImage,
+                category: updated.category,
+                tags: updated.tags,
+                author: updated.author,
+                authorRole: updated.authorRole,
+                readTime: updated.readTime,
+                published: updated.published,
+                featured: updated.featured,
+                updatedAt: updated.updatedAt,
+              },
+            })
+            .catch(() => {});
+        })
+        .catch(() => {});
+    }
+
     return updated;
   },
 
@@ -217,6 +274,19 @@ const fileDriver: BlogDriver = {
     const nextPosts = posts.filter((_, i) => i !== idx);
     writePostsToFile(nextPosts);
     setMemoryPosts(nextPosts);
+
+    if (isValidDatabaseUrl(process.env.DATABASE_URL)) {
+      import("./prisma")
+        .then(({ default: prisma }) => {
+          prisma.post
+            .deleteMany({
+              where: { OR: [{ id }, { slug: id }] },
+            })
+            .catch(() => {});
+        })
+        .catch(() => {});
+    }
+
     return true;
   },
 };

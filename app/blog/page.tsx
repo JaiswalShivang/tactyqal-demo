@@ -13,14 +13,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function BlogPage() {
-  const { posts } = await listPosts({ published: true, limit: 50 });
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
+export default async function BlogPage() {
+  const { posts } = await listPosts({ published: true, limit: 100 });
+  const serialized = JSON.parse(JSON.stringify(posts));
   const categories = Array.from(new Set(posts.map((p) => p.category))).sort();
 
   return (
     <BlogListClient
-      initialPosts={posts}
+      initialPosts={serialized}
       categories={categories}
     />
   );
